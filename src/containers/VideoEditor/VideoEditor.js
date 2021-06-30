@@ -78,6 +78,8 @@ const VideoEditor = () => {
               if (newWord.deleted && words[j + 1] && !words[j + 1].deleted) {
                 playerRef.current.currentTime = `${+newWord.end}`;
                 break;
+              } else if (!words[j + 1]) {
+                playerRef.current.currentTime = `${+newWord.end}`;
               }
             }
           } else if (!word.deleted) {

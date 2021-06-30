@@ -1,4 +1,5 @@
 {
+  "homepage": "https://davit-e.github.io/twiso-video-editor/",
   "name": "twiso-video-editor",
   "version": "0.1.0",
   "private": true,
@@ -14,7 +15,9 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start":  "set PORT=8080 && react-scripts start",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "start": "set PORT=8080 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -36,5 +39,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^3.2.3"
   }
 }
