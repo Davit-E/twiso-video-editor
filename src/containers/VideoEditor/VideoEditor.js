@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import styles from './VideoEditor.module.css';
 import Navigation from '../Navigation/Navigation';
 import Transcription from '../Transcription/Transcription';
-import useUploadVideo from '../../hooks/useUploadVideo';
+// import useUploadVideo from '../../hooks/useUploadVideo';
+import { words } from './sampleWords';
 
 const handleUpload = async (file, setFile, upload) => {
   const formData = new FormData();
@@ -17,8 +18,8 @@ const handleUpload = async (file, setFile, upload) => {
 };
 
 const VideoEditor = () => {
-  const { isUploading, uploadVideo, words, duration, fullText } =
-    useUploadVideo();
+  // const { isUploading, uploadVideo, words, duration, fullText } =
+  //   useUploadVideo();
   const [currentSelection, setCurrentSelection] = useState(null);
   const [currentWordId, setCurrentWordId] = useState(null);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -30,16 +31,16 @@ const VideoEditor = () => {
   const playerRef = useRef(null);
   useEffect(() => {
     if (viedoForUpload) {
-      handleUpload(viedoForUpload, setVideoForUpload, uploadVideo);
+      // handleUpload(viedoForUpload, setVideoForUpload);
       playerRef.current.src = URL.createObjectURL(viedoForUpload);
     }
-  }, [viedoForUpload, uploadVideo]);
+  }, [viedoForUpload]);
 
   useEffect(() => {
     if (words) {
       setCurrentWordId(words[0].id);
     }
-  }, [words]);
+  }, []);
 
   const handlePlay = (e) => {
     let selection = document.getSelection();
@@ -89,20 +90,20 @@ const VideoEditor = () => {
         }
       }
     },
-    [words]
+    []
   );
 
   useEffect(() => {
     if (words) {
       handleCurrentTime(currentTime);
     }
-  }, [words, currentTime, handleCurrentTime]);
+  }, [currentTime, handleCurrentTime]);
 
   return (
     <div className={styles.VideoEditor}>
       <Navigation
         setVideoForUpload={setVideoForUpload}
-        isUploading={isUploading}
+        // isUploading={isUploading}
       />
       <main className={styles.Main}>
         <Transcription
@@ -121,7 +122,7 @@ const VideoEditor = () => {
         />
         <div className={styles.Player}>
           <video
-            style={{ display: duration ? 'block' : 'none' }}
+            style={{ display: viedoForUpload ? 'block' : 'none' }}
             className={styles.Video}
             ref={playerRef}
             controls
