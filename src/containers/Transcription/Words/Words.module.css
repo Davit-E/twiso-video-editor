@@ -1,0 +1,119 @@
+.WordContainer {
+  font-weight: normal;
+  text-decoration: none;
+  display: inline-block;
+  flex-shrink: 0;
+  min-width: 0;
+  white-space: pre;
+  min-width: 0;
+  height: auto;
+  line-height: 20px;
+}
+
+.Word {
+  white-space: pre;
+  height: auto;
+  line-height: 32px;
+}
+
+.Word::selection,
+.Pause::selection,
+.Deleted::selection,
+.DeletedText::selection,
+.WordInput::selection {
+  background: #c5caec !important;
+}
+
+.Pause {
+  line-height: 32px;
+  color: #6f7bd0;
+  white-space: pre;
+}
+
+.Word:hover,
+.Pause:hover {
+  background: #f3f4f9;
+}
+
+.CurrentWord {
+  background: #6f7bd0;
+}
+
+.CurrentWord .Word,
+.CurrentWord .Pause {
+  color: white;
+}
+
+.CurrentWord:hover .Word,
+.CurrentWord:hover .Pause {
+  background: #6f7bd0;
+}
+
+.Highlight {
+  background: #ffe1df;
+}
+
+.Highlight:hover .Word,
+.Highlight:hover .Pause {
+  background: #ffe1df;
+}
+.Deleted {
+  position: relative;
+  cursor: pointer;
+}
+
+.DeletedImgContainer {
+  width: 100%;
+  height: 100%;
+  background: #f3f4f9;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: opacity 0.1s ease-in;
+  opacity: 0;
+}
+
+.DeletedText {
+  color: #a7a7a7;
+  line-height: 32px;
+}
+
+.DeletedImg {
+  position: relative;
+  top: 2px;
+  left: 3px;
+  width: 60%;
+  height: auto;
+}
+
+.DeletedImg::selection {
+  background: #f3f4f9;
+}
+
+.Deleted:hover .DeletedImgContainer {
+  opacity: 1;
+}
+
+.WordInput {
+  font-family: inherit;
+  font-size: 1rem;
+  background: #cdedba;
+  color: #343f2a;
+  border: none;
+  line-height: 32px;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.WordInput:focus {
+  outline: none;
+}
+
+.InSelection {
+  background: #c5caec !important;
+}
+.InSelection .Word:hover,
+.InSelection .Pause:hover{
+  background: #c5caec !important;
+}

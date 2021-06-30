@@ -1,0 +1,28 @@
+.VideoEditor {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.Main {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding-left: 2.5rem;
+  padding-bottom: 1rem;
+}
+
+.Player {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex: 1;
+  padding-top: 4rem;
+  padding-right: 2rem;
+}
+
+.Video {
+  width: 90%;
+  height: auto;
+}
+

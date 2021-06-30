@@ -1,0 +1,93 @@
+.Transcription {
+  background: #ffffff;
+  width: 30.25rem;
+  margin-right: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1rem 0;
+}
+
+.TextControls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 2rem;
+  padding: 0 1.56rem;
+}
+
+.CutContainer {
+  height: 100%;
+  padding: 0 0.75rem;
+  border: 1px solid #eff1f4;
+  border-radius: 4px;
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  cursor: pointer;
+  margin-right: 0.31rem;
+}
+
+.CutContainer:hover {
+  background: rgb(250, 250, 250);
+}
+
+.CutContainer img {
+  margin-right: 0.5rem;
+}
+
+.CutContainer p {
+  font-size: 0.75rem;
+  color: #1f1f1f;
+  margin: 0;
+}
+
+.SearchContainer {
+  height: 100%;
+  border: 1px solid #eff1f4;
+  border-radius: 4px;
+  padding: 0 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 17.25rem;
+}
+
+.SearchInput {
+  font-family: inherit;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  border: none;
+  padding-right: 0.2rem;
+}
+
+.SearchInput:focus {
+  outline: none;
+}
+
+.Text {
+  display: block;
+  text-align: start;
+  margin-top: 0.5rem;
+  padding: 0.5rem 1.56rem 2rem 1.56rem;
+  width: 100%;
+  min-width: 0;
+  overflow-y: auto;
+  height: 70vh;
+}
+
+.Text::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: rgb(234, 234, 234);
+}
+.Text::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgb(197, 197, 197);
+}
+
+
