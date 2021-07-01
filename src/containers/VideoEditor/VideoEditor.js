@@ -2,8 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import styles from './VideoEditor.module.css';
 import Navigation from '../Navigation/Navigation';
 import Transcription from '../Transcription/Transcription';
-// import useUploadVideo from '../../hooks/useUploadVideo';
-import { words } from './sampleWords';
+import useUploadVideo from '../../hooks/useUploadVideo';
 
 const handleUpload = async (file, setFile, upload) => {
   const formData = new FormData();
@@ -18,8 +17,8 @@ const handleUpload = async (file, setFile, upload) => {
 };
 
 const VideoEditor = () => {
-  // const { isUploading, uploadVideo, words, duration, fullText } =
-  //   useUploadVideo();
+  const { isUploading, uploadVideo, words, duration, fullText } =
+    useUploadVideo();
   const [currentSelection, setCurrentSelection] = useState(null);
   const [currentWordId, setCurrentWordId] = useState(null);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -31,16 +30,16 @@ const VideoEditor = () => {
   const playerRef = useRef(null);
   useEffect(() => {
     if (viedoForUpload) {
-      // handleUpload(viedoForUpload, setVideoForUpload);
+      handleUpload(viedoForUpload, setVideoForUpload, uploadVideo);
       playerRef.current.src = URL.createObjectURL(viedoForUpload);
     }
-  }, [viedoForUpload]);
+  }, [viedoForUpload, uploadVideo]);
 
   useEffect(() => {
     if (words) {
       setCurrentWordId(words[0].id);
     }
-  }, []);
+  }, [words]);
 
   const handlePlay = (e) => {
     let selection = document.getSelection();
@@ -97,13 +96,13 @@ const VideoEditor = () => {
     if (words) {
       handleCurrentTime(currentTime);
     }
-  }, [currentTime, handleCurrentTime]);
+  }, [words, currentTime, handleCurrentTime]);
 
   return (
     <div className={styles.VideoEditor}>
       <Navigation
         setVideoForUpload={setVideoForUpload}
-        // isUploading={isUploading}
+        isUploading={isUploading}
       />
       <main className={styles.Main}>
         <Transcription
@@ -122,7 +121,7 @@ const VideoEditor = () => {
         />
         <div className={styles.Player}>
           <video
-            style={{ display: viedoForUpload ? 'block' : 'none' }}
+            style={{ display: duration ? 'block' : 'none' }}
             className={styles.Video}
             ref={playerRef}
             controls
