@@ -22,21 +22,14 @@ const VideoEditor = () => {
     useUploadVideo();
   const [currentSelection, setCurrentSelection] = useState(null);
   const [currentWordId, setCurrentWordId] = useState(null);
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  // const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [viedoForUpload, setVideoForUpload] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
   const [currentTime, setCurrentTime] = useState(null);
   const [videoCuts, setVideoCuts] = useState([]);
-  const [nextCutIndex, setNextCutIndex] = useState(0);
+  const [nextCutIndex, setNextCutIndex] = useState(null);
   const playerRef = useRef(null);
-
-  // useEffect(() => {
-  //   videoCuts.forEach((el) => {
-  //     console.log(el);
-  //   });
-  //   console.log('//////////////////////////////');
-  // }, [videoCuts]);
 
   useEffect(() => {
     if (viedoForUpload) {
@@ -65,7 +58,13 @@ const VideoEditor = () => {
     clearInterval(intervalId);
   };
 
-  const setPlayerTime = (wordId) => {
+  const handleEnd = (e) => {
+    if (videoCuts.length > 0) setNextCutIndex(0);
+    setCurrentTime(0);
+  };
+
+  const setPlayerTime = (wordId, cuts) => {
+   cuts = videoCuts
     let endTime = '0';
     for (let i = 0; i < words.length; i++) {
       let word = words[i];
@@ -75,78 +74,78 @@ const VideoEditor = () => {
         break;
       }
     }
-
     let cutIndex = 0;
-    for (let i = 0; i < videoCuts.length; i++) {
-      let cut = videoCuts[i];
-      if (+endTime > +cut.start) {
+    for (let i = 0; i < cuts.length; i++) {
+      let cut = cuts[i];
+      if (+endTime > +cut.end) {
         cutIndex++;
       }
     }
-    // console.log(cutIndex);
     setNextCutIndex(cutIndex);
   };
 
   useEffect(() => {
-    // console.log(currentWordId);
-  }, [currentWordId]);
+    console.log(nextCutIndex);
+  }, [nextCutIndex]);
+
+  // const handleCurrentTime = useCallback(
+  //   (time) => {
+  //     let word = words[currentWordIndex];
+  //     if (+word.start <= +time && +word.end >= +time && !word.deleted) {
+  //       setCurrentWordIndex((prevState) => prevState + 1);
+  //     }
+  //   },
+  //   [currentWordIndex]
+  // );
+
+  // const handleCurrentWordUpdate = useCallback((currentWordId) => {
+  //   for (let i = 0; i < words.length; i++) {
+  //     let word = words[i];
+  //     if (currentWordId === word.id) {
+  //       setCurrentWordIndex(i);
+  //     }
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   if (currentWordId) handleCurrentWordUpdate(currentWordId);
+  // }, [currentWordId, handleCurrentWordUpdate]);
+
+  const handleVideoCuts = useCallback(
+    (time) => {
+      time = time + 0.05;
+      if (videoCuts.length > 0 && nextCutIndex !== null) {
+        if (
+          videoCuts[nextCutIndex] &&
+          time >= +videoCuts[nextCutIndex].start &&
+          time <= +videoCuts[nextCutIndex].end
+        ) {
+          playerRef.current.currentTime = videoCuts[nextCutIndex].end;
+          if (videoCuts[nextCutIndex + 1]) setNextCutIndex(nextCutIndex + 1);
+        }
+      }
+    },
+    [videoCuts, nextCutIndex]
+  );
 
   const handleCurrentTime = useCallback((time) => {
+    time = time + 0.05;
     for (let i = 0; i < words.length; i++) {
       let word = words[i];
-      if (word.start <= time && word.end >= time) {
-        if (word.deleted && words[i - 1] && !words[i - 1].deleted) {
-          for (let j = i; j < words.length; j++) {
-            let newWord = words[j];
-            if (newWord.deleted && words[j + 1] && !words[j + 1].deleted) {
-              playerRef.current.currentTime = `${+newWord.end}`;
-              break;
-            } else if (!words[j + 1]) {
-              playerRef.current.currentTime = `${+newWord.end}`;
-            }
-          }
-        } else if (!word.deleted) {
-          setCurrentWordId(word.id);
-          break;
-        }
+      if (+word.start <= time && +word.end >= time && !word.deleted) {
+        setCurrentWordId(word.id);
+        break;
       }
     }
   }, [words]);
 
-  // const handleCurrentTime = useCallback(
-  //   (time) => {
-  //     let shouldSet = true;
-  //     time = `${+time + 0.05}`;
-  //     if (videoCuts.length > 0 && nextCutIndex !== null) {
-  //       if (
-  //         videoCuts[nextCutIndex] &&
-  //         +time >= +videoCuts[nextCutIndex].start &&
-  //         +time <= +videoCuts[nextCutIndex].end
-  //       ) {
-  //         playerRef.current.currentTime = videoCuts[nextCutIndex].end;
-  //         if (videoCuts[nextCutIndex + 1]) setNextCutIndex(nextCutIndex + 1);
-  //         else setNextCutIndex(null);
-  //         shouldSet = false;
-  //       }
-  //     }
-
-  //     if (shouldSet) {
-  //       for (let i = 0; i < words.length; i++) {
-  //         let word = words[i];
-  //         if (+word.start <= +time && +word.end >= +time && !word.deleted) {
-  //           setCurrentWordId(word.id);
-  //           console.log('setting word id from handle time');
-  //           break;
-  //         }
-  //       }
-  //     }
-  //   },
-  //   [videoCuts, nextCutIndex]
-  // );
+  useEffect(() => {
+    if (currentTime !== null) handleCurrentTime(currentTime);
+  }, [currentTime, handleCurrentTime]);
 
   useEffect(() => {
-    if (currentTime) handleCurrentTime(currentTime);
-  }, [currentTime, handleCurrentTime]);
+    if (currentTime !== null) handleVideoCuts(currentTime);
+  }, [currentTime, handleVideoCuts]);
 
   return (
     <div className={styles.VideoEditor}>
@@ -177,6 +176,7 @@ const VideoEditor = () => {
             controls
             onPlay={handlePlay}
             onPause={handlePause}
+            onEnded={handleEnd}
           />
         </div>
       </main>

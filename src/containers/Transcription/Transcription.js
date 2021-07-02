@@ -31,7 +31,6 @@ const Transcription = ({
       setCurrentSelection(null);
       setPlayerTime(id);
       setCurrentWordId(id);
-      // console.log('setting word id from click');
     } else if (!inputId) {
       restoreDeleted(
         words,
@@ -52,7 +51,6 @@ const Transcription = ({
         if (anchorNode.parentNode.id) {
           setPlayerTime(anchorNode.parentNode.id);
           setCurrentWordId(anchorNode.parentNode.id);
-          // console.log('setting word id from selection');
         }
         setCurrentSelection(null);
       } else if (isAnchorNode && isFocusNode) {
@@ -85,7 +83,6 @@ const Transcription = ({
         setCurrentSelection({ start, end });
         setPlayerTime(start);
         setCurrentWordId(start);
-        // console.log('setting word id from selection 2');
       }
       selection.removeAllRanges();
     },
