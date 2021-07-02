@@ -3,6 +3,7 @@ import styles from './VideoEditor.module.css';
 import Navigation from '../Navigation/Navigation';
 import Transcription from '../Transcription/Transcription';
 import useUploadVideo from '../../hooks/useUploadVideo';
+// import { words } from './sampleWords';
 
 const handleUpload = async (file, setFile, upload) => {
   const formData = new FormData();
@@ -26,8 +27,17 @@ const VideoEditor = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
   const [currentTime, setCurrentTime] = useState(null);
-  const [cuts, setCuts] = useState([]);
+  const [videoCuts, setVideoCuts] = useState([]);
+  const [nextCutIndex, setNextCutIndex] = useState(0);
   const playerRef = useRef(null);
+
+  // useEffect(() => {
+  //   videoCuts.forEach((el) => {
+  //     console.log(el);
+  //   });
+  //   console.log('//////////////////////////////');
+  // }, [videoCuts]);
+
   useEffect(() => {
     if (viedoForUpload) {
       handleUpload(viedoForUpload, setVideoForUpload, uploadVideo);
@@ -36,9 +46,7 @@ const VideoEditor = () => {
   }, [viedoForUpload, uploadVideo]);
 
   useEffect(() => {
-    if (words) {
-      setCurrentWordId(words[0].id);
-    }
+    if (words) setCurrentWordId(words[0].id);
   }, [words]);
 
   const handlePlay = (e) => {
@@ -48,7 +56,7 @@ const VideoEditor = () => {
     setIsPlaying(true);
     let interval = setInterval(() => {
       setCurrentTime(playerRef.current.currentTime);
-    }, 100);
+    }, 10);
     setIntervalId(interval);
   };
 
@@ -58,45 +66,87 @@ const VideoEditor = () => {
   };
 
   const setPlayerTime = (wordId) => {
+    let endTime = '0';
     for (let i = 0; i < words.length; i++) {
       let word = words[i];
       if (wordId === word.id) {
+        endTime = word.end;
         playerRef.current.currentTime = word.start;
         break;
       }
     }
+
+    let cutIndex = 0;
+    for (let i = 0; i < videoCuts.length; i++) {
+      let cut = videoCuts[i];
+      if (+endTime > +cut.start) {
+        cutIndex++;
+      }
+    }
+    // console.log(cutIndex);
+    setNextCutIndex(cutIndex);
   };
 
-  const handleCurrentTime = useCallback(
-    (time) => {
-      for (let i = 0; i < words.length; i++) {
-        let word = words[i];
-        if (word.start <= time && word.end >= time) {
-          if (word.deleted && words[i - 1] && !words[i - 1].deleted) {
-            for (let j = i; j < words.length; j++) {
-              let newWord = words[j];
-              if (newWord.deleted && words[j + 1] && !words[j + 1].deleted) {
-                playerRef.current.currentTime = `${+newWord.end}`;
-                break;
-              } else if (!words[j + 1]) {
-                playerRef.current.currentTime = `${+newWord.end}`;
-              }
+  useEffect(() => {
+    // console.log(currentWordId);
+  }, [currentWordId]);
+
+  const handleCurrentTime = useCallback((time) => {
+    for (let i = 0; i < words.length; i++) {
+      let word = words[i];
+      if (word.start <= time && word.end >= time) {
+        if (word.deleted && words[i - 1] && !words[i - 1].deleted) {
+          for (let j = i; j < words.length; j++) {
+            let newWord = words[j];
+            if (newWord.deleted && words[j + 1] && !words[j + 1].deleted) {
+              playerRef.current.currentTime = `${+newWord.end}`;
+              break;
+            } else if (!words[j + 1]) {
+              playerRef.current.currentTime = `${+newWord.end}`;
             }
-          } else if (!word.deleted) {
-            setCurrentWordId(word.id);
-            break;
           }
+        } else if (!word.deleted) {
+          setCurrentWordId(word.id);
+          break;
         }
       }
-    },
-    []
-  );
+    }
+  }, [words]);
+
+  // const handleCurrentTime = useCallback(
+  //   (time) => {
+  //     let shouldSet = true;
+  //     time = `${+time + 0.05}`;
+  //     if (videoCuts.length > 0 && nextCutIndex !== null) {
+  //       if (
+  //         videoCuts[nextCutIndex] &&
+  //         +time >= +videoCuts[nextCutIndex].start &&
+  //         +time <= +videoCuts[nextCutIndex].end
+  //       ) {
+  //         playerRef.current.currentTime = videoCuts[nextCutIndex].end;
+  //         if (videoCuts[nextCutIndex + 1]) setNextCutIndex(nextCutIndex + 1);
+  //         else setNextCutIndex(null);
+  //         shouldSet = false;
+  //       }
+  //     }
+
+  //     if (shouldSet) {
+  //       for (let i = 0; i < words.length; i++) {
+  //         let word = words[i];
+  //         if (+word.start <= +time && +word.end >= +time && !word.deleted) {
+  //           setCurrentWordId(word.id);
+  //           console.log('setting word id from handle time');
+  //           break;
+  //         }
+  //       }
+  //     }
+  //   },
+  //   [videoCuts, nextCutIndex]
+  // );
 
   useEffect(() => {
-    if (words) {
-      handleCurrentTime(currentTime);
-    }
-  }, [words, currentTime, handleCurrentTime]);
+    if (currentTime) handleCurrentTime(currentTime);
+  }, [currentTime, handleCurrentTime]);
 
   return (
     <div className={styles.VideoEditor}>
@@ -112,7 +162,7 @@ const VideoEditor = () => {
           setCurrentWordId={setCurrentWordId}
           isPlaying={isPlaying}
           playerRef={playerRef}
-          setCuts={setCuts}
+          setCuts={setVideoCuts}
           currentSelection={currentSelection}
           setCurrentSelection={setCurrentSelection}
           setPlayerTime={setPlayerTime}

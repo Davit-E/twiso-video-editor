@@ -6,7 +6,7 @@ import {
   deleteWord,
   restoreDeleted,
   deleteSelection,
-} from './utils/updateText';
+} from './utils/updateTextAndCuts';
 import Words from './Words/Words';
 
 const Transcription = ({
@@ -29,8 +29,9 @@ const Transcription = ({
     if (e.detail > 1 && !inputId) setInputId(id);
     if (!isDeleted && !inputId) {
       setCurrentSelection(null);
-      setCurrentWordId(id);
       setPlayerTime(id);
+      setCurrentWordId(id);
+      // console.log('setting word id from click');
     } else if (!inputId) {
       restoreDeleted(
         words,
@@ -49,8 +50,9 @@ const Transcription = ({
       let end = '';
       if (anchorNode.parentNode.id === focusNode.parentNode.id) {
         if (anchorNode.parentNode.id) {
-          setCurrentWordId(anchorNode.parentNode.id);
           setPlayerTime(anchorNode.parentNode.id);
+          setCurrentWordId(anchorNode.parentNode.id);
+          // console.log('setting word id from selection');
         }
         setCurrentSelection(null);
       } else if (isAnchorNode && isFocusNode) {
@@ -81,8 +83,9 @@ const Transcription = ({
 
       if (start !== '' && end !== '') {
         setCurrentSelection({ start, end });
-        setCurrentWordId(start);
         setPlayerTime(start);
+        setCurrentWordId(start);
+        // console.log('setting word id from selection 2');
       }
       selection.removeAllRanges();
     },
