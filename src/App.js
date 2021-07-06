@@ -1,15 +1,15 @@
 import './App.css';
 import VideoEditor from './containers/VideoEditor/VideoEditor';
-import EditorContext from './contexts/EditorContext';
-import useEditorState from './hooks/useEditorState';
+import AppContext from './contexts/AppContext';
+import useAppState from './hooks/useAppState';
 
 const App = () => {
-  const [editorState, editorDispatch] = useEditorState();
+  const [appState, appDispatch] = useAppState();
   return (
     <div className='App'>
-      <EditorContext.Provider value={{ editorState, editorDispatch }}>
+      <AppContext.Provider value={{ appState, appDispatch }}>
         <VideoEditor />
-      </EditorContext.Provider>
+      </AppContext.Provider>
     </div>
   );
 };

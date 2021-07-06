@@ -11,31 +11,42 @@ import Words from './Words/Words';
 
 const Transcription = ({
   words,
-  currentWordId,
-  setCurrentWordId,
+  currentWordIndex,
+  setCurrentWordIndex,
   isPlaying,
-  playerRef,
+  videoRef,
   setCuts,
   currentSelection,
   setCurrentSelection,
   setPlayerTime,
 }) => {
   const [searchInput, setSearchInput] = useState('');
-  const [inputId, setInputId] = useState(null);
+  const [inputIndex, setInputIndex] = useState(null);
+  const findWordIndexWithId = useCallback(
+    (id) => {
+      for (let i = 0; i < words.length; i++) {
+        let word = words[i];
+        if (word.id === id) return i;
+      }
+      return null;
+    },
+    [words]
+  );
 
   const wordClickHandler = (e, isDeleted) => {
     let id = e.currentTarget.id;
-    if (isPlaying) playerRef.current.pause();
-    if (e.detail > 1 && !inputId) setInputId(id);
-    if (!isDeleted && !inputId) {
+    let index = findWordIndexWithId(id);
+    if (isPlaying) videoRef.current.pause();
+    if (e.detail > 1 && inputIndex === null) setInputIndex(index);
+    if (!isDeleted && inputIndex === null && index !== null) {
       setCurrentSelection(null);
-      setPlayerTime(id);
-      setCurrentWordId(id);
-    } else if (!inputId) {
+      setPlayerTime(index);
+      setCurrentWordIndex(index);
+    } else if (inputIndex === null) {
       restoreDeleted(
         words,
-        id,
-        setCurrentWordId,
+        index,
+        setCurrentWordIndex,
         setCurrentSelection,
         setCuts,
         setPlayerTime
@@ -48,9 +59,10 @@ const Transcription = ({
       let start = '';
       let end = '';
       if (anchorNode.parentNode.id === focusNode.parentNode.id) {
-        if (anchorNode.parentNode.id) {
-          setPlayerTime(anchorNode.parentNode.id);
-          setCurrentWordId(anchorNode.parentNode.id);
+        let index = findWordIndexWithId(anchorNode.parentNode.id);
+        if (anchorNode.parentNode.id && index !== null) {
+          setPlayerTime(index);
+          setCurrentWordIndex(index);
         }
         setCurrentSelection(null);
       } else if (isAnchorNode && isFocusNode) {
@@ -80,13 +92,22 @@ const Transcription = ({
       }
 
       if (start !== '' && end !== '') {
-        setCurrentSelection({ start, end });
-        setPlayerTime(start);
-        setCurrentWordId(start);
+        let indexStart = findWordIndexWithId(start);
+        let indexEnd = findWordIndexWithId(end);
+        if (indexStart !== null && indexEnd !== null) {
+          setCurrentSelection({ start: indexStart, end: indexEnd });
+          setPlayerTime(indexStart);
+          setCurrentWordIndex(indexStart);
+        }
       }
       selection.removeAllRanges();
     },
-    [setCurrentWordId, setCurrentSelection, setPlayerTime]
+    [
+      setCurrentWordIndex,
+      setCurrentSelection,
+      setPlayerTime,
+      findWordIndexWithId,
+    ]
   );
 
   const mouseUpHandler = useCallback(
@@ -101,7 +122,7 @@ const Transcription = ({
           selection.focusNode
         );
         if ((isAnchorNode || isFocusNode) && !selection.isCollapsed) {
-          if (isPlaying) playerRef.current.pause();
+          if (isPlaying) videoRef.current.pause();
           handleSelection(
             selection,
             anchorNode,
@@ -113,7 +134,7 @@ const Transcription = ({
         }
       }
     },
-    [handleSelection, isPlaying, playerRef]
+    [handleSelection, isPlaying, videoRef]
   );
 
   useEffect(() => {
@@ -122,19 +143,19 @@ const Transcription = ({
   }, [mouseUpHandler]);
 
   const cutClickHandler = () => {
-    if (isPlaying) playerRef.current.pause();
-    if (!currentSelection && currentWordId) {
+    if (isPlaying) videoRef.current.pause();
+    if (!currentSelection && currentWordIndex !== null) {
       deleteWord(
         words,
-        currentWordId,
-        setCurrentWordId,
+        currentWordIndex,
+        setCurrentWordIndex,
         setCuts,
         setPlayerTime
       );
     } else if (currentSelection) {
       deleteSelection(
         words,
-        setCurrentWordId,
+        setCurrentWordIndex,
         currentSelection,
         setCurrentSelection,
         setCuts,
@@ -165,11 +186,11 @@ const Transcription = ({
         {words ? (
           <Words
             wordsArr={words}
-            currentWordId={currentWordId}
+            currentWordIndex={currentWordIndex}
             searchInput={searchInput}
             wordClickHandler={wordClickHandler}
-            inputId={inputId}
-            setInputId={setInputId}
+            inputIndex={inputIndex}
+            setInputIndex={setInputIndex}
             currentSelection={currentSelection}
           />
         ) : null}

@@ -4,11 +4,11 @@ import restoreText from '../../../assets/restoreText.svg';
 
 const Words = ({
   wordsArr,
-  currentWordId,
+  currentWordIndex,
   searchInput,
   wordClickHandler,
-  inputId,
-  setInputId,
+  inputIndex,
+  setInputIndex,
   currentSelection,
 }) => {
   const [input, setInput] = useState('');
@@ -16,25 +16,16 @@ const Words = ({
 
   const blurHandler = () => {
     let inputVal = input.trim().length > 0 ? input : null;
-    let currentIndex = null;
-    for (let i = 0; i < wordsArr.length; i++) {
-      let word = wordsArr[i];
-      if (word.id === inputId) {
-        currentIndex = i;
-        break;
-      }
-    }
-
-    if (wordsArr[currentIndex]) {
-      if (inputVal && !wordsArr[currentIndex].silence) {
-        wordsArr[currentIndex].text = inputVal;
+    if (wordsArr[inputIndex]) {
+      if (inputVal && !wordsArr[inputIndex].silence) {
+        wordsArr[inputIndex].text = inputVal;
       } else if (inputVal) {
-        wordsArr[currentIndex].text = inputVal;
-        wordsArr[currentIndex].silence = false;
-      } else wordsArr[currentIndex].silence = true;
+        wordsArr[inputIndex].text = inputVal;
+        wordsArr[inputIndex].silence = false;
+      } else wordsArr[inputIndex].silence = true;
     }
     setInput('');
-    setInputId(null);
+    setInputIndex(null);
   };
 
   let isLastDeleted = false;
@@ -43,27 +34,19 @@ const Words = ({
   let isSelectionEnd = false;
 
   useEffect(() => {
-    if (inputId) {
+    if (inputIndex !== null) {
       inputRef.current.focus();
-      let currentIndex = null;
-      for (let i = 0; i < wordsArr.length; i++) {
-        let word = wordsArr[i];
-        if (word.id === inputId) {
-          currentIndex = i;
-          break;
-        }
-      }
-      if (wordsArr[currentIndex] && !wordsArr[currentIndex].silence) {
-        setInput(wordsArr[currentIndex].text);
+      if (wordsArr[inputIndex] && !wordsArr[inputIndex].silence) {
+        setInput(wordsArr[inputIndex].text);
       }
     }
-  }, [inputId, wordsArr]);
+  }, [inputIndex, wordsArr]);
 
-  return wordsArr.map((word) => {
+  return wordsArr.map((word, i) => {
     if (isLastDeleted && word.deleted) shouldShow = false;
     else shouldShow = true;
     let isCurrent =
-      word.id === currentWordId && !currentSelection && !word.deleted;
+      i === currentWordIndex && !currentSelection && !word.deleted;
     let isHighlight =
       !word.silence &&
       !word.deleted &&
@@ -73,16 +56,16 @@ const Words = ({
     if (!isLastDeleted && word.deleted) isLastDeleted = true;
     if (isLastDeleted && !word.deleted) isLastDeleted = false;
 
-    if (currentSelection && currentSelection.start === word.id) {
+    if (currentSelection && currentSelection.start === i) {
       isSelectionMode = true;
-    } else if (currentSelection && currentSelection.end === word.id) {
+    } else if (currentSelection && currentSelection.end === i) {
       isSelectionEnd = true;
     } else if (isSelectionEnd) {
       isSelectionMode = false;
       isSelectionEnd = false;
     }
 
-    let isInput = inputId && isCurrent;
+    let isInput = inputIndex !== null && isCurrent;
     let innerContent = isInput ? (
       <input
         ref={inputRef}

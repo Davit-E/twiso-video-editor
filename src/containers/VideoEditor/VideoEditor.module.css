@@ -12,17 +12,5 @@
   padding-bottom: 1rem;
 }
 
-.Player {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  flex: 1;
-  padding-top: 4rem;
-  padding-right: 2rem;
-}
 
-.Video {
-  width: 90%;
-  height: auto;
-}
 
