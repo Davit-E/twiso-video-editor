@@ -34,12 +34,19 @@ const useSelectionObserver = (isCanvasSet, canvas, state, dispatch) => {
   const isFirstLoad = useRef(true);
   const currentId = useRef(null);
 
+  const checkOffScreen = (e) => {
+    if (e.target.type === 'video' && !e.target.isOnScreen()) {
+      e.target.top = 0;
+      e.target.left = 0;
+    }
+  }
+
   const addListeners = useCallback(
     (c, dispatch, showCanvasToolbar) => {
       c.on('text:editing:entered', (e) => onTextEnter(e, c, setIsEditingText));
       c.on('text:editing:exited', (e) => onTextExit(e, c, setIsEditingText));
       c.on('selection:created', (e) =>
-        onCreated(e, dispatch, showCanvasToolbar)
+        onCreated(e, c, dispatch, showCanvasToolbar)
       );
       c.on('selection:updated', (e) => onUpdated(e, dispatch));
       c.on('object:modified', (e) => onModified(e, dispatch));
@@ -47,12 +54,16 @@ const useSelectionObserver = (isCanvasSet, canvas, state, dispatch) => {
       c.on('object:rotating', () => setIsRotating(true));
       c.on('object:rotated', () => setIsRotating(false));
       c.on('object:scaling', () => setIsScaling(true));
-      c.on('object:scaled', () => setIsScaling(false));
+      c.on('object:scaled', (e) => {
+        checkOffScreen(e);
+        setIsScaling(false);
+      });
       c.on('object:skewing', () => setIsSkewing(true));
       c.on('object:skewed', () => setIsSkewing(false));
-      c.on('object:moved', () =>
-        eventDispatch({ type: 'setIsMoving', data: false })
-      );
+      c.on('object:moved', (e) => {
+        checkOffScreen(e);
+        eventDispatch({ type: 'setIsMoving', data: false });
+      });
     },
     [eventDispatch]
   );
@@ -84,7 +95,8 @@ const useSelectionObserver = (isCanvasSet, canvas, state, dispatch) => {
         isSkewing ||
         eventState.isMoving ||
         isEditingText ||
-        !state.currentCoords
+        !state.currentCoords ||
+        state.currentObject.type === 'video'
       )
         data = false;
       dispatch({ type: 'setShowToolbar', data });
@@ -97,6 +109,7 @@ const useSelectionObserver = (isCanvasSet, canvas, state, dispatch) => {
     isEditingText,
     state.isCropMode,
     state.currentCoords,
+    state.currentObject,
     dispatch,
   ]);
 
@@ -106,18 +119,14 @@ const useSelectionObserver = (isCanvasSet, canvas, state, dispatch) => {
         dispatch({ type: 'setShowToolbar', data: false });
       } else if (
         state.currentObject.object &&
-        state.currentObject.object.id !== currentId.current
+        state.currentObject.object.id !== currentId.current &&
+        state.currentObject.type !== 'video'
       ) {
         currentId.current = state.currentObject.object.id;
         dispatch({ type: 'setShowToolbar', data: true });
       }
     } else isFirstLoad.current = false;
-  }, [
-    state.currentCoords,
-    state.currentObject.object,
-    dispatch,
-    state.isCropMode,
-  ]);
+  }, [state.currentCoords, state.currentObject, dispatch, state.isCropMode]);
 };
 
 export default useSelectionObserver;

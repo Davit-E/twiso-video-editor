@@ -64,6 +64,7 @@ const Transcription = ({
           setPlayerTime(index);
           setCurrentWordIndex(index);
         }
+        selection.removeAllRanges();
         setCurrentSelection(null);
       } else if (isAnchorNode && isFocusNode) {
         if (position === 4) {
@@ -100,7 +101,7 @@ const Transcription = ({
           setCurrentWordIndex(indexStart);
         }
       }
-      selection.removeAllRanges();
+      // selection.removeAllRanges();
     },
     [
       setCurrentWordIndex,
@@ -162,6 +163,8 @@ const Transcription = ({
         setPlayerTime
       );
     }
+    let selection = document.getSelection();
+    selection.removeAllRanges();
   };
 
   return (

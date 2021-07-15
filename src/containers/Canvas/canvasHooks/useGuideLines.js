@@ -5,11 +5,11 @@ import {
   objectMovingObserver,
 } from './utils/aligningGuidelines';
 import EventContext from '../../../contexts/EventContext';
-// import {
-//   showVerticalCenterLine,
-//   showHorizontalCenterLine,
-//   objectMovingCenterObserver,
-// } from './utils/centeringGuidelines';
+import {
+  showVerticalCenterLine,
+  showHorizontalCenterLine,
+  objectMovingCenterObserver,
+} from './utils/centeringGuidelines';
 
 const useGuideLines = (state, isCanvasSet, canvas) => {
   const { eventState, eventDispatch } = useContext(EventContext);
@@ -21,18 +21,18 @@ const useGuideLines = (state, isCanvasSet, canvas) => {
 
   const [canvasWidth, setCanvasWidth] = useState(null);
   const [canvasHeight, setCanvasHeight] = useState(null);
-  // const [canvasWidthCenterMap, setCanvasWidthCenterMap] = useState({});
-  // const [canvasHeightCenterMap, setCanvasHeightCenterMap] = useState({});
-  // const [isInVerticalCenter, setIsInVerticalCenter] = useState(null);
-  // const [isInHorizontalCenter, setIsInHorizontalCenter] = useState(null);
+  const [canvasWidthCenterMap, setCanvasWidthCenterMap] = useState({});
+  const [canvasHeightCenterMap, setCanvasHeightCenterMap] = useState({});
+  const [isInVerticalCenter, setIsInVerticalCenter] = useState(null);
+  const [isInHorizontalCenter, setIsInHorizontalCenter] = useState(null);
 
   const aligningLineOffset = 5;
   const aligningLineWidth = 1;
   const aligningLineMargin = 4;
   const centerLineMargin = 4;
-  const aligningLineColor = 'rgba(255,0,241,0.5)';
-  // const centerLineWidth = 1;
-  // const centerLineColor = 'rgba(255,0,241,0.5)';
+  const aligningLineColor = 'rgb(111, 123, 208)';
+  const centerLineWidth = 1;
+  const centerLineColor = 'rgb(111, 123, 208)';
 
   const handleMouseDown = useCallback(() => {
     setViewportTransform(canvas.viewportTransform);
@@ -54,24 +54,24 @@ const useGuideLines = (state, isCanvasSet, canvas) => {
         setHorizontalLines,
         aligningLineMargin
       );
-      // objectMovingCenterObserver(
-      //   e,
-      //   canvas,
-      //   setIsInVerticalCenter,
-      //   setIsInHorizontalCenter,
-      //   canvasWidthCenterMap,
-      //   canvasHeightCenterMap,
-      //   canvasWidth,
-      //   canvasHeight
-      // );
+      objectMovingCenterObserver(
+        e,
+        canvas,
+        setIsInVerticalCenter,
+        setIsInHorizontalCenter,
+        canvasWidthCenterMap,
+        canvasHeightCenterMap,
+        canvasWidth,
+        canvasHeight
+      );
     },
     [
       canvas,
       viewportTransform,
-      // canvasHeight,
-      // canvasHeightCenterMap,
-      // canvasWidth,
-      // canvasWidthCenterMap,
+      canvasHeight,
+      canvasHeightCenterMap,
+      canvasWidth,
+      canvasWidthCenterMap,
     ]
   );
 
@@ -98,50 +98,50 @@ const useGuideLines = (state, isCanvasSet, canvas) => {
     }
     setVerticalLines([]);
     setHorizontalLines([]);
-    // if (isInVerticalCenter) {
-    //   showVerticalCenterLine(
-    //     canvasWidth / 2,
-    //     canvasHeight,
-    //     ctx,
-    //     centerLineColor,
-    //     centerLineWidth,
-    //     viewportTransform
-    //   );
-    // }
-    // if (isInHorizontalCenter) {
-    //   showHorizontalCenterLine(
-    //     canvasHeight / 2,
-    //     canvasWidth,
-    //     ctx,
-    //     centerLineColor,
-    //     centerLineWidth,
-    //     viewportTransform
-    //   );
-    // }
+    if (isInVerticalCenter) {
+      showVerticalCenterLine(
+        canvasWidth / 2,
+        canvasHeight,
+        ctx,
+        centerLineColor,
+        centerLineWidth,
+        viewportTransform
+      );
+    }
+    if (isInHorizontalCenter) {
+      showHorizontalCenterLine(
+        canvasHeight / 2,
+        canvasWidth,
+        ctx,
+        centerLineColor,
+        centerLineWidth,
+        viewportTransform
+      );
+    }
   }, [
     ctx,
     viewportTransform,
     horizontalLines,
     verticalLines,
     zoom,
-    // canvasHeight,
-    // canvasWidth,
-    // isInHorizontalCenter,
-    // isInVerticalCenter,
+    canvasHeight,
+    canvasWidth,
+    isInHorizontalCenter,
+    isInVerticalCenter,
   ]);
 
   const handleMouseUp = useCallback(() => {
     setVerticalLines([]);
     setHorizontalLines([]);
-    // setIsInVerticalCenter(null);
-    // setIsInHorizontalCenter(null);
+    setIsInVerticalCenter(null);
+    setIsInHorizontalCenter(null);
     canvas.requestRenderAll();
   }, [canvas]);
 
   const initGuideLines = useCallback(() => {
     setCtx(canvas.getSelectionContext());
-    setCanvasWidth(canvas.getWidth());
-    setCanvasHeight(canvas.getHeight());
+    setCanvasWidth(canvas.getWidth() / canvas.getZoom());
+    setCanvasHeight(canvas.getHeight() / canvas.getZoom());
     let widthMap = {};
     let heightMap = {};
     for (
@@ -160,8 +160,8 @@ const useGuideLines = (state, isCanvasSet, canvas) => {
     ) {
       heightMap[Math.round(i)] = true;
     }
-    // setCanvasWidthCenterMap(widthMap);
-    // setCanvasHeightCenterMap(heightMap);
+    setCanvasWidthCenterMap(widthMap);
+    setCanvasHeightCenterMap(heightMap);
   }, [canvasHeight, canvasWidth, canvas]);
 
   const removelistneres = useCallback((canvas) => {
@@ -183,14 +183,20 @@ const useGuideLines = (state, isCanvasSet, canvas) => {
     if (isCanvasSet && ctx && !state.isCropMode) {
       canvas.on('mouse:down', handleMouseDown);
       canvas.on('object:moving', (e) => {
-        if (!eventState.isMoving){
+        if (!eventState.isMoving) {
           eventDispatch({ type: 'setIsMoving', data: true });
         }
         handleMoving(e);
       });
       canvas.on('before:render', handleBeforeRender);
       canvas.on('after:render', handleAfterRender);
-      canvas.on('mouse:up', handleMouseUp);
+      canvas.on('mouse:up', (e) => {
+        if (e.button === 3) {
+          eventDispatch({ type: 'setRightClickEvent', data: e });
+          e.e.preventDefault();
+        }
+        handleMouseUp(e);
+      });
     } else if (state.isCropMode) removelistneres(canvas);
     return () => {
       if (isCanvasSet && ctx) removelistneres(canvas);

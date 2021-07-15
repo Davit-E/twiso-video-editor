@@ -5,6 +5,7 @@ import useAppState from './hooks/useAppState';
 
 const App = () => {
   const [appState, appDispatch] = useAppState();
+  // console.log(appState);
   return (
     <div className='App'>
       <AppContext.Provider value={{ appState, appDispatch }}>

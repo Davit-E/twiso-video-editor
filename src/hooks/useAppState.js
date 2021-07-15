@@ -25,11 +25,14 @@ const initialState = {
     cornerRadius: 0,
     isSvg: false,
   },
+  isSubtitles: false,
   isCropMode: false,
   shouldCropImage: false,
   isImageDropdown: false,
+  isSubtitlesDropdown: false,
   isShapeDropdown: false,
   isResizeDropdown: false,
+  isCanvasBgColorDropdown: false,
   isDownloadDropdown: false,
   shouldAddText: false,
   shouldUpdateText: false,
@@ -56,16 +59,22 @@ const reducer = (state, action) => {
       return { ...state, canvasState: action.data };
     case 'setIsDownloadDropdown':
       return { ...state, isDownloadDropdown: action.data };
+    case 'setIsSubtitles':
+      return { ...state, isSubtitles: action.data, isSubtitlesDropdown: false };
     case 'setIsCropMode':
       return { ...state, isCropMode: action.data };
     case 'setShouldCropImage':
       return { ...state, shouldCropImage: action.data };
     case 'setIsImageDropdown':
       return { ...state, isImageDropdown: action.data };
+    case 'setIsSubtitlesDropdown':
+      return { ...state, isSubtitlesDropdown: action.data };
     case 'setIsShapeDropdown':
       return { ...state, isShapeDropdown: action.data };
     case 'setIsResizeDropdown':
       return { ...state, isResizeDropdown: action.data };
+    case 'setIsCanvasBgColorDropdown':
+      return { ...state, isCanvasBgColorDropdown: action.data };
     case 'setCurrentCoords':
       return { ...state, currentCoords: action.data };
     case 'setShowToolbar':
@@ -126,6 +135,17 @@ const reducer = (state, action) => {
         shouldUpdateCanvasSize: true,
         canvasState: {
           ...state.canvasState,
+          width: action.data.width,
+          height: action.data.height,
+        },
+      };
+    case 'setCanvasInitialSize':
+      return {
+        ...state,
+        canvasState: {
+          ...state.canvasState,
+          initialWidth: action.data.initialWidth,
+          initialHeight: action.data.initialHeight,
           width: action.data.width,
           height: action.data.height,
         },

@@ -2,12 +2,15 @@ import { useReducer } from 'react';
 
 const initialState = {
   isMoving: false,
+  rightClickEvent: null,
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case 'setIsMoving':
       return { ...state, isMoving: action.data };
+    case 'setRightClickEvent':
+      return { ...state, rightClickEvent: action.data };
 
     default:
       return state;

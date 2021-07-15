@@ -1,12 +1,51 @@
 .Player {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  width: 100%;
   flex: 1;
-  padding: 4rem 2rem 0 2rem;
+  flex-shrink: 1;
+  position: relative;
+  margin-top: 5.625rem;
+  padding: 0 1rem;
+  margin-bottom: 1.375rem;
 }
 
 .Video {
-  width: 100%;
+  width: 20rem;
   height: auto;
+  display: none;
+  position: absolute;
+}
+
+.PlayerContent {
+  position: relative;
+  width: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.PlayerControls {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.PlayButton {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.05), 0px 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.PlayButton:active {
+  background: rgba(88, 110, 224, 0.06);
 }

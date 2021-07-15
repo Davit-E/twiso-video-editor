@@ -40,20 +40,20 @@ const handleImage = (e, dispatch) => {
 
 const handleSelected = (e, dispatch) => {
   let obj = { type: '', object: null };
-  if (e.target.type === 'activeSelection') {
-    dispatch({ type: 'setCurrentObject', data: obj });
-    return;
-  }
-
   dispatch({ type: 'setCurrentCoords', data: e.target.lineCoords });
   if (e.target.type === 'textbox') obj.type = handleText(e, dispatch);
   else if (e.target.type === 'image') obj.type = handleImage(e, dispatch);
-  else obj.type = handleShape(e, dispatch);
+  else if (e.target.type !== 'video') obj.type = handleShape(e, dispatch);
+  else obj.type = 'video'
   obj.object = e.target;
   dispatch({ type: 'setCurrentObject', data: obj });
 };
 
-export const onCreated = (e, dispatch, showCanvasToolbar) => {
+export const onCreated = (e, c, dispatch, showCanvasToolbar) => {
+  if (e.target.type === 'activeSelection') {
+    c.discardActiveObject();
+    return;
+  }
   if (showCanvasToolbar) {
     dispatch({ type: 'setShowCanvasToolbar', data: false });
   }

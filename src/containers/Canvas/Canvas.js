@@ -9,13 +9,16 @@ import useUpdateObject from './canvasHooks/useUpdateObject';
 import Toolbar from '../Toolbar/Toolbar';
 import useCropImage from './canvasHooks/useCropImage';
 import useAddCanvas from './canvasHooks/useAddCanvas';
-
+import useAddVideo from './canvasHooks/useAddVideo';
+import useKeyEvents from './canvasHooks/useKeyEvents';
+import ContextMenu from './ContextMenu/ContextMenu';
 fabricConfig();
 
-const Canvas = ({ canvas, setCanvas, size }) => {
+const Canvas = ({ canvas, setCanvas, video }) => {
   const { appState, appDispatch } = useContext(AppContext);
   const [objectIdCount, setObjectIdCount] = useState(1);
   const [isCanvasSet, setIsCanvasSet] = useState(false);
+  const [clipboard, setClipboard] = useState(null);
   const updatetObjectId = useCallback(() => setObjectIdCount((i) => i + 1), []);
 
   useGuidelines(appState, isCanvasSet, canvas);
@@ -23,7 +26,9 @@ const Canvas = ({ canvas, setCanvas, size }) => {
   useSelectionObserver(isCanvasSet, canvas, appState, appDispatch);
   useUpdateObject(appState, appDispatch, canvas);
   useCropImage(appState, appDispatch, canvas, objectIdCount, updatetObjectId);
-  useAddCanvas(appState, setCanvas, setIsCanvasSet, size);
+  useAddCanvas(appState, setCanvas, setIsCanvasSet);
+  useKeyEvents(canvas, clipboard, setClipboard, objectIdCount, updatetObjectId);
+  useAddVideo(video, canvas);
 
   return (
     <div className={styles.CanvasComponent}>
@@ -31,6 +36,14 @@ const Canvas = ({ canvas, setCanvas, size }) => {
         <canvas id='canvas' />
       </div>
       {appState.showToolbar ? <Toolbar canvas={canvas} /> : null}
+      <ContextMenu
+        canvas={canvas}
+        isCanvasSet={isCanvasSet}
+        objId={objectIdCount}
+        updateId={updatetObjectId}
+        clipboard={clipboard}
+        setClipboard={setClipboard}
+      />
     </div>
   );
 };

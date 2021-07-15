@@ -7,21 +7,13 @@ export const scaleAndPositionImage = (state, canvas) => {
     let imgAspect = img.width / img.height;
     let left, top, scaleFactor;
     if (canvasAspect >= imgAspect) {
-      scaleFactor = (state.width * state.zoom) / canvas.getZoom() / img.width;
+      scaleFactor = state.width / canvas.getZoom() / img.width;
       left = 0;
-      top =
-        -(
-          img.height * scaleFactor -
-          (state.height * state.zoom) / canvas.getZoom()
-        ) / 2;
+      top = -(img.height * scaleFactor - state.height / canvas.getZoom()) / 2;
     } else {
-      scaleFactor = (state.height * state.zoom) / canvas.getZoom() / img.height;
+      scaleFactor = state.height / canvas.getZoom() / img.height;
       top = 0;
-      left =
-        -(
-          img.width * scaleFactor -
-          (state.width * state.zoom) / canvas.getZoom()
-        ) / 2;
+      left = -(img.width * scaleFactor - state.width / canvas.getZoom()) / 2;
     }
     canvas.hoverCursor = 'default';
     img.top = top;
@@ -59,11 +51,10 @@ export const updateCanvasSize = (state, canvas, dispatch) => {
     state.width / state.initialWidth,
     state.height / state.initialHeight
   );
-  canvas.setZoom(ratio * state.zoom);
-  canvas.zoom = state.zoom;
+  canvas.setZoom(ratio);
   canvas.setDimensions({
-    width: state.width * state.zoom,
-    height: state.height * state.zoom,
+    width: state.width,
+    height: state.height,
   });
 
   canvas.getObjects().forEach((el) => {

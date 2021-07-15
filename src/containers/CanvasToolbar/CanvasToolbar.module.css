@@ -1,0 +1,96 @@
+.CanvasToolbar {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  width: auto;
+  height: 2.5rem;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  user-select: none;
+}
+
+.BorderDiv {
+  width: 1px;
+  height: 20px;
+  background: #ececec;
+}
+
+.DownArrow {
+  width: 0.5rem;
+  height: auto;
+  user-select: none;
+}
+.TemplatesContainer,
+.ResizeContainer,
+.ColorContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  cursor: pointer;
+}
+.TemplatesContainer:hover,
+.ResizeContainer:hover,
+.ColorContainer:hover {
+  background: rgba(88, 110, 224, 0.06);
+}
+.TemplatesContainer:active,
+.ResizeContainer:active,
+.ColorContainer:active {
+  background: rgba(88, 110, 224, 0.12);
+}
+
+.ResizeContainer {
+  padding: 0 1rem;
+}
+.TemplatesContainer {
+  padding-left: 1rem;
+  padding-right: 0.75rem;
+}
+.ColorContainer {
+  padding-right: 1rem;
+  padding-left: 0.75rem;
+}
+
+.OptionText {
+  margin: 0;
+  font-weight: 500;
+  font-size: 0.875rem;
+  margin-left: 0.4rem;
+  white-space: nowrap;
+}
+
+.ResizeDropdown {
+  width: auto;
+  height: auto;
+  position: absolute;
+  z-index: 200;
+  right: 5.5rem;
+  bottom: 3rem;
+}
+
+.ColorPickerBorder {
+  border: 0.1px solid #c4c4c4;
+  height: 1rem;
+  width: 1rem;
+  border-radius: 30px;
+}
+
+.ColorPicker {
+  background: white;
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+}
+
+.ColorDropdownContainer {
+  position: absolute;
+  z-index: 200;
+  width: auto;
+  height: auto;
+  right: 0;
+  bottom: 3rem;
+}

@@ -121,7 +121,7 @@
 
 .DownloadButton {
   background: #6f7bd0;
-  border-radius: 4px;
+  border-radius: 30px;
   padding: 0.5rem 1.56rem;
   color: white;
   border: none;
@@ -181,6 +181,23 @@
   border-radius: 4px;
 }
 
+.SubtitlesDropdown {
+  position: absolute;
+  width: 11rem;
+  top: 3.3rem;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 200;
+  background: #ffffff;
+  border: 1px solid #ececec;
+  box-shadow: 0px 6px 12px -6px rgba(24, 39, 75, 0.12),
+    0px 8px 24px -4px rgba(24, 39, 75, 0.08);
+  border-radius: 4px;
+}
+
 .DownloadDropdown {
   position: absolute;
   width: 14rem;
@@ -201,7 +218,7 @@
   color: white;
   padding: 0.5rem 1rem;
   margin-left: 2rem;
-  border-radius: 4px;
+  border-radius: 30px;
   cursor: pointer;
 }
 .UploadVideo:active {

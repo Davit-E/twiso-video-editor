@@ -4,7 +4,7 @@ import Navigation from '../Navigation/Navigation';
 import Transcription from '../Transcription/Transcription';
 import Player from '../Player/Player';
 import useUploadVideo from '../../hooks/useUploadVideo';
-// import { words } from './sampleWords';
+// import { words } from './sampleWords2';
 
 const handleUpload = async (file, setFile, upload) => {
   const formData = new FormData();
@@ -19,8 +19,7 @@ const handleUpload = async (file, setFile, upload) => {
 };
 
 const VideoEditor = () => {
-  const { isUploading, uploadVideo, words, duration, fullText } =
-    useUploadVideo();
+  const { isUploading, uploadVideo, words, duration, fullText } = useUploadVideo();
   const [currentSelection, setCurrentSelection] = useState(null);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [viedoForUpload, setVideoForUpload] = useState(null);
@@ -37,7 +36,6 @@ const VideoEditor = () => {
   useEffect(() => {
     if (viedoForUpload) {
       handleUpload(viedoForUpload, setVideoForUpload, uploadVideo);
-      videoRef.current.src = URL.createObjectURL(viedoForUpload);
     }
   }, [viedoForUpload, uploadVideo]);
 
@@ -49,12 +47,19 @@ const VideoEditor = () => {
   //   console.log(currentWordIndex);
   // }, [currentWordIndex]);
 
+  useEffect(() => {
+    videoCuts.forEach((el) => {
+      console.log(el);
+    });
+  }, [videoCuts]);
+
   const handlePlay = (e) => {
     let selection = document.getSelection();
     selection.removeAllRanges();
     if (currentSelection) setCurrentSelection(null);
     setIsPlaying(true);
     let interval = setInterval(() => {
+      // console.log('interval: ', videoRef.current.currentTime);
       setCurrentTime(videoRef.current.currentTime);
     }, 10);
     setIntervalId(interval);
@@ -102,6 +107,27 @@ const VideoEditor = () => {
 
   const handleVideoCuts = useCallback(
     (time) => {
+      // if (
+      //   videoCuts.length > 0 &&
+      //   nextCutIndex !== null &&
+      //   videoCuts[nextCutIndex]
+      // ) {
+      //   console.log(videoCuts[nextCutIndex]);
+      //   console.log(
+      //     'comparing: ',
+      //     time,
+      //     '>=',
+      //     +videoCuts[nextCutIndex].start,
+      //     time >= +videoCuts[nextCutIndex].start
+      //   );
+      //   console.log(
+      //     'comparing: ',
+      //     time,
+      //     '<=',
+      //     +videoCuts[nextCutIndex].end,
+      //     time <= +videoCuts[nextCutIndex].end
+      //   );
+      // }
       time = +time + 0.05;
       if (videoCuts.length > 0 && nextCutIndex !== null) {
         if (
@@ -110,6 +136,8 @@ const VideoEditor = () => {
           time <= +videoCuts[nextCutIndex].end
         ) {
           videoRef.current.currentTime = videoCuts[nextCutIndex].end;
+          // console.log(`%c setting to: ${videoCuts[nextCutIndex].end}`, 'background:red; color:white');
+
           if (videoCuts[nextCutIndex + 1]) setNextCutIndex(nextCutIndex + 1);
         }
       }
@@ -128,14 +156,15 @@ const VideoEditor = () => {
       if (index !== null && nextWord && time > +word.end) {
         let isShortTime = +word.end - word.start <= 0.05 && !isPlaying;
         if (!isShortTime && nextWord.deleted && nextWord.next !== null) {
-          videoRef.current.currentTime = words[nextWord.next].start;
+          // videoRef.current.currentTime = words[nextWord.next].start;
+          // if (videoCuts[nextCutIndex + 1]) setNextCutIndex(nextCutIndex + 1);
           setCurrentWordIndex(nextWord.next);
         } else if (!isShortTime) {
           setCurrentWordIndex((prevState) => prevState + 1);
         }
       }
     },
-    [words, isPlaying]
+    [isPlaying, words]
   );
 
   useEffect(() => {
@@ -151,6 +180,7 @@ const VideoEditor = () => {
       <Navigation
         setVideoForUpload={setVideoForUpload}
         isUploading={isUploading}
+        canvas={canvas}
       />
       <main className={styles.Main}>
         <Transcription
@@ -167,16 +197,19 @@ const VideoEditor = () => {
           // duration={duration}
           // fullText={fullText}
         />
-        <Player
-          viedoForUpload={viedoForUpload}
-          videoRef={videoRef}
-          handleEnd={handleEnd}
-          handlePause={handlePause}
-          handlePlay={handlePlay}
-          canvas={canvas}
-          setCanvas={setCanvas}
-          duration={duration}
-        />
+        {words ? (
+          <Player
+            viedoForUpload={viedoForUpload}
+            videoRef={videoRef}
+            handleEnd={handleEnd}
+            handlePause={handlePause}
+            handlePlay={handlePlay}
+            canvas={canvas}
+            setCanvas={setCanvas}
+            duration={duration}
+            isPlaying={isPlaying}
+          />
+        ) : null}
       </main>
     </div>
   );
