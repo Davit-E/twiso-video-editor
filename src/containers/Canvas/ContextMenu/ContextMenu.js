@@ -101,7 +101,7 @@ const ContextMenu = ({
         onContextMenu={overlayClickHandler}
         onClick={overlayClickHandler}
       ></div>
-      <ul ref={menuRef} className={styles.Menu} id='contextMenu'>
+      <ul  onContextMenu={(e) => e.preventDefault()} ref={menuRef} className={styles.Menu} id='contextMenu'>
         {!canOnlyPaste && !isVideo ? (
           <li className={styles.Option} id='copy' onClick={optionClickHandler}>
             <p>Copy</p>
