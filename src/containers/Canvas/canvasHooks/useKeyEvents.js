@@ -3,7 +3,8 @@ import { handlePaste } from './utils/pasteObject';
 
 const deleteHandler = (canvas) => {
   let active = canvas.getActiveObject();
-  if (active && active.type !== 'video') {
+  let isInput = document.activeElement.tagName === 'INPUT';
+  if (!isInput && active && active.type !== 'video') {
     canvas.remove(active);
     canvas.discardActiveObject().requestRenderAll();
   }
@@ -19,8 +20,12 @@ const keyDownHandler = (
 ) => {
   if (canvas) {
     let ctrl = e.ctrlKey || e.metaKey;
-    console.log(e);
-    if (e.code === 'Delete' || e.key === 'Delete') {
+    if (
+      e.code === 'Delete' ||
+      e.key === 'Delete' ||
+      e.code === 'Backspace' ||
+      e.key === 'Backspace'
+    ) {
       deleteHandler(canvas);
     } else if (e.code === 'KeyC' || e.key === 'c') {
       if (ctrl) {

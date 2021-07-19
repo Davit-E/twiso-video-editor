@@ -17,7 +17,6 @@ const handleUpload = async (file, setFile, upload) => {
     setFile(null);
   }
 };
-
 const VideoEditor = () => {
   const { isUploading, uploadVideo, words, duration } = useUploadVideo();
   const [currentSelection, setCurrentSelection] = useState(null);
