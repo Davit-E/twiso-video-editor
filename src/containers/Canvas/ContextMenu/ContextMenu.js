@@ -28,7 +28,9 @@ const ContextMenu = ({
       if (e.currentTarget || clipboard) {
         if (e.currentTarget) {
           let active = canvas.getActiveObject();
-          if (!active) canvas.setActiveObject(e.currentTarget);
+          if (!active || active.id !== e.currentTarget.id) {
+            canvas.setActiveObject(e.currentTarget);
+          }
           setActiveObj(e.currentTarget);
           setCanOnlyPaste(false);
         } else setCanOnlyPaste(true);
@@ -101,7 +103,12 @@ const ContextMenu = ({
         onContextMenu={overlayClickHandler}
         onClick={overlayClickHandler}
       ></div>
-      <ul  onContextMenu={(e) => e.preventDefault()} ref={menuRef} className={styles.Menu} id='contextMenu'>
+      <ul
+        onContextMenu={(e) => e.preventDefault()}
+        ref={menuRef}
+        className={styles.Menu}
+        id='contextMenu'
+      >
         {!canOnlyPaste && !isVideo ? (
           <li className={styles.Option} id='copy' onClick={optionClickHandler}>
             <p>Copy</p>

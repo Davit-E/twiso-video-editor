@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import styles from './ShapeToolbar.module.css';
 import downArrow from '../../../assets/downArrow.svg';
+import cornerRadius from '../../../assets/cornerRadius.svg';
 import AppContext from '../../../contexts/AppContext';
 import ShapeDropdowns from '../ShapeDropdowns/ShapeDropdowns';
 import {
@@ -22,11 +23,21 @@ const ShapeToolbar = ({ coords }) => {
   const [strokeWidthInput, setStrokeWidthInput] = useState(
     appState.shapeState.strokeWidth
   );
+  const [radiusInput, setRadiusInput] = useState(appState.shapeState.rx);
   const shapeToolbarRef = useRef(null);
   const fillRef = useRef(null);
   const strokeRef = useRef(null);
   const strokeContainerRef = useRef(null);
   const isLine = appState.currentObject.type === 'line';
+  const isRect = appState.currentObject.type === 'rect';
+
+  const radiusChangeHandler = (e) => {
+    setRadiusInput(e.target.value);
+    let val = +e.target.value;
+    if (val < 0) val = 0;
+    if (val > 100) val = 100;
+    appDispatch({ type: 'setShapeRadius', data: val });
+  };
 
   const clickHandler = (e) =>
     handleClick(
@@ -98,6 +109,10 @@ const ShapeToolbar = ({ coords }) => {
           />
         </div>
         <div
+          style={{
+            borderTopRightRadius: isRect ? '0' : '15px',
+            borderBottomRightRadius: isRect ? '0' : '15px',
+          }}
           className={styles.StrokeWidthArrowContainer}
           id='strokeWidth'
           onClick={clickHandler}
@@ -106,6 +121,24 @@ const ShapeToolbar = ({ coords }) => {
         </div>
       </div>
 
+      {isRect ? (
+        <>
+          <div className={styles.BorderDiv}></div>
+          <div
+            className={styles.RadiusContainer}
+            id='radius'
+            onClick={clickHandler}
+          >
+            <img src={cornerRadius} alt='radius' />
+            <input
+              className={styles.RadiusInput}
+              type='number'
+              value={radiusInput}
+              onChange={radiusChangeHandler}
+            />
+          </div>
+        </>
+      ) : null}
       <ShapeDropdowns
         state={appState}
         dispatch={appDispatch}
@@ -124,6 +157,7 @@ const ShapeToolbar = ({ coords }) => {
         strokeChangeCompleteHandler={strokeChangeCompleteHandler}
         strokeRef={strokeRef}
         isLine={isLine}
+        isRect={isRect}
       />
     </div>
   );

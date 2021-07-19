@@ -21,6 +21,7 @@ const ShapeDropdowns = ({
   strokeRef,
   setIsStrokeWidthDropdown,
   isLine,
+  isRect,
 }) => {
   const [dropDownStyle, setDropdownStyle] = useState({ top: 41 });
   const [strokeWidthDropDownStyle, setStrokeWidthDropDownStyle] = useState({
@@ -40,7 +41,7 @@ const ShapeDropdowns = ({
         canvasHeight
       ) {
         style.bottom = 41;
-        setStrokeWidthDropDownStyle({ bottom: 41 });
+        setStrokeWidthDropDownStyle({ bottom: 41, right: !isRect ? 0 : 66 });
       }
 
       if (coords.coordX + toolbarWidth - maxDropdownWidth < 0) {
@@ -49,7 +50,7 @@ const ShapeDropdowns = ({
       }
       if (Object.keys(style).length !== 0) setDropdownStyle(style);
     },
-    []
+    [isRect]
   );
 
   useEffect(() => {

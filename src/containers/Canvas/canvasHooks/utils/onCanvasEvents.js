@@ -8,7 +8,7 @@ const textPropertyArr = [
   'textAlign',
 ];
 
-const shapePropertyArr = ['fill', 'stroke', 'strokeWidth'];
+const shapePropertyArr = ['fill', 'stroke', 'strokeWidth', 'rx', 'ry'];
 const imagePropertyArr = ['cornerRadius', 'isSvg'];
 
 const handleText = (e, dispatch) => {

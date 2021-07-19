@@ -19,7 +19,7 @@ const handleUpload = async (file, setFile, upload) => {
 };
 
 const VideoEditor = () => {
-  const { isUploading, uploadVideo, words, duration, fullText } = useUploadVideo();
+  const { isUploading, uploadVideo, words, duration } = useUploadVideo();
   const [currentSelection, setCurrentSelection] = useState(null);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [viedoForUpload, setVideoForUpload] = useState(null);
@@ -47,11 +47,11 @@ const VideoEditor = () => {
   //   console.log(currentWordIndex);
   // }, [currentWordIndex]);
 
-  useEffect(() => {
-    videoCuts.forEach((el) => {
-      console.log(el);
-    });
-  }, [videoCuts]);
+  // useEffect(() => {
+  //   videoCuts.forEach((el) => {
+  //     console.log(el);
+  //   });
+  // }, [videoCuts]);
 
   const handlePlay = (e) => {
     let selection = document.getSelection();

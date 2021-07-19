@@ -19,6 +19,7 @@ const keyDownHandler = (
 ) => {
   if (canvas) {
     let ctrl = e.ctrlKey || e.metaKey;
+    console.log(e);
     if (e.code === 'Delete' || e.key === 'Delete') {
       deleteHandler(canvas);
     } else if (e.code === 'KeyC' || e.key === 'c') {

@@ -11,6 +11,7 @@ import useCropImage from './canvasHooks/useCropImage';
 import useAddCanvas from './canvasHooks/useAddCanvas';
 import useAddVideo from './canvasHooks/useAddVideo';
 import useKeyEvents from './canvasHooks/useKeyEvents';
+import useClickListener from './canvasHooks/useClickListener';
 import ContextMenu from './ContextMenu/ContextMenu';
 fabricConfig();
 
@@ -28,10 +29,11 @@ const Canvas = ({ canvas, setCanvas, video }) => {
   useCropImage(appState, appDispatch, canvas, objectIdCount, updatetObjectId);
   useAddCanvas(appState, setCanvas, setIsCanvasSet);
   useKeyEvents(canvas, clipboard, setClipboard, objectIdCount, updatetObjectId);
+  useClickListener(canvas);
   useAddVideo(video, canvas);
 
   return (
-    <div className={styles.CanvasComponent}>
+    <div className={styles.CanvasComponent} id='canvasComponent'>
       <div className={styles.Canvas}>
         <canvas id='canvas' />
       </div>

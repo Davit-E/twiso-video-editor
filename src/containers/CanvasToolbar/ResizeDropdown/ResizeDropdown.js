@@ -34,18 +34,6 @@ const ResizeDropdown = ({ state, dispatch }) => {
     }
   };
 
-  const inputChangeHandler = (e) => {
-    if (e.target.value !== '') {
-      let value = +e.target.value;
-      if (value < 1) value = 1;
-      else if (value > 3508) value = 3508;
-      let data = { width: state.width, height: state.height, zoom: 1 };
-      if (e.target.id === 'resizeWidth') data.width = value;
-      else data.height = value;
-      dispatch({ type: 'setCanvasSize', data });
-    }
-  };
-
   useEffect(() => {
     for (let [key, value] of Object.entries(sizes)) {
       if (value.width === state.width && value.height === state.height) {
@@ -71,26 +59,6 @@ const ResizeDropdown = ({ state, dispatch }) => {
             </li>
           );
         })}
-        {/* <li className={styles.CustomSizeOption}>
-          <p className={styles.CustomSizeText}>Custom size</p>
-          <div className={styles.InputsContainer}>
-            <input
-              id='resizeWidth'
-              className={styles.InputWidth}
-              type='number'
-              placeholder='Width'
-              onBlur={inputChangeHandler}
-            />
-            <input
-              id='resizeHeight'
-              className={styles.InputHeight}
-              type='number'
-              placeholder='Height'
-              onBlur={inputChangeHandler}
-            />
-            <p className={styles.PxText}>px</p>
-          </div>
-        </li> */}
       </ul>
     </div>
   );

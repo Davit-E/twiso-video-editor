@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import styles from './ShapeDropdown.module.css';
 import square from '../../../assets/square.svg';
-import roundedSquare from '../../../assets/roundedSquare.svg';
 import circle from '../../../assets/circle.svg';
 import triangle from '../../../assets/triangle.svg';
 import line from '../../../assets/line.svg';
@@ -21,14 +20,6 @@ const ShapeDropdown = () => {
     <div className={styles.Dropdown} onClick={clickHandler}>
       <div className={styles.ShapeContainer}>
         <img className={styles.Shape} src={square} alt='square' id='square' />
-      </div>
-      <div className={styles.ShapeContainer}>
-        <img
-          className={styles.Shape}
-          src={roundedSquare}
-          alt='rounded square'
-          id='roundedSquare'
-        />
       </div>
       <div className={styles.ShapeContainer}>
         <img className={styles.Shape} src={circle} alt='circle' id='circle' />

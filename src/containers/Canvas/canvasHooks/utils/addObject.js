@@ -12,8 +12,6 @@ const ShowControls = {
   mtr: true,
 };
 
-
-
 export const addNewImage = (state, canvas, dispatch, id, updateId) => {
   let image = state.imageToAdd.src;
   if (state.shouldReplaceImage) {
@@ -68,7 +66,7 @@ export const addNewText = (canvas, state, dispatch, id, updateId) => {
   updateId();
 };
 
-const addNewRect = () => {
+const newRect = () => {
   let rect = new fabric.Rect({
     left: 100,
     top: 100,
@@ -79,19 +77,13 @@ const addNewRect = () => {
     fill: 'rgba(196,196,196,1)',
     stroke: 'rgba(255,255,255,1)',
     strokeWidth: 0,
+    rx: 0,
+    ry: 0,
   });
-  rect.setControlsVisibility(ShowControls);
   return rect;
 };
 
-const addNewRoundedRect = () => {
-  let rect = addNewRect();
-  rect.rx = 30;
-  rect.ry = 30;
-  return rect;
-};
-
-const addNewCircle = () => {
+const newCircle = () => {
   let circle = new fabric.Circle({
     left: 100,
     top: 100,
@@ -101,12 +93,13 @@ const addNewCircle = () => {
     fill: 'rgba(196,196,196,1)',
     stroke: 'rgba(255,255,255,1)',
     strokeWidth: 0,
+    rx: 0,
+    ry: 0,
   });
-  circle.setControlsVisibility(ShowControls);
   return circle;
 };
 
-const addNewTriangle = () => {
+const newTriangle = () => {
   let triangle = new fabric.Triangle({
     left: 100,
     top: 100,
@@ -117,12 +110,13 @@ const addNewTriangle = () => {
     fill: 'rgba(196,196,196,1)',
     stroke: 'rgba(255,255,255,1)',
     strokeWidth: 0,
+    rx: 0,
+    ry: 0,
   });
-  triangle.setControlsVisibility(ShowControls);
   return triangle;
 };
 
-const addNewLine = () => {
+const newLine = () => {
   let line = new fabric.Line([0, 0, 300, 0], {
     left: 100,
     top: 100,
@@ -131,6 +125,8 @@ const addNewLine = () => {
     padding: 10,
     borderColor: 'transparent',
     noScaleCache: false,
+    rx: 0,
+    ry: 0,
   });
   return line;
 };
@@ -138,11 +134,10 @@ const addNewLine = () => {
 export const addNewShape = (state, canvas, dispatch, id, updateId) => {
   dispatch({ type: 'setShapeToAdd', data: null });
   let obj = null;
-  if (state.shapeToAdd === 'square') obj = addNewRect();
-  else if (state.shapeToAdd === 'roundedSquare') obj = addNewRoundedRect();
-  else if (state.shapeToAdd === 'circle') obj = addNewCircle();
-  else if (state.shapeToAdd === 'triangle') obj = addNewTriangle();
-  else if (state.shapeToAdd === 'line') obj = addNewLine();
+  if (state.shapeToAdd === 'square') obj = newRect();
+  else if (state.shapeToAdd === 'circle') obj = newCircle();
+  else if (state.shapeToAdd === 'triangle') obj = newTriangle();
+  else if (state.shapeToAdd === 'line') obj = newLine();
   if (obj) {
     obj.id = id;
     canvas.add(obj).setActiveObject(obj);

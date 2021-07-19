@@ -1,5 +1,9 @@
 .FillDropdownContainer,
-.StrokeDropdownContainer,
+.StrokeDropdownContainer {
+  position: absolute;
+  left: 0;
+}
+
 .StrokeWidthDropdownContainer {
   position: absolute;
   right: 0;

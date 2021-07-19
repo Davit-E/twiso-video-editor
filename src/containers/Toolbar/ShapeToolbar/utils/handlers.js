@@ -64,8 +64,12 @@ export const handleClick = (
     setIsStrokeDropdown((prevState) => !prevState);
     setIsFillDropdown(false);
     setIsStrokeWidthDropdown(false);
-  } else {
+  } else if(clicked === 'strokeWidth'){
     setIsStrokeWidthDropdown((prevState) => !prevState);
+    setIsFillDropdown(false);
+    setIsStrokeDropdown(false);
+  } else { 
+    setIsStrokeWidthDropdown(false)
     setIsFillDropdown(false);
     setIsStrokeDropdown(false);
   }

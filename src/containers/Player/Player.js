@@ -104,6 +104,7 @@ const Player = ({
         width={videoSize ? videoSize.width : 0}
         height={videoSize ? videoSize.height : 0}
         id='video'
+        preload='true'
         className={styles.Video}
         ref={videoRef}
         controls

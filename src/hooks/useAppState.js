@@ -20,6 +20,8 @@ const initialState = {
     fill: 'rgba(196,196,196,1)',
     stroke: 'rgba(255,255,255,1)',
     strokeWidth: 0,
+    rx: 0,
+    ry: 0,
   },
   imageState: {
     cornerRadius: 0,
@@ -157,6 +159,16 @@ const reducer = (state, action) => {
         imageState: {
           ...state.imageState,
           cornerRadius: action.data,
+        },
+      };
+    case 'setShapeRadius':
+      return {
+        ...state,
+        shouldUpdateShape: true,
+        shapeState: {
+          ...state.shapeState,
+          rx: action.data,
+          ry: action.data,
         },
       };
     case 'setShapeFill':
