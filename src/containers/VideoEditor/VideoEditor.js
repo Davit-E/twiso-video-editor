@@ -93,7 +93,7 @@ const VideoEditor = () => {
       endTime = word.end;
       videoRef.current.currentTime = +word.start;
       setCurrentTime(+word.start);
-      console.log('seting player time: ', +word.start);
+      // console.log('seting player time: ', +word.start);
     }
     let cutIndex = 0;
     for (let i = 0; i < videoCuts.length; i++) {
@@ -107,27 +107,27 @@ const VideoEditor = () => {
 
   const handleVideoCuts = useCallback(
     (time) => {
-      if (
-        videoCuts.length > 0 &&
-        nextCutIndex !== null &&
-        videoCuts[nextCutIndex]
-      ) {
-        console.log(videoCuts[nextCutIndex]);
-        console.log(
-          'comparing: ',
-          time,
-          '>=',
-          +videoCuts[nextCutIndex].start,
-          time >= +videoCuts[nextCutIndex].start
-        );
-        console.log(
-          'comparing: ',
-          time,
-          '<=',
-          +videoCuts[nextCutIndex].end,
-          time <= +videoCuts[nextCutIndex].end
-        );
-      }
+      // if (
+      //   videoCuts.length > 0 &&
+      //   nextCutIndex !== null &&
+      //   videoCuts[nextCutIndex]
+      // ) {
+      //   console.log(videoCuts[nextCutIndex]);
+      //   console.log(
+      //     'comparing: ',
+      //     time,
+      //     '>=',
+      //     +videoCuts[nextCutIndex].start,
+      //     time >= +videoCuts[nextCutIndex].start
+      //   );
+      //   console.log(
+      //     'comparing: ',
+      //     time,
+      //     '<=',
+      //     +videoCuts[nextCutIndex].end,
+      //     time <= +videoCuts[nextCutIndex].end
+      //   );
+      // }
       if (videoCuts.length > 0 && videoCuts[nextCutIndex]) {
         time = +time + 0.05;
         let moreThanStart = time >= +videoCuts[nextCutIndex].start;
@@ -137,10 +137,10 @@ const VideoEditor = () => {
             0.05 && moreThanStart;
         if ((moreThanStart && lessThanEnd) || isShortTime) {
           videoRef.current.currentTime = +videoCuts[nextCutIndex].end;
-          console.log(
-            `%c setting to: ${+videoCuts[nextCutIndex].end}`,
-            'background:red; color:white'
-          );
+          // console.log(
+          //   `%c setting to: ${+videoCuts[nextCutIndex].end}`,
+          //   'background:red; color:white'
+          // );
 
           if (videoCuts[nextCutIndex + 1]) setNextCutIndex(nextCutIndex + 1);
           else setNextCutIndex(null);
