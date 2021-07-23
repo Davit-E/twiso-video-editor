@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/twiso-video-editor/static/css/main.961dff38.chunk.css",
-    "main.js": "/twiso-video-editor/static/js/main.aa18ff4d.chunk.js",
-    "main.js.map": "/twiso-video-editor/static/js/main.aa18ff4d.chunk.js.map",
+    "main.css": "/twiso-video-editor/static/css/main.bdb2b754.chunk.css",
+    "main.js": "/twiso-video-editor/static/js/main.0b91339d.chunk.js",
+    "main.js.map": "/twiso-video-editor/static/js/main.0b91339d.chunk.js.map",
     "runtime-main.js": "/twiso-video-editor/static/js/runtime-main.0bca8d3d.js",
     "runtime-main.js.map": "/twiso-video-editor/static/js/runtime-main.0bca8d3d.js.map",
-    "static/js/2.a3df4be7.chunk.js": "/twiso-video-editor/static/js/2.a3df4be7.chunk.js",
-    "static/js/2.a3df4be7.chunk.js.map": "/twiso-video-editor/static/js/2.a3df4be7.chunk.js.map",
+    "static/js/2.3d3435c9.chunk.js": "/twiso-video-editor/static/js/2.3d3435c9.chunk.js",
+    "static/js/2.3d3435c9.chunk.js.map": "/twiso-video-editor/static/js/2.3d3435c9.chunk.js.map",
     "static/js/3.e5580ae4.chunk.js": "/twiso-video-editor/static/js/3.e5580ae4.chunk.js",
     "static/js/3.e5580ae4.chunk.js.map": "/twiso-video-editor/static/js/3.e5580ae4.chunk.js.map",
     "index.html": "/twiso-video-editor/index.html",
-    "static/css/main.961dff38.chunk.css.map": "/twiso-video-editor/static/css/main.961dff38.chunk.css.map",
-    "static/js/2.a3df4be7.chunk.js.LICENSE.txt": "/twiso-video-editor/static/js/2.a3df4be7.chunk.js.LICENSE.txt",
+    "static/css/main.bdb2b754.chunk.css.map": "/twiso-video-editor/static/css/main.bdb2b754.chunk.css.map",
+    "static/js/2.3d3435c9.chunk.js.LICENSE.txt": "/twiso-video-editor/static/js/2.3d3435c9.chunk.js.LICENSE.txt",
     "static/media/addImage.5167341a.svg": "/twiso-video-editor/static/media/addImage.5167341a.svg",
     "static/media/addShape.efc88c00.svg": "/twiso-video-editor/static/media/addShape.efc88c00.svg",
     "static/media/addText.3a1cc6fe.svg": "/twiso-video-editor/static/media/addText.3a1cc6fe.svg",
@@ -47,8 +47,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.0bca8d3d.js",
-    "static/js/2.a3df4be7.chunk.js",
-    "static/css/main.961dff38.chunk.css",
-    "static/js/main.aa18ff4d.chunk.js"
+    "static/js/2.3d3435c9.chunk.js",
+    "static/css/main.bdb2b754.chunk.css",
+    "static/js/main.0b91339d.chunk.js"
   ]
 }
