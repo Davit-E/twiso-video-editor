@@ -7,7 +7,6 @@ const addCanvas = (state, id) => {
     height: state.initialHeight,
     backgroundColor: 'rgba(255,255,255,1)',
     preserveObjectStacking: true,
-    bgImage: null,
     fireRightClick: true,  
     stopContextMenu: true,  
   });

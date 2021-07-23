@@ -42,9 +42,10 @@ const handleSelected = (e, dispatch) => {
   let obj = { type: '', object: null };
   dispatch({ type: 'setCurrentCoords', data: e.target.lineCoords });
   if (e.target.type === 'textbox') obj.type = handleText(e, dispatch);
-  else if (e.target.type === 'image') obj.type = handleImage(e, dispatch);
-  else if (e.target.type !== 'video') obj.type = handleShape(e, dispatch);
-  else obj.type = 'video'
+  else if (e.target.type === 'image' && e.target.id !== 'video')
+    obj.type = handleImage(e, dispatch);
+  else if (e.target.id !== 'video') obj.type = handleShape(e, dispatch);
+  else obj.type = 'video';
   obj.object = e.target;
   dispatch({ type: 'setCurrentObject', data: obj });
 };

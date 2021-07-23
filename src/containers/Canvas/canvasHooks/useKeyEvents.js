@@ -4,7 +4,7 @@ import { handlePaste } from './utils/pasteObject';
 const deleteHandler = (canvas) => {
   let active = canvas.getActiveObject();
   let isInput = document.activeElement.tagName === 'INPUT';
-  if (!isInput && active && active.type !== 'video') {
+  if (!isInput && active && active.id !== 'video') {
     canvas.remove(active);
     canvas.discardActiveObject().requestRenderAll();
   }
@@ -78,7 +78,7 @@ const useKeyEvents = (canvas, clipboard, setClipboard, objId, updateId) => {
     } else if (shouldRun && isCopying) {
       setShouldRun(false);
       let active = canvas.getActiveObject();
-      if (active && active.type !== 'video') {
+      if (active && active.id !== 'video') {
         setClipboard({
           object: active,
           coords: { top: active.top, left: active.left },

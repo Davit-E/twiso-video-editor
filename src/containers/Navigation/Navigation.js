@@ -1,5 +1,11 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React, { useRef, useState, useContext } from 'react';
+import React, {
+  useRef,
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+} from 'react';
 import styles from './Navigation.module.css';
 import backArrow from '../../assets/backArrow.svg';
 import addText from '../../assets/addText.svg';
@@ -13,18 +19,51 @@ import Backdrop from '../../components/Backdrop/Backdrop';
 import ImageDropdown from './ImageDropdown/ImageDropdown';
 import ShapeDropdown from './ShapeDropdown/ShapeDropdown';
 import SubtitlesDropdown from './SubtitlesDropdown/SubtitlesDropdown';
+import { downloadStartHandler } from './utils/download';
+import useDownloadVideo from '../../hooks/useDownloadVideo';
 
-const Navigation = ({ setVideoForUpload, isUploading, canvas }) => {
+const handleDownload = async (data, download, setData) => {
+  try {
+    await download(data);
+  } catch (err) {
+    console.log(err);
+  } finally {
+    setData(null);
+  }
+};
+
+const Navigation = ({
+  viedoForUpload,
+  setVideoForUpload,
+  isUploading,
+  canvas,
+  videoRef,
+  videoCuts,
+  duration,
+}) => {
   const { appState, appDispatch } = useContext(AppContext);
+  const { isDownloading, downloadVideo, downloadedVideo } = useDownloadVideo();
+  const [downloadData, setDownloadData] = useState(null);
+  const [backImage, setBackImage] = useState(null);
+  const [frontImage, setFrontImage] = useState(null);
+  const [videoInfo, setVideoInfo] = useState(null);
+  const [breaks, setBreaks] = useState(null);
   const [userFiles, setUserFiles] = useState([
     { src: photo, type: 'image' },
     { src: photo2, type: 'image' },
   ]);
 
   const uploadRef = useRef(null);
+  const downloadRef = useRef(null);
   const uploadHandler = () => {
     setVideoForUpload(uploadRef.current.files[0]);
   };
+
+  useEffect(() => {
+    if (downloadData) {
+      handleDownload(downloadData, downloadVideo, setDownloadData);
+    }
+  }, [downloadData, downloadVideo]);
 
   const clickHandler = (e) => {
     if (canvas && !appState.shouldCropImage) {
@@ -41,6 +80,88 @@ const Navigation = ({ setVideoForUpload, isUploading, canvas }) => {
     }
   };
 
+  const imageDownloadHandler = useCallback((back, front) => {
+    downloadRef.current.href = back;
+    downloadRef.current.download = 'design.png';
+    downloadRef.current.click();
+    if (front) {
+      downloadRef.current.href = front;
+      downloadRef.current.download = 'design2.png';
+      downloadRef.current.click();
+      setBackImage(null);
+      setFrontImage(null);
+    }
+  }, []);
+
+  const downloadClickHandler = () => {
+    if (appState.isCropMode) {
+      appDispatch({ type: 'setIsCropMode', data: false });
+    } else if (canvas) {
+      videoRef.current.pause();
+      generateBreaks(videoCuts, duration);
+      downloadStartHandler(
+        canvas,
+        setBackImage,
+        setFrontImage,
+        setVideoInfo,
+        viedoForUpload
+      );
+    }
+  };
+
+  // useEffect(() => {
+  //   if (backImage && frontImage !== null) {
+  //     imageDownloadHandler(backImage, frontImage);
+  //   }
+  // }, [backImage, frontImage, imageDownloadHandler]);
+
+  const generateBreaks = (cuts, endTime) => {
+    let videoBreaks = [];
+    let prev = null;
+    for (let i = 0; i < cuts.length; i++) {
+      let el = cuts[i];
+      if (i === 0) {
+        videoBreaks.push({ start: 0, end: el.start });
+        prev = el.end;
+      } else {
+        videoBreaks.push({ start: prev, end: el.start });
+        prev = el.end;
+      }
+
+      if (i === cuts.length - 1 && el.end !== endTime) {
+        videoBreaks.push({ start: el.end, end: endTime });
+      }
+    }
+    setBreaks(videoBreaks);
+  };
+
+  const prepareData = useCallback(
+    (backImg, frontImg, videoData, breaksData) => {
+      let elements = [{ ...backImg }];
+      if (frontImg) elements.push({ ...frontImg });
+      let data = {
+        video: { ...videoData },
+        elements,
+        breaks: [...breaksData],
+      };
+      console.log(data);
+      let jsonData = JSON.stringify(data);
+      console.log(jsonData);
+      setDownloadData(jsonData);
+      setBackImage(null);
+      setFrontImage(null);
+      setBreaks(null);
+      setVideoInfo(null);
+    },
+    []
+  );
+
+  useEffect(() => {
+    if (backImage && frontImage !== null && videoInfo && breaks) {
+      prepareData(backImage, frontImage, videoInfo, breaks);
+    }
+  }, [backImage, frontImage, videoInfo, prepareData, breaks]);
+
   return (
     <header className={styles.Navigation}>
       <div className={styles.BackFileInfoContainer}>
@@ -53,7 +174,7 @@ const Navigation = ({ setVideoForUpload, isUploading, canvas }) => {
           className={styles.UploadVideo}
           onClick={() => uploadRef.current.click()}
         >
-          {!isUploading ? ' Upload video' : 'Loading...'}
+          {!isUploading ? 'Upload video' : 'Loading...'}
         </button>
         <input
           ref={uploadRef}
@@ -148,13 +269,20 @@ const Navigation = ({ setVideoForUpload, isUploading, canvas }) => {
       </div>
 
       <div className={styles.DownloadUserInfoContainer}>
-        <button id='downloadDesign' className={styles.DownloadButton}>
-          Download
+        <button
+          id='downloadDesign'
+          className={styles.DownloadButton}
+          // onClick={downloadClickHandler}
+        >
+          {!isDownloading ? 'Download' : 'Loading...'}
         </button>
         <div className={styles.User}>
           <p className={styles.UserInitials}>DE</p>
         </div>
       </div>
+      <a className={styles.DownloadLink} ref={downloadRef} href='/'>
+        Download
+      </a>
     </header>
   );
 };

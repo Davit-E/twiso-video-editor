@@ -10,7 +10,8 @@ const useAddVideo = (video, canvas) => {
         top: 0,
         left: 0,
         objectCaching: false,
-        type: 'video',
+        id: 'video',
+        excludeFromExport: true,
       });
       canvas.add(fabricVideo);
       video.currentTime = 0.001;

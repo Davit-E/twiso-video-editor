@@ -3,15 +3,12 @@ import styles from './ImageDropdown.module.css';
 import AppContext from '../../../contexts/AppContext';
 
 const ImageDropdown = ({ setUserFiles, userFiles }) => {
-  const { appState, appDispatch } = useContext(AppContext);
+  const {  appDispatch } = useContext(AppContext);
   const fileInput = useRef(null);
   const clickHandler = (e) => {
     let type = 'setImageToAdd';
     let imageType = 'image';
     if (e.target.classList.contains('isSvg')) imageType = 'svg';
-    if (appState.shouldAddCanvasBgImage) {
-      type = 'setCanvasBackgroundImage';
-    }
     if (e.target.tagName === 'IMG') {
       appDispatch({ type, data: { type: imageType, src: e.target.src } });
     } else if (e.target.classList.contains(styles.ImageContainer)) {

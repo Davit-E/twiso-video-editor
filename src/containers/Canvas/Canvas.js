@@ -29,7 +29,7 @@ const Canvas = ({ canvas, setCanvas, video }) => {
   useCropImage(appState, appDispatch, canvas, objectIdCount, updatetObjectId);
   useAddCanvas(appState, setCanvas, setIsCanvasSet);
   useKeyEvents(canvas, clipboard, setClipboard, objectIdCount, updatetObjectId);
-  useClickListener(canvas);
+  useClickListener(canvas, appState);
   useAddVideo(video, canvas);
 
   return (

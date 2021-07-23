@@ -122,7 +122,6 @@ const newLine = () => {
     top: 100,
     stroke: 'rgba(196,196,196,1)',
     strokeWidth: 2,
-    padding: 10,
     borderColor: 'transparent',
     noScaleCache: false,
     rx: 0,

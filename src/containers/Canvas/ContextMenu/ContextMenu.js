@@ -56,7 +56,7 @@ const ContextMenu = ({
 
   const optionClickHandler = (e) => {
     let id = e.currentTarget.id;
-    if (id === 'delete' && activeObj.type !== 'video') {
+    if (id === 'delete' && activeObj.id !== 'video') {
       canvas.remove(activeObj);
       canvas.discardActiveObject().requestRenderAll();
       eventDispatch({ type: 'setRightClickEvent', data: null });
@@ -95,7 +95,7 @@ const ContextMenu = ({
     }
     return () => setIsMounted(false);
   }, [isCanvasSet, eventState.rightClickEvent, handleClick]);
-  let isVideo = activeObj && activeObj.type === 'video';
+  let isVideo = activeObj && activeObj.id === 'video';
   let content = (
     <>
       <div

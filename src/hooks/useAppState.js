@@ -7,11 +7,9 @@ const initialState = {
     width: 0,
     height: 0,
     backgroundColor: 'rgba(255,255,255,1)',
-    backgroundImage: { type: '', src: null },
   },
   shouldUpdateCanvas: false,
   shouldUpdateCanvasSize: false,
-  shouldAddCanvasBgImage: false,
   shapeToAdd: null,
   imageToAdd: null,
   currentCoords: null,
@@ -95,8 +93,6 @@ const reducer = (state, action) => {
       return { ...state, shouldUpdateCanvas: action.data };
     case 'setShouldUpdateCanvasSize':
       return { ...state, shouldUpdateCanvasSize: action.data };
-    case 'setShouldAddCanvasBgImage':
-      return { ...state, shouldAddCanvasBgImage: action.data };
     case 'setCurrentObject':
       return { ...state, currentObject: action.data };
     case 'setShapeToAdd':
@@ -117,18 +113,7 @@ const reducer = (state, action) => {
         shouldUpdateCanvas: true,
         canvasState: {
           ...state.canvasState,
-          backgroundImage: { type: '', src: null },
           backgroundColor: action.data,
-        },
-      };
-    case 'setCanvasBackgroundImage':
-      return {
-        ...state,
-        shouldUpdateCanvas: true,
-        canvasState: {
-          ...state.canvasState,
-          backgroundColor: 'rgba(255,255,255,1)',
-          backgroundImage: action.data,
         },
       };
     case 'setCanvasSize':

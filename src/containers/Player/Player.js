@@ -77,6 +77,7 @@ const Player = ({
     window.addEventListener('resize', getPlayerSize);
     return () => window.removeEventListener('resize', getPlayerSize);
   }, [getPlayerSize]);
+
   useEffect(() => {
     if (viedoForUpload) {
       videoRef.current.src = URL.createObjectURL(viedoForUpload);
@@ -97,6 +98,19 @@ const Player = ({
     }
   };
 
+  const seeking = (e) => {
+    console.log(e);
+    console.log(videoRef.current.seekable);
+  };
+
+  const seeked = (e) => {
+    console.log(e);
+    console.log(videoRef.current.seekable);
+    // var bufferedTimeRanges = videoRef.current.buffered;
+    // console.log(bufferedTimeRanges);
+    // console.log(videoRef.current.seekable);
+  };
+
   return (
     <div className={styles.Player} ref={playerRef}>
       <video
@@ -112,6 +126,8 @@ const Player = ({
         onPause={handlePause}
         onEnded={handleEnd}
         onLoadedMetadata={getDimensions}
+        // onSeeking={seeking}
+        // onSeeked={seeked}
       />
       <EventContext.Provider value={{ eventState, eventDispatch }}>
         <div className={styles.PlayerContent}>

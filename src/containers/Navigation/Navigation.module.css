@@ -224,3 +224,7 @@
 .UploadVideo:active {
   background: #5f68b3;
 }
+
+.DownloadLink {
+  display: none;
+}

@@ -200,7 +200,7 @@ const fabricConfig = () => {
     getActionName: scaleOrSkewActionName,
     cornerSize: 30,
     offsetY: 3,
-    offsetX: 11,
+    offsetX: 0,
     render: renderScaleIcon(ctrlScaleImage),
   });
 
@@ -212,7 +212,7 @@ const fabricConfig = () => {
     getActionName: scaleOrSkewActionName,
     cornerSize: 30,
     offsetY: 3,
-    offsetX: -10,
+    offsetX: 0,
     render: renderScaleIcon(ctrlScaleImage),
   });
 

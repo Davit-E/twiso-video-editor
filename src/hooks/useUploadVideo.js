@@ -7,10 +7,22 @@ const useUploadVideo = () => {
   const [fullText, setFullText] = useState(null);
   const words = useRef(null);
 
+  // const onUploadProgress = (e) => {
+  //   const percentCompleted = Math.round((e.loaded * 100) / e.total);
+  //   console.log(`%cuploading ${percentCompleted}%`, 'color: #3153fb');
+  // };
+
+  // const onDownloadProgress = (e) => {
+  //   // const percentCompleted = Math.round((e.loaded * 100) / e.total);
+  //   console.log('%cdownloaded', 'color: #0cc700');
+  // };
+
   const axiosUploadVideo = useCallback((formData) => {
     return new Promise((resolve, reject) => {
       axios
         .post('/upload', formData, {
+          // onUploadProgress,
+          // onDownloadProgress,
           headers: {
             Accept: 'application/json',
             'Content-Type': 'multipart/form-data',
@@ -30,7 +42,6 @@ const useUploadVideo = () => {
       setIsUploading(true);
       try {
         const res = await axiosUploadVideo(formData);
-        // console.log(res.data);
         setDuration(res.data.duration);
         words.current = res.data.text_breakup;
         setFullText(res.data.full_text);

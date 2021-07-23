@@ -1,16 +1,21 @@
 import { useEffect, useCallback } from 'react';
 
-const useClickListener = (canvas) => {
+const useClickListener = (canvas, state) => {
   const clickHandler = useCallback(
     (e) => {
-      if (canvas) {
+      if (
+        canvas &&
+        !state.isCropMode &&
+        !state.shouldCropImage &&
+        !state.shouldReplaceImage
+      ) {
         for (let i = 0; i < e.path.length; i++) {
           if (e.path[i].id === 'canvasComponent') return;
         }
-        canvas.discardActiveObject();
+        canvas.discardActiveObject().requestRenderAll();
       }
     },
-    [canvas]
+    [canvas, state.isCropMode, state.shouldCropImage, state.shouldReplaceImage]
   );
 
   useEffect(() => {

@@ -35,9 +35,10 @@ const useSelectionObserver = (isCanvasSet, canvas, state, dispatch) => {
   const currentId = useRef(null);
 
   const checkOffScreen = (e) => {
-    if (e.target.type === 'video' && !e.target.isOnScreen()) {
+    if (e.target.id === 'video' && !e.target.isOnScreen()) {
       e.target.top = 0;
       e.target.left = 0;
+      e.target.setCoords();
     }
   }
 
