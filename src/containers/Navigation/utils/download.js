@@ -42,6 +42,8 @@ const getVideoData = async (canvas, setVideoInfo, viedoForUpload) => {
       y: video.top,
       w: video.width * video.scaleX,
       h: video.height * video.scaleY,
+      z: 1,
+      degrees: 0,
     },
   };
   setVideoInfo(info);
@@ -71,6 +73,7 @@ const handleFrontImg = (newCanvas, objects, index, setFrontImage) => {
         y: 0,
         w: newCanvas.getWidth(),
         h: newCanvas.getHeight(),
+        z: 2,
       },
     });
   } else {
@@ -95,6 +98,7 @@ const handleBackImg = (newCanvas, objects, index, setBackImage) => {
       y: 0,
       w: newCanvas.getWidth(),
       h: newCanvas.getHeight(),
+      z: 0,
     },
   });
 };

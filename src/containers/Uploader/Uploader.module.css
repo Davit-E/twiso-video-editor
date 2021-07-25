@@ -1,0 +1,30 @@
+.Uploader {
+  flex: 1 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: #ffffff;
+}
+
+.UploadText {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -0.03em;
+  color: #464646;
+}
+
+.UploadVideo {
+  border: none;
+  background: #6f7bd0;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+.UploadVideo:active {
+  background: #5f68b3;
+}

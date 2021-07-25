@@ -23,15 +23,19 @@ export const initialLoadHandler = (
 };
 
 export const fillChangeCompleteHandler = (c, dispatch, fillRef) => {
-  let colorString = `rgba(${c.rgb.r}, ${c.rgb.g}, ${c.rgb.b}, ${c.rgb.a})`;
-  dispatch({ type: 'setShapeFill', data: colorString });
-  fillRef.current.style.background = colorString;
+  if (fillRef.current) {
+    let colorString = `rgba(${c.rgb.r}, ${c.rgb.g}, ${c.rgb.b}, ${c.rgb.a})`;
+    dispatch({ type: 'setShapeFill', data: colorString });
+    fillRef.current.style.background = colorString;
+  }
 };
 
 export const strokeChangeCompleteHandler = (c, dispatch, strokeRef) => {
-  let colorString = `rgba(${c.rgb.r}, ${c.rgb.g}, ${c.rgb.b}, ${c.rgb.a})`;
-  dispatch({ type: 'setShapeStroke', data: colorString });
-  strokeRef.current.style.background = colorString;
+  if (strokeRef.current) {
+    let colorString = `rgba(${c.rgb.r}, ${c.rgb.g}, ${c.rgb.b}, ${c.rgb.a})`;
+    dispatch({ type: 'setShapeStroke', data: colorString });
+    strokeRef.current.style.background = colorString;
+  }
 };
 
 export const strokeWidthChangeHandler = (
@@ -64,12 +68,12 @@ export const handleClick = (
     setIsStrokeDropdown((prevState) => !prevState);
     setIsFillDropdown(false);
     setIsStrokeWidthDropdown(false);
-  } else if(clicked === 'strokeWidth'){
+  } else if (clicked === 'strokeWidth') {
     setIsStrokeWidthDropdown((prevState) => !prevState);
     setIsFillDropdown(false);
     setIsStrokeDropdown(false);
-  } else { 
-    setIsStrokeWidthDropdown(false)
+  } else {
+    setIsStrokeWidthDropdown(false);
     setIsFillDropdown(false);
     setIsStrokeDropdown(false);
   }

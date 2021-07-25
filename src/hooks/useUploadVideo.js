@@ -5,15 +5,17 @@ const useUploadVideo = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [duration, setDuration] = useState(null);
   const [fullText, setFullText] = useState(null);
+  const [progress, setProgress] = useState(0);
   const words = useRef(null);
 
-  // const onUploadProgress = (e) => {
-  //   const percentCompleted = Math.round((e.loaded * 100) / e.total);
-  //   console.log(`%cuploading ${percentCompleted}%`, 'color: #3153fb');
-  // };
+  const onUploadProgress = (e) => {
+    const currentProgress = Math.round((e.loaded * 100) / e.total);
+    setProgress(currentProgress);
+    console.log(`%cuploading ${currentProgress}%`, 'color: #3153fb');
+  };
 
   // const onDownloadProgress = (e) => {
-  //   // const percentCompleted = Math.round((e.loaded * 100) / e.total);
+  //   // const currentProgress = Math.round((e.loaded * 100) / e.total);
   //   console.log('%cdownloaded', 'color: #0cc700');
   // };
 
@@ -21,7 +23,7 @@ const useUploadVideo = () => {
     return new Promise((resolve, reject) => {
       axios
         .post('/upload', formData, {
-          // onUploadProgress,
+          onUploadProgress,
           // onDownloadProgress,
           headers: {
             Accept: 'application/json',
@@ -39,6 +41,7 @@ const useUploadVideo = () => {
 
   const uploadVideo = useCallback(
     async (formData) => {
+      setProgress(0);
       setIsUploading(true);
       try {
         const res = await axiosUploadVideo(formData);
@@ -49,13 +52,21 @@ const useUploadVideo = () => {
         console.log('Error Uploading Video', err);
       } finally {
         setIsUploading(false);
+        setProgress(100);
         return;
       }
     },
     [axiosUploadVideo]
   );
 
-  return { isUploading, uploadVideo, words: words.current, duration, fullText };
+  return {
+    isUploading,
+    uploadVideo,
+    words: words.current,
+    duration,
+    fullText,
+    progress,
+  };
 };
 
 export default useUploadVideo;

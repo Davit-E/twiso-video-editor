@@ -1,7 +1,9 @@
 export const colorChangeCompleteHandler = (c, ref, dispatch) => {
-  let colorString = `rgba(${c.rgb.r}, ${c.rgb.g}, ${c.rgb.b}, ${c.rgb.a})`;
-  dispatch({ type: 'setTextFill', data: colorString });
-  ref.current.style.background = colorString;
+  if (ref.current) {
+    let colorString = `rgba(${c.rgb.r}, ${c.rgb.g}, ${c.rgb.b}, ${c.rgb.a})`;
+    dispatch({ type: 'setTextFill', data: colorString });
+    ref.current.style.background = colorString;
+  }
 };
 
 export const handleClick = (e, dropdownHandlers, styleHandlers) => {

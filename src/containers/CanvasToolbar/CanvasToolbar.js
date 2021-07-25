@@ -28,9 +28,11 @@ const CanvasToolbar = ({ player }) => {
   };
 
   const colorChangeCompleteHandler = (c) => {
-    let colorString = `rgba(${c.rgb.r}, ${c.rgb.g}, ${c.rgb.b}, ${c.rgb.a})`;
-    backgroundColorRef.current.style.background = colorString;
-    appDispatch({ type: 'setCanvasBackgroundColor', data: colorString });
+    if (backgroundColorRef.current) {
+      let colorString = `rgba(${c.rgb.r}, ${c.rgb.g}, ${c.rgb.b}, ${c.rgb.a})`;
+      backgroundColorRef.current.style.background = colorString;
+      appDispatch({ type: 'setCanvasBackgroundColor', data: colorString });
+    }
   };
 
   useEffect(() => {

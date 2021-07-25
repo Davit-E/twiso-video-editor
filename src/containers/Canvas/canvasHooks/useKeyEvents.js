@@ -4,7 +4,7 @@ import { handlePaste } from './utils/pasteObject';
 const deleteHandler = (canvas) => {
   let active = canvas.getActiveObject();
   let isInput = document.activeElement.tagName === 'INPUT';
-  if (!isInput && active && active.id !== 'video') {
+  if (!isInput && active && !active.isEditing && active.id !== 'video') {
     canvas.remove(active);
     canvas.discardActiveObject().requestRenderAll();
   }

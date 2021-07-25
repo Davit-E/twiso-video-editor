@@ -3,23 +3,11 @@ import styles from './VideoEditor.module.css';
 import Navigation from '../Navigation/Navigation';
 import Transcription from '../Transcription/Transcription';
 import Player from '../Player/Player';
+import Uploader from '../Uploader/Uploader';
 import useUploadVideo from '../../hooks/useUploadVideo';
 // import { words } from './sampleWords2';
 
-const handleUpload = async (file, setFile, upload) => {
-  const formData = new FormData();
-  formData.append('video', file);
-  try {
-    await upload(formData);
-  } catch (err) {
-    console.log(err);
-  } finally {
-    // setFile(null);
-  }
-};
-
 const VideoEditor = () => {
-  const { isUploading, uploadVideo, words, duration, fullText } = useUploadVideo();
   const [currentSelection, setCurrentSelection] = useState(null);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [viedoForUpload, setVideoForUpload] = useState(null);
@@ -28,16 +16,11 @@ const VideoEditor = () => {
   const [currentTime, setCurrentTime] = useState(null);
   const [videoCuts, setVideoCuts] = useState([]);
   const [nextCutIndex, setNextCutIndex] = useState(null);
-
   const [canvas, setCanvas] = useState(null);
+  const { isUploading, uploadVideo, words, duration, fullText, progress } =
+    useUploadVideo();
 
   const videoRef = useRef(null);
-
-  useEffect(() => {
-    if (viedoForUpload) {
-      handleUpload(viedoForUpload, setVideoForUpload, uploadVideo);
-    }
-  }, [viedoForUpload, uploadVideo]);
 
   // useEffect(() => {
   //   console.log(nextCutIndex);
@@ -190,35 +173,46 @@ const VideoEditor = () => {
         videoRef={videoRef}
         videoCuts={videoCuts}
         duration={duration}
+        words={words}
       />
       <main className={styles.Main}>
-        <Transcription
-          className={styles.VideoEditor}
-          words={words}
-          currentWordIndex={currentWordIndex}
-          setCurrentWordIndex={setCurrentWordIndex}
-          isPlaying={isPlaying}
-          videoRef={videoRef}
-          setCuts={setVideoCuts}
-          currentSelection={currentSelection}
-          setCurrentSelection={setCurrentSelection}
-          setPlayerTime={setPlayerTime}
-          // duration={duration}
-          // fullText={fullText}
-        />
-        {words ? (
-          <Player
+        {!words ? (
+          <Uploader
             viedoForUpload={viedoForUpload}
-            videoRef={videoRef}
-            handleEnd={handleEnd}
-            handlePause={handlePause}
-            handlePlay={handlePlay}
-            canvas={canvas}
-            setCanvas={setCanvas}
-            duration={duration}
-            isPlaying={isPlaying}
+            setVideoForUpload={setVideoForUpload}
+            uploadVideo={uploadVideo}
+            isUploading={isUploading}
+            progress={progress}
           />
-        ) : null}
+        ) : (
+          <>
+            <Transcription
+              className={styles.VideoEditor}
+              words={words}
+              currentWordIndex={currentWordIndex}
+              setCurrentWordIndex={setCurrentWordIndex}
+              isPlaying={isPlaying}
+              videoRef={videoRef}
+              setCuts={setVideoCuts}
+              currentSelection={currentSelection}
+              setCurrentSelection={setCurrentSelection}
+              setPlayerTime={setPlayerTime}
+              // duration={duration}
+              // fullText={fullText}
+            />
+            <Player
+              viedoForUpload={viedoForUpload}
+              videoRef={videoRef}
+              handleEnd={handleEnd}
+              handlePause={handlePause}
+              handlePlay={handlePlay}
+              canvas={canvas}
+              setCanvas={setCanvas}
+              duration={duration}
+              isPlaying={isPlaying}
+            />
+          </>
+        )}
         {/* <div className={styles.DownloadCanvas}>
           <canvas id='downloadCanvas' />
         </div> */}

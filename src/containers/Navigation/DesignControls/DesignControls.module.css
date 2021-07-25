@@ -1,0 +1,120 @@
+.ControlsContainer {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.DesignControl {
+  position: relative;
+}
+
+.AddTextContainer,
+.AddImageContainer,
+.AddShapeContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  padding: 0.75rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.AddImageContainer {
+  margin: 0 0.5rem;
+}
+
+.AddTextContainer:hover,
+.AddImageContainer:hover,
+.AddShapeContainer:hover {
+  background: #eceefb;
+}
+
+.AddTextContainer:hover .HoverContent,
+.AddImageContainer:hover .HoverContent,
+.AddShapeContainer:hover .HoverContent {
+  background: #eceefb;
+  display: flex;
+}
+
+.HoverContent {
+  position: absolute;
+  background: #eceefb;
+  border-radius: 2px;
+  width: auto;
+  white-space: nowrap;
+  top: 54px;
+  padding: 0.31rem 0.875rem;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 100;
+  display: none;
+}
+
+.HoverTriangle {
+  width: 0.69rem;
+  height: 0.38rem;
+  position: absolute;
+  top: -0.38rem;
+  border-left: 5.5px solid transparent;
+  border-right: 5.5px solid transparent;
+  border-bottom: 5.5px solid #eceefb;
+}
+
+.HoverText {
+  font-size: 0.7rem;
+  margin: 0;
+}
+
+.ShapeDropdown {
+  position: absolute;
+  width: 15rem;
+  height: auto;
+  top: 3.55rem;
+  right: -7rem;
+  padding: 0.75rem 0.8rem;
+  z-index: 200;
+  background: #ffffff;
+  border: 1px solid #ececec;
+  box-shadow: 0px 6px 12px -6px rgba(24, 39, 75, 0.12),
+    0px 8px 24px -4px rgba(24, 39, 75, 0.08);
+  border-radius: 4px;
+}
+
+.ImageDropdown {
+  position: absolute;
+  width: 28.75rem;
+  height: 25.3rem;
+  top: 3.3rem;
+  right: -10.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 200;
+  background: #ffffff;
+  border: 1px solid #ececec;
+  box-shadow: 0px 6px 12px -6px rgba(24, 39, 75, 0.12),
+    0px 8px 24px -4px rgba(24, 39, 75, 0.08);
+  border-radius: 4px;
+}
+
+.SubtitlesDropdown {
+  position: absolute;
+  width: 11rem;
+  top: 3.3rem;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 200;
+  background: #ffffff;
+  border: 1px solid #ececec;
+  box-shadow: 0px 6px 12px -6px rgba(24, 39, 75, 0.12),
+    0px 8px 24px -4px rgba(24, 39, 75, 0.08);
+  border-radius: 4px;
+}
