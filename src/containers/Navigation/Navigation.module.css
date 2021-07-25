@@ -108,3 +108,17 @@
 .UploadVideo:active {
   background: #5f68b3;
 }
+
+.DownloadVideoContainer{
+  position: absolute;
+  top: 158px;
+  left: 15px;
+  z-index: 500;
+  width: auto;
+  height: auto;
+}
+
+.DownloadVideo {
+  width: 500px;
+  height: auto;
+}

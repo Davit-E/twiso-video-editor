@@ -40,7 +40,7 @@ const useDownloadVideo = () => {
       try {
         const res = await axiosDownloadVideo(data);
         console.log(res);
-        console.log(res.data);
+        setDownloadedVideo(res.data.url)
       } catch (err) {
         console.log('Error Downloading Video', err);
       } finally {

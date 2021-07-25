@@ -171,6 +171,18 @@ const Navigation = ({
       <a className={styles.DownloadLink} ref={downloadRef} href='/'>
         Download
       </a>
+      {downloadedVideo ? (
+        <div className={styles.DownloadVideoContainer}>
+          <video
+            className={styles.DownloadVideo}
+            // style={{ display: 'absolute' }}
+            id='video'
+            preload='true'
+            src={downloadedVideo}
+            controls
+          />
+        </div>
+      ) : null}
     </header>
   );
 };
