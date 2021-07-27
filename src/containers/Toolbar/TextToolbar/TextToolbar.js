@@ -8,7 +8,7 @@ import textRight from '../../../assets/textRight.svg';
 import textCenter from '../../../assets/textCenter.svg';
 import textJustify from '../../../assets/textJustify.svg';
 import TextDropdowns from '../TextDropdowns/TextDropdowns';
-import AppContext from '../../../contexts/AppContext';
+import EditorContext from '../../../contexts/EditorContext';
 import {
   handleClick,
   fontSizeChangeHandler,
@@ -16,9 +16,9 @@ import {
 } from './utils/handlers';
 
 const TextToolbar = ({ coords }) => {
-  const { appState, appDispatch } = useContext(AppContext);
+  const { editorState, editorDispatch } = useContext(EditorContext);
   const [fontSizeInput, setFontSizeInput] = useState(
-    appState.textState.fontSize
+    editorState.textState.fontSize
   );
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [isFontFamilyDropdown, setIsFontFamilyDropdown] = useState(false);
@@ -36,31 +36,31 @@ const TextToolbar = ({ coords }) => {
   // Active styles
   const boldStlyes = [styles.FontWeightBoldContainer];
   const italicStyles = [styles.FontStyleItalicContainer];
-  const isBold = appState.textState.fontWeight === 'Bold';
-  const isItalic = appState.textState.fontStyle === 'Italic';
+  const isBold = editorState.textState.fontWeight === 'Bold';
+  const isItalic = editorState.textState.fontStyle === 'Italic';
   if (isBold) boldStlyes.push(styles.Active);
   if (isItalic) italicStyles.push(styles.Active);
 
   // Text Align SVG
   let textAlignSrc = textLeft;
-  if (appState.textState.textAlign === 'center') {
+  if (editorState.textState.textAlign === 'center') {
     textAlignSrc = textCenter;
-  } else if (appState.textState.textAlign === 'right') {
+  } else if (editorState.textState.textAlign === 'right') {
     textAlignSrc = textRight;
-  } else if (appState.textState.textAlign === 'justify') {
+  } else if (editorState.textState.textAlign === 'justify') {
     textAlignSrc = textJustify;
   }
 
   const boldHandler = () => {
     let weight = 'Bold';
     if (isBold) weight = 'Normal';
-    appDispatch({ type: 'setFontWeight', data: weight });
+    editorDispatch({ type: 'setFontWeight', data: weight });
   };
 
   const italicHandler = () => {
     let style = 'Italic';
     if (isItalic) style = 'Normal';
-    appDispatch({ type: 'setFontStyle', data: style });
+    editorDispatch({ type: 'setFontStyle', data: style });
   };
 
   const dropdownHandlers = {
@@ -80,14 +80,14 @@ const TextToolbar = ({ coords }) => {
   useEffect(() => {
     if (isFirstLoad) {
       setIsFirstLoad(false);
-      const [r, g, b, a] = appState.textState.fill
+      const [r, g, b, a] = editorState.textState.fill
         .split('(')[1]
         .split(')')[0]
         .split(',');
       setColor({ r, g, b, a });
-      colorPickerRef.current.style.background = appState.textState.fill;
+      colorPickerRef.current.style.background = editorState.textState.fill;
     }
-  }, [appState.textState.fill, isFirstLoad]);
+  }, [editorState.textState.fill, isFirstLoad]);
 
   return (
     <div className={styles.TextToolbar}>
@@ -96,7 +96,7 @@ const TextToolbar = ({ coords }) => {
         id='fontFamily'
         onClick={clickHandler}
       >
-        <p>{appState.textState.fontFamily}</p>
+        <p>{editorState.textState.fontFamily}</p>
         <img className={styles.DownArrow} src={downArrow} alt='arrow' />
       </div>
       <div className={styles.BorderDiv}></div>
@@ -107,7 +107,7 @@ const TextToolbar = ({ coords }) => {
             type='number'
             value={fontSizeInput}
             onChange={(e) =>
-              fontSizeChangeHandler(e, setFontSizeInput, appDispatch)
+              fontSizeChangeHandler(e, setFontSizeInput, editorDispatch)
             }
           />
         </div>
@@ -154,8 +154,8 @@ const TextToolbar = ({ coords }) => {
         <img className={styles.TextAlign} src={textAlignSrc} alt='textAlign' />
       </div>
       <TextDropdowns
-        state={appState}
-        dispatch={appDispatch}
+        state={editorState}
+        dispatch={editorDispatch}
         coords={coords}
         isFontFamilyDropdown={isFontFamilyDropdown}
         isFontSizeDropdown={isFontSizeDropdown}

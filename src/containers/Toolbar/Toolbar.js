@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useState,
 } from 'react';
-import AppContext from '../../contexts/AppContext';
+import EditorContext from '../../contexts/EditorContext';
 import styles from './Toolbar.module.css';
 import { calcPosition } from './utils/toolbarPosition';
 import TextToolbar from './TextToolbar/TextToolbar';
@@ -14,7 +14,7 @@ import ImageToolbar from './ImageToolbar/ImageToolbar';
 
 const Toolbar = ({ canvas }) => {
   const [coords, setCoords] = useState(null);
-  const { appState } = useContext(AppContext);
+  const { editorState } = useContext(EditorContext);
   const toolbarRef = useRef(null);
   const toolbarOffset = 28;
   const toolbarPadding = 10;
@@ -26,10 +26,10 @@ const Toolbar = ({ canvas }) => {
   }, []);
 
   useEffect(() => {
-    if (appState.currentCoords) {
+    if (editorState.currentCoords) {
       setTransform(
         calcPosition(
-          appState.currentCoords,
+          editorState.currentCoords,
           canvas.getWidth(),
           canvas.getHeight(),
           toolbarRef.current,
@@ -38,17 +38,17 @@ const Toolbar = ({ canvas }) => {
         )
       );
     }
-  }, [canvas, setTransform, appState.currentCoords, appState.isCroppingImage]);
+  }, [canvas, setTransform, editorState.currentCoords, editorState.isCroppingImage]);
 
   return (
     <div ref={toolbarRef} className={styles.Toolbar}>
-      {appState.currentObject.type === 'text' ? (
+      {editorState.currentObject.type === 'text' ? (
         <TextToolbar coords={coords} />
       ) : null}
-      {shapeArr.includes(appState.currentObject.type) ? (
+      {shapeArr.includes(editorState.currentObject.type) ? (
         <ShapeToolbar coords={coords} />
       ) : null}
-      {appState.currentObject.type === 'image' ? <ImageToolbar /> : null}
+      {editorState.currentObject.type === 'image' ? <ImageToolbar /> : null}
     </div>
   );
 };

@@ -5,7 +5,7 @@ import Transcription from '../Transcription/Transcription';
 import Player from '../Player/Player';
 import Uploader from '../Uploader/Uploader';
 import useUploadVideo from '../../hooks/useUploadVideo';
-// import { words } from './sampleWords2';
+// import { words } from './sampleWords';
 
 const VideoEditor = () => {
   const [currentSelection, setCurrentSelection] = useState(null);

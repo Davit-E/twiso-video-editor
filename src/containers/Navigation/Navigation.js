@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import styles from './Navigation.module.css';
 import backArrow from '../../assets/backArrow.svg';
-import AppContext from '../../contexts/AppContext';
+import EditorContext from '../../contexts/EditorContext';
 import { downloadStartHandler } from './utils/download';
 import useDownloadVideo from '../../hooks/useDownloadVideo';
 import DesignControls from './DesignControls/DesignControls';
@@ -31,7 +31,7 @@ const Navigation = ({
   videoCuts,
   duration,
 }) => {
-  const { appState, appDispatch } = useContext(AppContext);
+  const { editorState, editorDispatch } = useContext(EditorContext);
   const { isDownloading, downloadVideo, downloadedVideo } = useDownloadVideo();
   const [downloadData, setDownloadData] = useState(null);
   const [backImage, setBackImage] = useState(null);
@@ -65,8 +65,8 @@ const Navigation = ({
   }, []);
 
   const downloadClickHandler = () => {
-    if (appState.isCropMode) {
-      appDispatch({ type: 'setIsCropMode', data: false });
+    if (editorState.isCropMode) {
+      editorDispatch({ type: 'setIsCropMode', data: false });
     } else if (canvas) {
       videoRef.current.pause();
       generateBreaks(videoCuts, duration);
@@ -87,22 +87,23 @@ const Navigation = ({
   // }, [backImage, frontImage, imageDownloadHandler]);
 
   const generateBreaks = (cuts, endTime) => {
+    console.log(cuts);
     let videoBreaks = [];
     let prev = null;
     for (let i = 0; i < cuts.length; i++) {
       let el = cuts[i];
-      if (i === 0) {
+      if (i === 0 && el.start !== 0) {
         videoBreaks.push({ start: 0, end: el.start });
-        prev = el.end;
-      } else {
+      } else if (el.start !== 0) {
         videoBreaks.push({ start: prev, end: el.start });
-        prev = el.end;
       }
+      prev = el.end;
 
       if (i === cuts.length - 1 && el.end !== endTime) {
         videoBreaks.push({ start: el.end, end: endTime });
       }
     }
+    console.log(videoBreaks);
     setBreaks(videoBreaks);
   };
 
@@ -117,7 +118,7 @@ const Navigation = ({
       };
       console.log(data);
       let jsonData = JSON.stringify(data);
-      console.log(jsonData);
+      // console.log(jsonData);
       setDownloadData(jsonData);
       setBackImage(null);
       setFrontImage(null);
@@ -141,7 +142,8 @@ const Navigation = ({
           <p className={styles.FileName}>Untitled</p>
           <p className={styles.Creater}>Dmitry</p>
         </div>
-        <button
+
+        {/* <button
           className={styles.UploadVideo}
           onClick={() => uploadRef.current.click()}
         >
@@ -153,7 +155,8 @@ const Navigation = ({
           accept='video/mp4'
           style={{ display: 'none' }}
           onChange={uploadHandler}
-        />
+        /> */}
+
       </div>
       {duration ? <DesignControls canvas={canvas} /> : null}
       <div className={styles.DownloadUserInfoContainer}>
@@ -176,6 +179,7 @@ const Navigation = ({
           <video
             className={styles.DownloadVideo}
             // style={{ display: 'absolute' }}
+            // onPlay={() => videoRef.current.play()}
             id='video'
             preload='true'
             src={downloadedVideo}

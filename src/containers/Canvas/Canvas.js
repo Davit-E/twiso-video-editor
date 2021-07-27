@@ -1,6 +1,6 @@
 import React, { useState, useContext, useCallback } from 'react';
 import styles from './Canvas.module.css';
-import AppContext from '../../contexts/AppContext';
+import EditorContext from '../../contexts/EditorContext';
 import fabricConfig from './fabricConfig';
 import useAddObject from './canvasHooks/useAddObject';
 import useSelectionObserver from './canvasHooks/useSelectionObserver';
@@ -16,20 +16,20 @@ import ContextMenu from './ContextMenu/ContextMenu';
 fabricConfig();
 
 const Canvas = ({ canvas, setCanvas, video }) => {
-  const { appState, appDispatch } = useContext(AppContext);
+  const { editorState, editorDispatch } = useContext(EditorContext);
   const [objectIdCount, setObjectIdCount] = useState(1);
   const [isCanvasSet, setIsCanvasSet] = useState(false);
   const [clipboard, setClipboard] = useState(null);
   const updatetObjectId = useCallback(() => setObjectIdCount((i) => i + 1), []);
 
-  useGuidelines(appState, isCanvasSet, canvas);
-  useAddObject(appState, appDispatch, canvas, objectIdCount, updatetObjectId);
-  useSelectionObserver(isCanvasSet, canvas, appState, appDispatch);
-  useUpdateObject(appState, appDispatch, canvas);
-  useCropImage(appState, appDispatch, canvas, objectIdCount, updatetObjectId);
-  useAddCanvas(appState, setCanvas, setIsCanvasSet);
+  useGuidelines(editorState, isCanvasSet, canvas);
+  useAddObject(editorState, editorDispatch, canvas, objectIdCount, updatetObjectId);
+  useSelectionObserver(isCanvasSet, canvas, editorState, editorDispatch);
+  useUpdateObject(editorState, editorDispatch, canvas);
+  useCropImage(editorState, editorDispatch, canvas, objectIdCount, updatetObjectId);
+  useAddCanvas(editorState, setCanvas, setIsCanvasSet);
   useKeyEvents(canvas, clipboard, setClipboard, objectIdCount, updatetObjectId);
-  useClickListener(canvas, appState);
+  useClickListener(canvas, editorState);
   useAddVideo(video, canvas);
 
   return (
@@ -37,7 +37,7 @@ const Canvas = ({ canvas, setCanvas, video }) => {
       <div className={styles.Canvas}>
         <canvas id='canvas' />
       </div>
-      {appState.showToolbar ? <Toolbar canvas={canvas} /> : null}
+      {editorState.showToolbar ? <Toolbar canvas={canvas} /> : null}
       <ContextMenu
         canvas={canvas}
         isCanvasSet={isCanvasSet}

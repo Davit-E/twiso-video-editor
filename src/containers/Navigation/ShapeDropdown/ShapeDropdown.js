@@ -4,15 +4,15 @@ import square from '../../../assets/square.svg';
 import circle from '../../../assets/circle.svg';
 import triangle from '../../../assets/triangle.svg';
 import line from '../../../assets/line.svg';
-import AppContext from '../../../contexts/AppContext';
+import EditorContext from '../../../contexts/EditorContext';
 
 const ShapeDropdown = () => {
-  const { appDispatch } = useContext(AppContext);
+  const { editorDispatch } = useContext(EditorContext);
   const clickHandler = (e) => {
     if (e.target.tagName === 'IMG') {
-      appDispatch({ type: 'setShapeToAdd', data: e.target.id });
+      editorDispatch({ type: 'setShapeToAdd', data: e.target.id });
     } else if (e.target.classList.contains(styles.ShapeContainer)) {
-      appDispatch({ type: 'setShapeToAdd', data: e.target.childNodes[0].id });
+      editorDispatch({ type: 'setShapeToAdd', data: e.target.childNodes[0].id });
     }
   };
 

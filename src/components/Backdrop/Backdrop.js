@@ -1,28 +1,28 @@
 import React, { useContext } from 'react';
 import styles from './Backdrop.module.css';
-import AppContext from '../../contexts/AppContext';
+import EditorContext from '../../contexts/EditorContext';
 
 const Backdrop = (props) => {
-  const { appState, appDispatch } = useContext(AppContext);
+  const { editorState, editorDispatch } = useContext(EditorContext);
 
   const clickHandler = (e) => {
     if (e.target.id === 'backdrop') {
       let actionType = '';
-      if (appState.isImageDropdown) actionType = 'setIsImageDropdown';
-      else if (appState.isShapeDropdown) actionType = 'setIsShapeDropdown';
-      else if (appState.isSubtitlesDropdown)
+      if (editorState.isImageDropdown) actionType = 'setIsImageDropdown';
+      else if (editorState.isShapeDropdown) actionType = 'setIsShapeDropdown';
+      else if (editorState.isSubtitlesDropdown)
         actionType = 'setIsSubtitlesDropdown';
-      else if (appState.shouldReplaceImage)
+      else if (editorState.shouldReplaceImage)
         actionType = 'setShouldReplaceImage';
-      else if (appState.isResizeDropdown) actionType = 'setIsResizeDropdown';
-      else if (appState.isCanvasBgColorDropdown)
+      else if (editorState.isResizeDropdown) actionType = 'setIsResizeDropdown';
+      else if (editorState.isCanvasBgColorDropdown)
         actionType = 'setIsCanvasBgColorDropdown';
-      else if (appState.isZoomDropdown) actionType = 'setIsZoomDropdown';
-      else if (appState.shouldAddCanvasBgImage)
+      else if (editorState.isZoomDropdown) actionType = 'setIsZoomDropdown';
+      else if (editorState.shouldAddCanvasBgImage)
         actionType = 'setShouldAddCanvasBgImage';
-      else if (appState.isDownloadDropdown)
+      else if (editorState.isDownloadDropdown)
         actionType = 'setIsDownloadDropdown';
-      appDispatch({ type: actionType, data: false });
+      editorDispatch({ type: actionType, data: false });
     }
   };
 

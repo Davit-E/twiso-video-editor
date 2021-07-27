@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState, useContext } from 'react';
 import styles from './DesignControls.module.css';
-import AppContext from '../../../contexts/AppContext';
+import EditorContext from '../../../contexts/EditorContext';
 import Backdrop from '../../../components/Backdrop/Backdrop';
 import ImageDropdown from '../ImageDropdown/ImageDropdown';
 import ShapeDropdown from '../ShapeDropdown/ShapeDropdown';
@@ -14,23 +14,23 @@ import photo from '../../../assets/photo.jpg';
 import photo2 from '../../../assets/photo2.jpg';
 
 const DesignControls = ({ canvas }) => {
-  const { appState, appDispatch } = useContext(AppContext);
+  const { editorState, editorDispatch } = useContext(EditorContext);
   const [userFiles, setUserFiles] = useState([
     { src: photo, type: 'image' },
     { src: photo2, type: 'image' },
   ]);
 
   const clickHandler = (e) => {
-    if (canvas && !appState.shouldCropImage) {
+    if (canvas && !editorState.shouldCropImage) {
       let type = '';
       let id = e.currentTarget.id;
       if (id === 'addText') type = 'setShouldAddText';
       else if (id === 'addImage') type = 'setIsImageDropdown';
       else if (id === 'addShape') type = 'setIsShapeDropdown';
       else if (id === 'subtitles') type = 'setIsSubtitlesDropdown';
-      appDispatch({ type, data: true });
-      if (appState.isCropMode) {
-        appDispatch({ type: 'setIsCropMode', data: false });
+      editorDispatch({ type, data: true });
+      if (editorState.isCropMode) {
+        editorDispatch({ type: 'setIsCropMode', data: false });
       }
     }
   };
@@ -60,9 +60,9 @@ const DesignControls = ({ canvas }) => {
             <p className={styles.HoverText}>Add image</p>
           </div>
         </div>
-        {appState.isImageDropdown ||
-        appState.shouldReplaceImage ||
-        appState.shouldAddCanvasBgImage ? (
+        {editorState.isImageDropdown ||
+        editorState.shouldReplaceImage ||
+        editorState.shouldAddCanvasBgImage ? (
           <>
             <Backdrop />
             <div className={styles.ImageDropdown}>
@@ -87,7 +87,7 @@ const DesignControls = ({ canvas }) => {
             <p className={styles.HoverText}>Add shape</p>
           </div>
         </div>
-        {appState.isShapeDropdown ? (
+        {editorState.isShapeDropdown ? (
           <>
             <Backdrop />
             <div className={styles.ShapeDropdown}>
@@ -109,7 +109,7 @@ const DesignControls = ({ canvas }) => {
           </div>
         </div>
       </div>
-      {appState.isSubtitlesDropdown ? (
+      {editorState.isSubtitlesDropdown ? (
         <>
           <Backdrop />
           <div className={styles.SubtitlesDropdown}>

@@ -12,7 +12,9 @@ const useAddVideo = (video, canvas) => {
         objectCaching: false,
         id: 'video',
         excludeFromExport: true,
+        lockScalingFlip: true,
       });
+      fabricVideo.controls.mtr.visible = false;
       canvas.add(fabricVideo);
       video.currentTime = 0.001;
       // fabricVideo.scaleToWidth(canvas.getWidth());s

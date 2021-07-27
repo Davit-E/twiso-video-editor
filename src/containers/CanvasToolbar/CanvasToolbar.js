@@ -1,28 +1,28 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import styles from './CanvasToolbar.module.css';
 import ResizeDropdown from './ResizeDropdown/ResizeDropdown';
-import AppContext from '../../contexts/AppContext';
+import EditorContext from '../../contexts/EditorContext';
 import Backdrop from '../../components/Backdrop/Backdrop';
 import { ReactComponent as Templates } from '../../assets/templates.svg';
 import { ReactComponent as Resize } from '../../assets/resize.svg';
 import { SketchPicker } from 'react-color';
 
 const CanvasToolbar = ({ player }) => {
-  const { appState, appDispatch } = useContext(AppContext);
-  const [bgColor, setBgColor] = useState(appState.canvasState.backgroundColor);
+  const { editorState, editorDispatch } = useContext(EditorContext);
+  const [bgColor, setBgColor] = useState(editorState.canvasState.backgroundColor);
   const backgroundColorRef = useRef(null);
   const bgDropdownRef = useRef(null);
   const resizeDropdownRef = useRef(null);
   const clickHandler = (e) => {
-    if (!appState.shouldCropImage) {
-      if (appState.isCropMode) {
-        appDispatch({ type: 'setIsCropMode', data: false });
+    if (!editorState.shouldCropImage) {
+      if (editorState.isCropMode) {
+        editorDispatch({ type: 'setIsCropMode', data: false });
       }
       let id = e.currentTarget.id;
       if (id === 'resize') {
-        // appDispatch({ type: 'setIsResizeDropdown', data: true });
+        // editorDispatch({ type: 'setIsResizeDropdown', data: true });
       } else if (id === 'bgColor') {
-        appDispatch({ type: 'setIsCanvasBgColorDropdown', data: true });
+        editorDispatch({ type: 'setIsCanvasBgColorDropdown', data: true });
       }
     }
   };
@@ -31,7 +31,7 @@ const CanvasToolbar = ({ player }) => {
     if (backgroundColorRef.current) {
       let colorString = `rgba(${c.rgb.r}, ${c.rgb.g}, ${c.rgb.b}, ${c.rgb.a})`;
       backgroundColorRef.current.style.background = colorString;
-      appDispatch({ type: 'setCanvasBackgroundColor', data: colorString });
+      editorDispatch({ type: 'setCanvasBackgroundColor', data: colorString });
     }
   };
 
@@ -69,19 +69,19 @@ const CanvasToolbar = ({ player }) => {
         </div>
         <p className={styles.OptionText}>Background color</p>
       </div>
-      {appState.isResizeDropdown ? (
+      {editorState.isResizeDropdown ? (
         <>
           <Backdrop></Backdrop>
           <div className={styles.ResizeDropdown} ref={resizeDropdownRef}>
             <ResizeDropdown
-              state={appState.canvasState}
-              dispatch={appDispatch}
+              state={editorState.canvasState}
+              dispatch={editorDispatch}
             />
           </div>
         </>
       ) : null}
 
-      {appState.isCanvasBgColorDropdown ? (
+      {editorState.isCanvasBgColorDropdown ? (
         <>
           <Backdrop></Backdrop>
           <div className={styles.ColorDropdownContainer} ref={bgDropdownRef}>

@@ -1,18 +1,18 @@
 import React, { useContext, useRef } from 'react';
 import styles from './ImageDropdown.module.css';
-import AppContext from '../../../contexts/AppContext';
+import EditorContext from '../../../contexts/EditorContext';
 
 const ImageDropdown = ({ setUserFiles, userFiles }) => {
-  const {  appDispatch } = useContext(AppContext);
+  const {  editorDispatch } = useContext(EditorContext);
   const fileInput = useRef(null);
   const clickHandler = (e) => {
     let type = 'setImageToAdd';
     let imageType = 'image';
     if (e.target.classList.contains('isSvg')) imageType = 'svg';
     if (e.target.tagName === 'IMG') {
-      appDispatch({ type, data: { type: imageType, src: e.target.src } });
+      editorDispatch({ type, data: { type: imageType, src: e.target.src } });
     } else if (e.target.classList.contains(styles.ImageContainer)) {
-      appDispatch({
+      editorDispatch({
         type,
         data: { type: imageType, src: e.target.childNodes[0].src },
       });

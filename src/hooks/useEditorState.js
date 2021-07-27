@@ -243,9 +243,9 @@ const reducer = (state, action) => {
   }
 };
 
-const useAppState = () => {
-  const [appState, appDispatch] = useReducer(reducer, initialState);
-  return [appState, appDispatch];
+const useEditorState = () => {
+  const [editorState, editorDispatch] = useReducer(reducer, initialState);
+  return [editorState, editorDispatch];
 };
 
-export default useAppState;
+export default useEditorState;

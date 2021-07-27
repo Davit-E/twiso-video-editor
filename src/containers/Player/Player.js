@@ -9,7 +9,7 @@ import styles from './Player.module.css';
 import Canvas from '../Canvas/Canvas';
 import EventContext from '../../contexts/EventContext';
 import useEventState from '../../hooks/useEventsState';
-import AppContext from '../../contexts/AppContext';
+import EditorContext from '../../contexts/EditorContext';
 import CanvasToolbar from '../CanvasToolbar/CanvasToolbar';
 import play from '../../assets/play.svg';
 const Player = ({
@@ -23,7 +23,7 @@ const Player = ({
   duration,
   isPlaying,
 }) => {
-  const { appState, appDispatch } = useContext(AppContext);
+  const { editorState, editorDispatch } = useContext(EditorContext);
   const [eventState, eventDispatch] = useEventState();
   const [videoSize, setVideoSize] = useState(null);
   const [playerSize, setPlayerSize] = useState(null);
@@ -52,7 +52,7 @@ const Player = ({
       let isInRange = width > 100;
       if (isFirtLoad.current && isInRange) {
         isFirtLoad.current = false;
-        appDispatch({
+        editorDispatch({
           type: 'setCanvasInitialSize',
           data: {
             initialWidth: videoSize.width,
@@ -62,16 +62,16 @@ const Player = ({
           },
         });
       } else if (isInRange) {
-        appDispatch({ type: 'setCanvasSize', data: { width, height } });
+        editorDispatch({ type: 'setCanvasSize', data: { width, height } });
       }
     }
-  }, [isFirtLoad, playerSize, videoSize, appDispatch]);
+  }, [isFirtLoad, playerSize, videoSize, editorDispatch]);
 
   useEffect(() => {
-    if (appState.isCropMode) {
+    if (editorState.isCropMode) {
       videoRef.current.pause();
     }
-  }, [appState.isCropMode, videoRef]);
+  }, [editorState.isCropMode, videoRef]);
 
   useEffect(() => {
     window.addEventListener('resize', getPlayerSize);
@@ -93,7 +93,7 @@ const Player = ({
 
   const playClickHandler = () => {
     if (isPlaying) videoRef.current.pause();
-    else if (!appState.isCropMode && !appState.shouldCropImage) {
+    else if (!editorState.isCropMode && !editorState.shouldCropImage) {
       videoRef.current.play();
     }
   };

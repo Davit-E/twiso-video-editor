@@ -31,6 +31,7 @@ const getVideoData = async (canvas, setVideoInfo, viedoForUpload) => {
     if (el.id === 'video') {
       videoIndex = i;
       video = el;
+      // console.log('angle: ', el.angle);
     }
   }
 
@@ -111,7 +112,6 @@ export const downloadStartHandler = async (
   viedoForUpload
 ) => {
   let videoIndex = await getVideoData(canvas, setVideoInfo, viedoForUpload);
-  console.log(videoIndex);
   // let rect = getRect(video);
   // console.log(rect);
   let newCanvas = new fabric.Canvas();

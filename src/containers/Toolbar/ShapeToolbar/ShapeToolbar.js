@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import styles from './ShapeToolbar.module.css';
 import downArrow from '../../../assets/downArrow.svg';
 import cornerRadius from '../../../assets/cornerRadius.svg';
-import AppContext from '../../../contexts/AppContext';
+import EditorContext from '../../../contexts/EditorContext';
 import ShapeDropdowns from '../ShapeDropdowns/ShapeDropdowns';
 import {
   initialLoadHandler,
@@ -13,7 +13,7 @@ import {
 } from './utils/handlers';
 
 const ShapeToolbar = ({ coords }) => {
-  const { appState, appDispatch } = useContext(AppContext);
+  const { editorState, editorDispatch } = useContext(EditorContext);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [fill, setFill] = useState('rgba(196,196,196,1)');
   const [stroke, setStroke] = useState('rgba(255,255,255,1)');
@@ -21,22 +21,22 @@ const ShapeToolbar = ({ coords }) => {
   const [isStrokeDropdown, setIsStrokeDropdown] = useState(false);
   const [isStrokeWidthDropdown, setIsStrokeWidthDropdown] = useState(false);
   const [strokeWidthInput, setStrokeWidthInput] = useState(
-    appState.shapeState.strokeWidth
+    editorState.shapeState.strokeWidth
   );
-  const [radiusInput, setRadiusInput] = useState(appState.shapeState.rx);
+  const [radiusInput, setRadiusInput] = useState(editorState.shapeState.rx);
   const shapeToolbarRef = useRef(null);
   const fillRef = useRef(null);
   const strokeRef = useRef(null);
   const strokeContainerRef = useRef(null);
-  const isLine = appState.currentObject.type === 'line';
-  const isRect = appState.currentObject.type === 'rect';
+  const isLine = editorState.currentObject.type === 'line';
+  const isRect = editorState.currentObject.type === 'rect';
 
   const radiusChangeHandler = (e) => {
     setRadiusInput(e.target.value);
     let val = +e.target.value;
     if (val < 0) val = 0;
     if (val > 100) val = 100;
-    appDispatch({ type: 'setShapeRadius', data: val });
+    editorDispatch({ type: 'setShapeRadius', data: val });
   };
 
   const clickHandler = (e) =>
@@ -51,7 +51,7 @@ const ShapeToolbar = ({ coords }) => {
     if (isFirstLoad) {
       initialLoadHandler(
         isLine,
-        appState.shapeState,
+        editorState.shapeState,
         setIsFirstLoad,
         setFill,
         fillRef,
@@ -60,7 +60,7 @@ const ShapeToolbar = ({ coords }) => {
         strokeRef
       );
     }
-  }, [isLine, appState.shapeState, isFirstLoad]);
+  }, [isLine, editorState.shapeState, isFirstLoad]);
 
   return (
     <div ref={shapeToolbarRef} className={styles.ShapeToolbar}>
@@ -101,7 +101,7 @@ const ShapeToolbar = ({ coords }) => {
             onChange={(e) =>
               strokeWidthChangeHandler(
                 e,
-                appDispatch,
+                editorDispatch,
                 setStrokeWidthInput,
                 isLine
               )
@@ -140,8 +140,8 @@ const ShapeToolbar = ({ coords }) => {
         </>
       ) : null}
       <ShapeDropdowns
-        state={appState}
-        dispatch={appDispatch}
+        state={editorState}
+        dispatch={editorDispatch}
         coords={coords}
         shapeToolbar={shapeToolbarRef.current}
         isStrokeWidthDropdown={isStrokeWidthDropdown}
