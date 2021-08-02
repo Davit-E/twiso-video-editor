@@ -12,14 +12,6 @@
   margin-bottom: 1.375rem;
 }
 
-.Video {
-  /* width: 20rem;
-  height: auto;
-  align-self: flex-start;
-  position: absolute; */
-  display: none;
-}
-
 .PlayerContent {
   position: relative;
   width: auto;

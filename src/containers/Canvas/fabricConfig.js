@@ -10,7 +10,7 @@ const fabricConfig = () => {
   fabric.Object.prototype.cornerStrokeColor = '#6F7BD0';
   fabric.Object.prototype.cornerStyle = 'circle';
   fabric.Object.prototype.objectCaching = false;
-  
+
   const ctrlStretchImage = new Image();
   ctrlStretchImage.src = ctrlStretch;
   const ctrlScaleImage = new Image();
@@ -106,7 +106,6 @@ const fabricConfig = () => {
     render: renderStretchIconY(ctrlStretchImage),
   });
 
-
   objectControls.tl = new fabric.Control({
     x: -0.5,
     y: -0.5,
@@ -174,7 +173,6 @@ const fabricConfig = () => {
       actionName: 'resizing',
       cornerSize: 42,
       offsetY: 3,
-      offsetX: 1,
       render: renderStretchIconX(ctrlStretchImage),
     });
 
@@ -229,12 +227,69 @@ const fabricConfig = () => {
   activeSelection.br = objectControls.br;
   activeSelection.tl = objectControls.tl;
   activeSelection.bl = objectControls.bl;
-  let group = (fabric.Group.prototype.controls = {});
-  group.mtr = objectControls.mtr;
-  group.tr = objectControls.tr;
-  group.br = objectControls.br;
-  group.tl = objectControls.tl;
-  group.bl = objectControls.bl;
+
+  // let group = (fabric.Group.prototype.controls = {});
+  // group.mtr = objectControls.mtr;
+  // group.tr = objectControls.tr;
+  // group.br = objectControls.br;
+  // group.tl = objectControls.tl;
+  // group.bl = objectControls.bl;
 };
+
+// Subtitles renreding padding and border radius
+// CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+//   if (w < 2 * r) r = w / 2;
+//   if (h < 2 * r) r = h / 2;
+//   this.beginPath();
+//   this.moveTo(x + r, y);
+//   this.arcTo(x + w, y, x + w, y + h, r);
+//   this.arcTo(x + w, y + h, x, y + h, r);
+//   this.arcTo(x, y + h, x, y, r);
+//   this.arcTo(x, y, x + w, y, r);
+//   this.closePath();
+//   return this;
+// };
+fabric.Subtitle = fabric.util.createClass(fabric.IText, {
+  type: 'subtitle',
+
+  _getNonTransformedDimensions() {
+    // Object dimensions
+    return new fabric.Point(
+      this.width + this.paddingX,
+      this.height + this.paddingY
+    );
+  },
+
+  _calculateCurrentDimensions() {
+    // Controls dimensions
+    return fabric.util.transformPoint(
+      this._getTransformedDimensions(),
+      this.getViewportTransform(),
+      true
+    );
+  },
+
+  // _renderBackground(ctx) {
+  //   if (!this.backgroundColor) {
+  //     return;
+  //   }
+  //   var dim = this._getNonTransformedDimensions();
+  //   ctx.fillStyle = this.backgroundColor;
+
+  //   if (!this.bgCornerRadius) {
+  //     ctx.fillRect(-dim.x / 2, -dim.y / 2, dim.x, dim.y);
+  //   } else {
+  //     ctx
+  //       .roundRect(-dim.x / 2, -dim.y / 2, dim.x, dim.y, this.bgCornerRadius)
+  //       .fill();
+  //   }
+  //   // if there is background color no other shadows
+  //   // should be casted
+  //   this._removeShadow(ctx);
+  // },
+
+});
+
+fabric.Subtitle.prototype.controls = {}
 
 export default fabricConfig;

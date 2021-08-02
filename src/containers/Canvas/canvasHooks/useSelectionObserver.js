@@ -8,6 +8,7 @@ import {
   onTextEnter,
   onTextExit,
 } from './utils/onCanvasEvents';
+import { fabric } from 'fabric';
 
 const removeListeners = (c) => {
   c.off('selection:created');
@@ -34,13 +35,29 @@ const useSelectionObserver = (isCanvasSet, canvas, state, dispatch) => {
   const isFirstLoad = useRef(true);
   const currentId = useRef(null);
 
-  const checkOffScreen = (e) => {
-    if (e.target.id === 'video' && !e.target.isOnScreen()) {
-      e.target.top = 0;
-      e.target.left = 0;
-      e.target.setCoords();
-    }
-  }
+  const checkOffScreen = useCallback(
+    (e) => {
+      if (!e.target.isOnScreen()) {
+        if (e.target.id === 'subtitle') {
+          let x =
+            canvas.getHeight() / canvas.getZoom() -
+            e.target.height -
+            e.target.paddingY;
+          let y = canvas.getWidth() / canvas.getZoom();
+          e.target.setPositionByOrigin(
+            new fabric.Point(y / 2, x),
+            'center',
+            'center'
+          );
+        } else {
+          e.target.top = 0;
+          e.target.left = 0;
+        }
+        e.target.setCoords();
+      }
+    },
+    [canvas]
+  );
 
   const addListeners = useCallback(
     (c, dispatch, showCanvasToolbar) => {
@@ -66,7 +83,7 @@ const useSelectionObserver = (isCanvasSet, canvas, state, dispatch) => {
         eventDispatch({ type: 'setIsMoving', data: false });
       });
     },
-    [eventDispatch]
+    [eventDispatch, checkOffScreen]
   );
 
   useEffect(() => {

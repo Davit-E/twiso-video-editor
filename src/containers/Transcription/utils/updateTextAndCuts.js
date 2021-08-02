@@ -1,3 +1,5 @@
+import { findSubIndexWithWordIndex } from '../../utils/findIndex';
+
 const handleDelete = (wordsArr, setCuts, setPlayerTime, wordIndex) => {
   let arr = [];
   let isLastDeleted = false;
@@ -64,7 +66,9 @@ const findAndSetCurrentWord = (
   wordsArr,
   setWordIndex,
   setCuts,
-  setPlayerTime
+  setPlayerTime,
+  setCurrentSubIndex,
+  subArr
 ) => {
   let currentIndex = null;
   for (let i = deletedIndex; i >= 0; i--) {
@@ -85,8 +89,9 @@ const findAndSetCurrentWord = (
     }
   }
 
-  let index = currentIndex !== null ? currentIndex : null;
-  setWordIndex(index);
+  setWordIndex(currentIndex);
+  let subIndex = findSubIndexWithWordIndex(currentIndex, wordsArr, subArr);
+  setCurrentSubIndex(subIndex);
   handleVideoCuts('delete', wordsArr, setCuts, setPlayerTime, currentIndex);
 };
 
@@ -95,15 +100,33 @@ export const deleteWord = (
   wordIndex,
   setWordIndex,
   setCuts,
-  setPlayerTime
+  setPlayerTime,
+  setCurrentSubIndex,
+  subArr
 ) => {
-  wordsArr[wordIndex].deleted = true;
+  let word = wordsArr[wordIndex];
+  word.deleted = true;
+  let subIndex = findSubIndexWithWordIndex(wordIndex, wordsArr, subArr);
+  let sub = subArr[subIndex];
+  if (!sub.silence) {
+    for (let i = 0; i < sub.words.length; i++) {
+      let el = sub.words[i];
+      if (el.id === word.id){
+        el.deleted = true;
+
+        break;
+      } 
+    }
+  } else sub.deleted = true;
+
   findAndSetCurrentWord(
     wordIndex,
     wordsArr,
     setWordIndex,
     setCuts,
-    setPlayerTime
+    setPlayerTime,
+    setCurrentSubIndex,
+    subArr
   );
 };
 
@@ -113,7 +136,9 @@ export const deleteSelection = (
   currentSelection,
   setCurrentSelection,
   setCuts,
-  setPlayerTime
+  setPlayerTime,
+  setCurrentSubIndex,
+  subArr
 ) => {
   let deletedStartIndex = currentSelection.start;
   let deleteEndIndex = currentSelection.end;
@@ -123,13 +148,32 @@ export const deleteSelection = (
     word.deleted = true;
     if (i === deleteEndIndex) break;
   }
+  let deletedStartWord = wordsArr[deletedStartIndex];
+  let deletedEndWord = wordsArr[deleteEndIndex];
+  let subIndexStart = findSubIndexWithWordIndex(deletedStartIndex, wordsArr, subArr);
+  let subIndexEnd = findSubIndexWithWordIndex(deleteEndIndex, wordsArr, subArr);
+
+  let isDeleting = false;
+  for (let i = subIndexStart; i <= subIndexEnd; i++) {
+    let sub = subArr[i];
+    if (!sub.silence) {
+      for (let i = 0; i < sub.words.length; i++) {
+        let el = sub.words[i];
+        if (el.id === deletedStartWord.id) isDeleting = true;
+        if(isDeleting) el.deleted = true;
+        if(el.id === deletedEndWord.id)  break;
+      }
+    } else sub.deleted = true;
+  }
 
   findAndSetCurrentWord(
     deletedStartIndex,
     wordsArr,
     setWordIndex,
     setCuts,
-    setPlayerTime
+    setPlayerTime,
+    setCurrentSubIndex,
+    subArr
   );
   setCurrentSelection(null);
 };

@@ -15,7 +15,12 @@ import useClickListener from './canvasHooks/useClickListener';
 import ContextMenu from './ContextMenu/ContextMenu';
 fabricConfig();
 
-const Canvas = ({ canvas, setCanvas, video }) => {
+const Canvas = ({
+  canvas,
+  setCanvas,
+  video,
+  currentSub,
+}) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const [objectIdCount, setObjectIdCount] = useState(1);
   const [isCanvasSet, setIsCanvasSet] = useState(false);
@@ -23,12 +28,31 @@ const Canvas = ({ canvas, setCanvas, video }) => {
   const updatetObjectId = useCallback(() => setObjectIdCount((i) => i + 1), []);
 
   useGuidelines(editorState, isCanvasSet, canvas);
-  useAddObject(editorState, editorDispatch, canvas, objectIdCount, updatetObjectId);
+  useAddObject(
+    editorState,
+    editorDispatch,
+    canvas,
+    objectIdCount,
+    updatetObjectId
+  );
   useSelectionObserver(isCanvasSet, canvas, editorState, editorDispatch);
   useUpdateObject(editorState, editorDispatch, canvas);
-  useCropImage(editorState, editorDispatch, canvas, objectIdCount, updatetObjectId);
+  useCropImage(
+    editorState,
+    editorDispatch,
+    canvas,
+    objectIdCount,
+    updatetObjectId
+  );
   useAddCanvas(editorState, setCanvas, setIsCanvasSet);
-  useKeyEvents(canvas, clipboard, setClipboard, objectIdCount, updatetObjectId);
+  useKeyEvents(
+    canvas,
+    clipboard,
+    setClipboard,
+    objectIdCount,
+    updatetObjectId,
+    currentSub
+  );
   useClickListener(canvas, editorState);
   useAddVideo(video, canvas);
 
@@ -45,6 +69,7 @@ const Canvas = ({ canvas, setCanvas, video }) => {
         updateId={updatetObjectId}
         clipboard={clipboard}
         setClipboard={setClipboard}
+        currentSub={currentSub}
       />
     </div>
   );

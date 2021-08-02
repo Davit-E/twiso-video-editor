@@ -45,6 +45,8 @@ const useUploadVideo = () => {
       setIsUploading(true);
       try {
         const res = await axiosUploadVideo(formData);
+        console.log(res);
+        console.log(res.data);
         setDuration(res.data.duration);
         words.current = res.data.text_breakup;
         setFullText(res.data.full_text);

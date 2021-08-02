@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  useContext,
-} from 'react';
+import React, { useRef, useContext, useState } from 'react';
 import styles from './Player.module.css';
 import Canvas from '../Canvas/Canvas';
 import EventContext from '../../contexts/EventContext';
@@ -12,134 +6,94 @@ import useEventState from '../../hooks/useEventsState';
 import EditorContext from '../../contexts/EditorContext';
 import CanvasToolbar from '../CanvasToolbar/CanvasToolbar';
 import play from '../../assets/play.svg';
+import usePlayerSize from './playerHooks/usePlayerSize';
+import usePlayerTime from './playerHooks/usePlayerTime';
+import useSubtitles from './playerHooks/useSubtitles';
+import { getPlayerSize, playClickHandler } from '../utils/playerEvents';
+
 const Player = ({
-  viedoForUpload,
   videoRef,
-  handleEnd,
-  handlePause,
-  handlePlay,
   canvas,
   setCanvas,
-  duration,
   isPlaying,
+  words,
+  currentTime,
+  videoSize,
+  videoCuts,
+  setNextCutIndex,
+  setCurrentWordIndex,
+  nextCutIndex,
+  currentWordIndex,
+  subArr,
+  setSubArr,
+  currentSub,
+  setCurrentSub,
+  currentSubIndex,
+  setCurrentSubIndex,
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const [eventState, eventDispatch] = useEventState();
-  const [videoSize, setVideoSize] = useState(null);
   const [playerSize, setPlayerSize] = useState(null);
   const playerRef = useRef(null);
-  const playerPadding = 32;
-  const isFirtLoad = useRef(true);
-  const getPlayerSize = useCallback(() => {
-    let width =
-      window.innerWidth - playerRef.current.offsetLeft - playerPadding;
-    let height = playerRef.current.offsetHeight;
-    // console.log(width, height);
-    if (width > 800) {
-      height = (height * 800) / width;
-      width = 800;
-    }
-    setPlayerSize({ width, height });
-  }, []);
+  const isFirstLoad = useRef(true);
+  usePlayerSize(
+    isFirstLoad,
+    videoSize,
+    playerSize,
+    editorDispatch,
+    getPlayerSize,
+    playerRef,
+    setPlayerSize
+  );
 
-  useEffect(() => {
-    if (videoSize && playerSize) {
-      // console.log('video: ', videoSize);
-      // console.log('player: ', playerSize);
-      let width = playerSize.width;
-      let height = (videoSize.height * width) / videoSize.width;
-      // console.log(width, height);
-      let isInRange = width > 100;
-      if (isFirtLoad.current && isInRange) {
-        isFirtLoad.current = false;
-        editorDispatch({
-          type: 'setCanvasInitialSize',
-          data: {
-            initialWidth: videoSize.width,
-            initialHeight: videoSize.height,
-            width,
-            height,
-          },
-        });
-      } else if (isInRange) {
-        editorDispatch({ type: 'setCanvasSize', data: { width, height } });
-      }
-    }
-  }, [isFirtLoad, playerSize, videoSize, editorDispatch]);
+  usePlayerTime(
+    videoRef,
+    videoCuts,
+    words,
+    isPlaying,
+    currentTime,
+    nextCutIndex,
+    setNextCutIndex,
+    currentWordIndex,
+    setCurrentWordIndex,
+    subArr,
+    currentSubIndex,
+    setCurrentSubIndex,
+    currentSub
+  );
 
-  useEffect(() => {
-    if (editorState.isCropMode) {
-      videoRef.current.pause();
-    }
-  }, [editorState.isCropMode, videoRef]);
-
-  useEffect(() => {
-    window.addEventListener('resize', getPlayerSize);
-    return () => window.removeEventListener('resize', getPlayerSize);
-  }, [getPlayerSize]);
-
-  useEffect(() => {
-    if (viedoForUpload) {
-      videoRef.current.src = URL.createObjectURL(viedoForUpload);
-    }
-  }, [viedoForUpload, videoRef]);
-
-  const getDimensions = (e) => {
-    let width = videoRef.current.videoWidth;
-    let height = videoRef.current.videoHeight;
-    setVideoSize({ width, height });
-    getPlayerSize();
-  };
-
-  const playClickHandler = () => {
-    if (isPlaying) videoRef.current.pause();
-    else if (!editorState.isCropMode && !editorState.shouldCropImage) {
-      videoRef.current.play();
-    }
-  };
-
-  const seeking = (e) => {
-    console.log(e);
-    console.log(videoRef.current.seekable);
-  };
-
-  const seeked = (e) => {
-    console.log(e);
-    console.log(videoRef.current.seekable);
-    // var bufferedTimeRanges = videoRef.current.buffered;
-    // console.log(bufferedTimeRanges);
-    // console.log(videoRef.current.seekable);
-  };
+  useSubtitles(
+    editorState,
+    canvas,
+    currentSub,
+    setCurrentSub,
+    words,
+    subArr,
+    setSubArr,
+    currentSubIndex,
+    setCurrentSubIndex,
+    currentWordIndex
+  );
 
   return (
     <div className={styles.Player} ref={playerRef}>
-      <video
-        // style={{ display: viedoForUpload ? 'block' : 'none' }}
-        width={videoSize ? videoSize.width : 0}
-        height={videoSize ? videoSize.height : 0}
-        id='video'
-        preload='true'
-        className={styles.Video}
-        ref={videoRef}
-        controls
-        onPlay={handlePlay}
-        onPause={handlePause}
-        onEnded={handleEnd}
-        onLoadedMetadata={getDimensions}
-        // onSeeking={seeking}
-        // onSeeked={seeked}
-      />
       <EventContext.Provider value={{ eventState, eventDispatch }}>
         <div className={styles.PlayerContent}>
           <Canvas
             canvas={canvas}
             setCanvas={setCanvas}
             video={videoRef.current}
+            currentSub={currentSub}
           />
           {canvas ? (
             <>
               <div className={styles.PlayerControls}>
-                <div className={styles.PlayButton} onClick={playClickHandler}>
+                <div
+                  className={styles.PlayButton}
+                  onClick={() =>
+                    playClickHandler(isPlaying, videoRef, editorState)
+                  }
+                >
                   <img src={play} alt='play' />
                 </div>
               </div>

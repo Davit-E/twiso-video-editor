@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import styles from './TextToolbar.module.css';
 import downArrow from '../../../assets/downArrow.svg';
 import bold from '../../../assets/bold.svg';
+import subBackground from '../../../assets/subBackground.svg';
 import italic from '../../../assets/italic.svg';
 import textLeft from '../../../assets/textLeft.svg';
 import textRight from '../../../assets/textRight.svg';
@@ -15,29 +16,37 @@ import {
   colorChangeCompleteHandler,
 } from './utils/handlers';
 
-const TextToolbar = ({ coords }) => {
+const TextToolbar = ({ coords, isSub }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
-  const [fontSizeInput, setFontSizeInput] = useState(
-    editorState.textState.fontSize
-  );
+  const [fontSizeInput, setFontSizeInput] = useState(0);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [isFontFamilyDropdown, setIsFontFamilyDropdown] = useState(false);
   const [isFontSizeDropdown, setIsFontSizeDropdown] = useState(false);
   const [isColorDropdown, setIsColorDropdown] = useState(false);
   const [isTextAlignDropDown, setIsTextAlignDropDown] = useState(false);
+  const [isBgColorDropdown, setIsBgColorDropdown] = useState(false);
   const [color, setColor] = useState({
     r: 0,
     g: 0,
     b: 0,
     a: 1,
   });
+  const [bgColor, setBgColor] = useState({
+    r: 0,
+    g: 0,
+    b: 0,
+    a: 1,
+  });
+
   const colorPickerRef = useRef(null);
+  const bgColorPickerRef = useRef(null);
 
   // Active styles
   const boldStlyes = [styles.FontWeightBoldContainer];
   const italicStyles = [styles.FontStyleItalicContainer];
-  const isBold = editorState.textState.fontWeight === 'Bold';
-  const isItalic = editorState.textState.fontStyle === 'Italic';
+  const state = isSub ? editorState.subtitlesState : editorState.textState;
+  const isBold = state.fontWeight === 'Bold';
+  const isItalic = state.fontStyle === 'Italic';
   if (isBold) boldStlyes.push(styles.Active);
   if (isItalic) italicStyles.push(styles.Active);
 
@@ -54,13 +63,15 @@ const TextToolbar = ({ coords }) => {
   const boldHandler = () => {
     let weight = 'Bold';
     if (isBold) weight = 'Normal';
-    editorDispatch({ type: 'setFontWeight', data: weight });
+    let type = isSub ? 'setSubtitlesFontWeight' : 'setFontWeight';
+    editorDispatch({ type, data: weight });
   };
 
   const italicHandler = () => {
     let style = 'Italic';
     if (isItalic) style = 'Normal';
-    editorDispatch({ type: 'setFontStyle', data: style });
+    let type = isSub ? 'setSubtitlesFontStyle' : 'setFontStyle';
+    editorDispatch({ type, data: style });
   };
 
   const dropdownHandlers = {
@@ -68,6 +79,7 @@ const TextToolbar = ({ coords }) => {
     fontSizeArrow: setIsFontSizeDropdown,
     colorPicker: setIsColorDropdown,
     textAlign: setIsTextAlignDropDown,
+    bgColor: setIsBgColorDropdown,
   };
 
   const styleHandlers = {
@@ -80,14 +92,20 @@ const TextToolbar = ({ coords }) => {
   useEffect(() => {
     if (isFirstLoad) {
       setIsFirstLoad(false);
-      const [r, g, b, a] = editorState.textState.fill
-        .split('(')[1]
-        .split(')')[0]
-        .split(',');
+      setFontSizeInput(state.fontSize);
+      let [r, g, b, a] = state.fill.split('(')[1].split(')')[0].split(',');
       setColor({ r, g, b, a });
-      colorPickerRef.current.style.background = editorState.textState.fill;
+      colorPickerRef.current.style.background = state.fill;
+      if (isSub) {
+        [r, g, b, a] = state.backgroundColor
+          .split('(')[1]
+          .split(')')[0]
+          .split(',');
+        setBgColor({ r, g, b, a });
+        bgColorPickerRef.current.style.background = state.backgroundColor;
+      }
     }
-  }, [editorState.textState.fill, isFirstLoad]);
+  }, [state, isFirstLoad, isSub]);
 
   return (
     <div className={styles.TextToolbar}>
@@ -96,7 +114,7 @@ const TextToolbar = ({ coords }) => {
         id='fontFamily'
         onClick={clickHandler}
       >
-        <p>{editorState.textState.fontFamily}</p>
+        <p>{state.fontFamily}</p>
         <img className={styles.DownArrow} src={downArrow} alt='arrow' />
       </div>
       <div className={styles.BorderDiv}></div>
@@ -107,7 +125,7 @@ const TextToolbar = ({ coords }) => {
             type='number'
             value={fontSizeInput}
             onChange={(e) =>
-              fontSizeChangeHandler(e, setFontSizeInput, editorDispatch)
+              fontSizeChangeHandler(e, setFontSizeInput, editorDispatch, isSub)
             }
           />
         </div>
@@ -136,7 +154,6 @@ const TextToolbar = ({ coords }) => {
         <img className={styles.Bold} src={bold} alt='bold' />
       </div>
       <div className={styles.BorderDiv}></div>
-
       <div
         className={italicStyles.join(' ')}
         id='italic'
@@ -145,14 +162,32 @@ const TextToolbar = ({ coords }) => {
         <img className={styles.Italic} src={italic} alt='italic' />
       </div>
       <div className={styles.BorderDiv}></div>
+      {!isSub ? (
+        <>
+          <div
+            className={styles.TextAlignContainer}
+            id='textAlign'
+            onClick={clickHandler}
+          >
+            <img
+              className={styles.TextAlign}
+              src={textAlignSrc}
+              alt='textAlign'
+            />
+          </div>
+        </>
+      ) : (
+        <div
+          className={styles.BgColorContainer}
+          id='bgColor'
+          onClick={clickHandler}
+        >
+          <div className={styles.BgColor} ref={bgColorPickerRef}></div>
+          <img src={subBackground} alt='italic' />
+          <p>Background</p>
+        </div>
+      )}
 
-      <div
-        className={styles.TextAlignContainer}
-        id='textAlign'
-        onClick={clickHandler}
-      >
-        <img className={styles.TextAlign} src={textAlignSrc} alt='textAlign' />
-      </div>
       <TextDropdowns
         state={editorState}
         dispatch={editorDispatch}
@@ -166,8 +201,13 @@ const TextToolbar = ({ coords }) => {
         colorChangeCompleteHandler={colorChangeCompleteHandler}
         setIsTextAlignDropDown={setIsTextAlignDropDown}
         setColor={setColor}
+        setBgColor={setBgColor}
         color={color}
+        bgColor={bgColor}
         colorPickerRef={colorPickerRef}
+        bgColorPickerRef={bgColorPickerRef}
+        isSub={isSub}
+        isBgColorDropdown={isBgColorDropdown}
       />
     </div>
   );

@@ -1,11 +1,11 @@
 import React from 'react';
 import styles from './FontSizeDropdown.module.css';
 
-const FontSizeDropdown = ({setIsDropDown, dispatch}) => {
-
+const FontSizeDropdown = ({ setIsDropDown, dispatch, isSub }) => {
   const optionsClickHandler = (e) => {
     if (e.target.tagName === 'LI') {
-      dispatch({ type: 'setFontSize', data: e.target.textContent });
+      let type = isSub ? 'setSubtitlesFontSize' : 'setFontSize';
+      dispatch({ type, data: e.target.textContent });
       dispatch({ type: 'setShowToolbar', data: false });
       setIsDropDown(false);
     }

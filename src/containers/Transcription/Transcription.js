@@ -8,7 +8,10 @@ import {
   deleteSelection,
 } from './utils/updateTextAndCuts';
 import Words from './Words/Words';
-
+import {
+  findWordIndexWithId,
+  findSubIndexWithWordIndex,
+} from '../utils/findIndex';
 const Transcription = ({
   words,
   currentWordIndex,
@@ -19,33 +22,29 @@ const Transcription = ({
   currentSelection,
   setCurrentSelection,
   setPlayerTime,
+  subArr,
+  setCurrentSubIndex,
+  currentSub,
 }) => {
   const [searchInput, setSearchInput] = useState('');
   const [inputIndex, setInputIndex] = useState(null);
-  const findWordIndexWithId = useCallback(
-    (id) => {
-      for (let i = 0; i < words.length; i++) {
-        let word = words[i];
-        if (word.id === id) return i;
-      }
-      return null;
-    },
-    [words]
-  );
 
   const wordClickHandler = (e, isDeleted) => {
     let id = e.currentTarget.id;
-    let index = findWordIndexWithId(id);
+    let wordIndex = findWordIndexWithId(id, words);
+    let subIndex = findSubIndexWithWordIndex(wordIndex, words, subArr);
+    console.log(subIndex);
     if (isPlaying) videoRef.current.pause();
-    if (e.detail > 1 && inputIndex === null) setInputIndex(index);
-    if (!isDeleted && inputIndex === null && index !== null) {
+    if (e.detail > 1 && inputIndex === null) setInputIndex(wordIndex);
+    if (!isDeleted && inputIndex === null && wordIndex !== null) {
       setCurrentSelection(null);
-      setPlayerTime(index);
-      setCurrentWordIndex(index);
+      setPlayerTime(wordIndex);
+      setCurrentWordIndex(wordIndex);
+      if (subIndex !== null) setCurrentSubIndex(subIndex);
     } else if (inputIndex === null) {
       restoreDeleted(
         words,
-        index,
+        wordIndex,
         setCurrentWordIndex,
         setCurrentSelection,
         setCuts,
@@ -59,10 +58,13 @@ const Transcription = ({
       let start = '';
       let end = '';
       if (anchorNode.parentNode.id === focusNode.parentNode.id) {
-        let index = findWordIndexWithId(anchorNode.parentNode.id);
-        if (anchorNode.parentNode.id && index !== null) {
-          setPlayerTime(index);
-          setCurrentWordIndex(index);
+        let wordIndex = findWordIndexWithId(anchorNode.parentNode.id, words);
+        let subIndex =  findSubIndexWithWordIndex(wordIndex, words, subArr);
+        console.log('hi', subIndex);
+        if (anchorNode.parentNode.id && wordIndex !== null) {
+          setPlayerTime(wordIndex);
+          setCurrentWordIndex(wordIndex);
+          if (subIndex !== null) setCurrentSubIndex(subIndex);
         }
         selection.removeAllRanges();
         setCurrentSelection(null);
@@ -93,21 +95,26 @@ const Transcription = ({
       }
 
       if (start !== '' && end !== '') {
-        let indexStart = findWordIndexWithId(start);
-        let indexEnd = findWordIndexWithId(end);
+        let indexStart = findWordIndexWithId(start, words);
+        let indexEnd = findWordIndexWithId(end, words);
+        let subIndex = findSubIndexWithWordIndex(indexStart, words, subArr);
+        console.log('hi2', subIndex);
         if (indexStart !== null && indexEnd !== null) {
           setCurrentSelection({ start: indexStart, end: indexEnd });
           setPlayerTime(indexStart);
           setCurrentWordIndex(indexStart);
+          if (subIndex !== null) setCurrentSubIndex(subIndex);
         }
       }
       // selection.removeAllRanges();
     },
     [
+      setCurrentSubIndex,
       setCurrentWordIndex,
       setCurrentSelection,
       setPlayerTime,
-      findWordIndexWithId,
+      words,
+      subArr
     ]
   );
 
@@ -151,7 +158,9 @@ const Transcription = ({
         currentWordIndex,
         setCurrentWordIndex,
         setCuts,
-        setPlayerTime
+        setPlayerTime,
+        setCurrentSubIndex,
+        subArr
       );
     } else if (currentSelection) {
       deleteSelection(
@@ -160,7 +169,9 @@ const Transcription = ({
         currentSelection,
         setCurrentSelection,
         setCuts,
-        setPlayerTime
+        setPlayerTime,
+        setCurrentSubIndex,
+        subArr
       );
     }
     let selection = document.getSelection();
@@ -195,6 +206,7 @@ const Transcription = ({
             inputIndex={inputIndex}
             setInputIndex={setInputIndex}
             currentSelection={currentSelection}
+            currentSub={currentSub}
           />
         ) : null}
       </div>

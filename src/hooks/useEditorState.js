@@ -36,6 +36,7 @@ const initialState = {
   isDownloadDropdown: false,
   shouldAddText: false,
   shouldUpdateText: false,
+  shouldUpdateSubtitles: false,
   shouldUpdateShape: false,
   shouldUpdateImage: false,
   shouldReplaceImage: false,
@@ -50,6 +51,14 @@ const initialState = {
     fontSize: 30,
     fill: 'rgba(0,0,0,1)',
     textAlign: 'left',
+  },
+  subtitlesState: {
+    fontFamily: 'Inter',
+    fontStyle: 'Normal',
+    fontWeight: 'Normal',
+    fontSize: 24,
+    fill: 'rgba(0,0,0,1)',
+    backgroundColor: 'rgba(255,255,255,1)',
   },
 };
 
@@ -85,6 +94,8 @@ const reducer = (state, action) => {
       return { ...state, shouldAddText: action.data };
     case 'setShouldUpdateText':
       return { ...state, shouldUpdateText: action.data };
+    case 'setShouldUpdateSubtitles':
+      return { ...state, shouldUpdateSubtitles: action.data };
     case 'setShouldUpdateShape':
       return { ...state, shouldUpdateShape: action.data };
     case 'setShouldUpdateImage':
@@ -105,6 +116,8 @@ const reducer = (state, action) => {
       return { ...state, imageState: { ...action.data } };
     case 'setTextState':
       return { ...state, textState: { ...action.data } };
+    case 'setSubtitlesState':
+      return { ...state, subtitlesState: { ...action.data } };
     case 'setShouldReplaceImage':
       return { ...state, shouldReplaceImage: action.data };
     case 'setCanvasBackgroundColor':
@@ -183,6 +196,7 @@ const reducer = (state, action) => {
           strokeWidth: action.data,
         },
       };
+
     case 'setFontFamily':
       return {
         ...state,
@@ -234,6 +248,70 @@ const reducer = (state, action) => {
         shouldUpdateText: true,
         textState: {
           ...state.textState,
+          textAlign: action.data,
+        },
+      };
+
+    case 'setSubtitlesbackgroundColor':
+      return {
+        ...state,
+        shouldUpdateSubtitles: true,
+        subtitlesState: {
+          ...state.subtitlesState,
+          backgroundColor: action.data,
+        },
+      };
+    case 'setSubtitlesFontFamily':
+      return {
+        ...state,
+        shouldUpdateSubtitles: true,
+        subtitlesState: {
+          ...state.subtitlesState,
+          fontFamily: action.data,
+        },
+      };
+    case 'setSubtitlesFontStyle':
+      return {
+        ...state,
+        shouldUpdateSubtitles: true,
+        subtitlesState: {
+          ...state.subtitlesState,
+          fontStyle: action.data,
+        },
+      };
+    case 'setSubtitlesFontWeight':
+      return {
+        ...state,
+        shouldUpdateSubtitles: true,
+        subtitlesState: {
+          ...state.subtitlesState,
+          fontWeight: action.data,
+        },
+      };
+    case 'setSubtitlesFontSize':
+      return {
+        ...state,
+        shouldUpdateSubtitles: true,
+        subtitlesState: {
+          ...state.subtitlesState,
+          fontSize: action.data,
+        },
+      };
+    case 'setSubtitlesTextFill':
+      return {
+        ...state,
+        shouldUpdateSubtitles: true,
+        subtitlesState: {
+          ...state.subtitlesState,
+          fill: action.data,
+        },
+      };
+    case 'setSubtitlesTextAlign':
+      return {
+        ...state,
+        shouldUpdateSubtitles: true,
+        subtitlesState: {
+          ...state.subtitlesState,
           textAlign: action.data,
         },
       };

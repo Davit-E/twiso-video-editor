@@ -38,12 +38,20 @@ const Toolbar = ({ canvas }) => {
         )
       );
     }
-  }, [canvas, setTransform, editorState.currentCoords, editorState.isCroppingImage]);
+  }, [
+    canvas,
+    setTransform,
+    editorState.currentCoords,
+    editorState.isCroppingImage,
+  ]);
 
   return (
     <div ref={toolbarRef} className={styles.Toolbar}>
       {editorState.currentObject.type === 'text' ? (
-        <TextToolbar coords={coords} />
+        <TextToolbar coords={coords} isSub={false} />
+      ) : null}
+      {editorState.currentObject.type === 'subtitle' ? (
+        <TextToolbar coords={coords} isSub={true} />
       ) : null}
       {shapeArr.includes(editorState.currentObject.type) ? (
         <ShapeToolbar coords={coords} />

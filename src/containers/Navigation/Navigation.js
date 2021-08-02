@@ -156,7 +156,6 @@ const Navigation = ({
           style={{ display: 'none' }}
           onChange={uploadHandler}
         /> */}
-
       </div>
       {duration ? <DesignControls canvas={canvas} /> : null}
       <div className={styles.DownloadUserInfoContainer}>

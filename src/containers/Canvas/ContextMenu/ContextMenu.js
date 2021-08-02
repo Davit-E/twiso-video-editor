@@ -16,6 +16,7 @@ const ContextMenu = ({
   updateId,
   clipboard,
   setClipboard,
+  currentSub,
 }) => {
   const { eventState, eventDispatch } = useContext(EventContext);
   const [isMounted, setIsMounted] = useState(false);
@@ -25,8 +26,8 @@ const ContextMenu = ({
 
   const handleClick = useCallback(
     (e) => {
-      if (e.currentTarget || clipboard) {
-        if (e.currentTarget) {
+      if ((e.currentTarget && e.currentTarget.id !== 'subtitle') || clipboard) {
+        if (e.currentTarget && e.currentTarget.id !== 'subtitle') {
           let active = canvas.getActiveObject();
           if (!active || active.id !== e.currentTarget.id) {
             canvas.setActiveObject(e.currentTarget);
@@ -62,6 +63,7 @@ const ContextMenu = ({
       eventDispatch({ type: 'setRightClickEvent', data: null });
     } else if (id === 'bringToFront') {
       canvas.bringToFront(activeObj);
+      if (currentSub) canvas.bringToFront(currentSub);
       eventDispatch({ type: 'setRightClickEvent', data: null });
     } else if (id === 'sendToBack') {
       canvas.sendToBack(activeObj);
@@ -80,7 +82,8 @@ const ContextMenu = ({
           objId,
           updateId,
           setClipboard,
-          eventDispatch
+          eventDispatch,
+          currentSub
         );
       } else eventDispatch({ type: 'setRightClickEvent', data: null });
     }

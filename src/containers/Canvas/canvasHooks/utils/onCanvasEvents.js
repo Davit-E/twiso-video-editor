@@ -44,6 +44,7 @@ const handleSelected = (e, dispatch) => {
   if (e.target.type === 'textbox') obj.type = handleText(e, dispatch);
   else if (e.target.type === 'image' && e.target.id !== 'video')
     obj.type = handleImage(e, dispatch);
+  else if (e.target.id === 'subtitle') obj.type = 'subtitle';
   else if (e.target.id !== 'video') obj.type = handleShape(e, dispatch);
   else obj.type = 'video';
   obj.object = e.target;

@@ -10,6 +10,7 @@ const Words = ({
   inputIndex,
   setInputIndex,
   currentSelection,
+  currentSub
 }) => {
   const [input, setInput] = useState('');
   const inputRef = useRef(null);
@@ -19,8 +20,10 @@ const Words = ({
     if (wordsArr[inputIndex]) {
       if (inputVal && !wordsArr[inputIndex].silence) {
         wordsArr[inputIndex].text = inputVal;
+        // currentSub.text = inputVal;
       } else if (inputVal) {
         wordsArr[inputIndex].text = inputVal;
+        // currentSub.text = inputVal;
         wordsArr[inputIndex].silence = false;
       } else wordsArr[inputIndex].silence = true;
     }

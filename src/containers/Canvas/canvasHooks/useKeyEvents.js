@@ -4,7 +4,13 @@ import { handlePaste } from './utils/pasteObject';
 const deleteHandler = (canvas) => {
   let active = canvas.getActiveObject();
   let isInput = document.activeElement.tagName === 'INPUT';
-  if (!isInput && active && !active.isEditing && active.id !== 'video') {
+  if (
+    !isInput &&
+    active &&
+    !active.isEditing &&
+    active.id !== 'video' &&
+    active.id !== 'subtitle'
+  ) {
     canvas.remove(active);
     canvas.discardActiveObject().requestRenderAll();
   }
@@ -65,7 +71,14 @@ const keyUpHandler = (
   setShouldRun(true);
 };
 
-const useKeyEvents = (canvas, clipboard, setClipboard, objId, updateId) => {
+const useKeyEvents = (
+  canvas,
+  clipboard,
+  setClipboard,
+  objId,
+  updateId,
+  currentSub
+) => {
   const [isPasting, setIsPasting] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
   const [isBringToFront, setIsBringToFront] = useState(false);
@@ -74,11 +87,19 @@ const useKeyEvents = (canvas, clipboard, setClipboard, objId, updateId) => {
   useEffect(() => {
     if (shouldRun && isPasting && clipboard) {
       setShouldRun(false);
-      handlePaste(canvas, clipboard, objId, updateId, setClipboard, null);
+      handlePaste(
+        canvas,
+        clipboard,
+        objId,
+        updateId,
+        setClipboard,
+        null,
+        currentSub
+      );
     } else if (shouldRun && isCopying) {
       setShouldRun(false);
       let active = canvas.getActiveObject();
-      if (active && active.id !== 'video') {
+      if (active && active.id !== 'video' && active.id !== 'subtitle') {
         setClipboard({
           object: active,
           coords: { top: active.top, left: active.left },
@@ -87,11 +108,14 @@ const useKeyEvents = (canvas, clipboard, setClipboard, objId, updateId) => {
     } else if (shouldRun && isBringToFront) {
       setShouldRun(false);
       let active = canvas.getActiveObject();
-      if (active) canvas.bringToFront(active);
+      if (active && active.id !== 'subtitle') {
+        canvas.bringToFront(active);
+        if (currentSub) canvas.bringToFront(currentSub);
+      }
     } else if (shouldRun && isSendToBack) {
       setShouldRun(false);
       let active = canvas.getActiveObject();
-      if (active) canvas.sendToBack(active);
+      if (active && active.id !== 'subtitle') canvas.sendToBack(active);
     }
   }, [
     canvas,
@@ -104,6 +128,7 @@ const useKeyEvents = (canvas, clipboard, setClipboard, objId, updateId) => {
     clipboard,
     updateId,
     shouldRun,
+    currentSub,
   ]);
 
   useEffect(() => {

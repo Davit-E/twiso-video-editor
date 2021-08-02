@@ -165,7 +165,6 @@ const useGuideLines = (state, isCanvasSet, canvas) => {
   }, [canvasHeight, canvasWidth, canvas]);
 
   const removelistneres = useCallback((canvas) => {
-    canvas.off('object:added');
     canvas.off('mouse:down');
     canvas.off('object:moving');
     canvas.off('before:render');

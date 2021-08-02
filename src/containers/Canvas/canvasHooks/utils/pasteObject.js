@@ -4,7 +4,8 @@ export const handlePaste = (
   objId,
   updateId,
   setClipboard,
-  dispatch
+  dispatch,
+  currentSub
 ) => {
   let top = clipboard.coords.top + 15;
   let left = clipboard.coords.left + 15;
@@ -20,7 +21,6 @@ export const handlePaste = (
       cloned.padding = 10;
       cloned.cursorWidth = 0.5;
     } else if (type === 'line') {
-      cloned.padding = 10;
       cloned.borderColor = 'transparent';
       cloned.noScaleCache = false;
     } else {
@@ -28,6 +28,7 @@ export const handlePaste = (
       cloned.strokeUniform = true;
     }
     canvas.add(cloned).setActiveObject(cloned);
+    if (currentSub) canvas.bringToFront(currentSub);
     canvas.requestRenderAll();
     setClipboard({
       object: clipboard.object,
