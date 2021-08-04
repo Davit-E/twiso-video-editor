@@ -21,12 +21,11 @@ const VideoEditor = () => {
   const [currentSub, setCurrentSub] = useState(null);
   const [currentSubIndex, setCurrentSubIndex] = useState(null);
   const [videoSize, setVideoSize] = useState(null);
- 
+  const [shouldRerenderSub, setShouldRerenderSub] = useState(false);
   const { isUploading, uploadVideo, words, duration, fullText, progress } =
     useUploadVideo();
 
   const videoRef = useRef(null);
-
 
   // useEffect(() => {
   //   console.log('currentSubIndex:', currentSubIndex);
@@ -40,11 +39,11 @@ const VideoEditor = () => {
   //   console.log(currentWordIndex);
   // }, [currentWordIndex]);
 
-  // useEffect(() => {
-  //   videoCuts.forEach((el) => {
-  //     console.log(el);
-  //   });
-  // }, [videoCuts]);
+  useEffect(() => {
+    videoCuts.forEach((el) => {
+      console.log(el);
+    });
+  }, [videoCuts]);
 
   useEffect(() => {
     if (viedoForUpload)
@@ -81,6 +80,8 @@ const VideoEditor = () => {
         videoCuts={videoCuts}
         duration={duration}
         words={words}
+        subArr={subArr}
+        currentSub={currentSub}
       />
       <main className={styles.Main}>
         {!words ? (
@@ -107,8 +108,8 @@ const VideoEditor = () => {
               subArr={subArr}
               setCurrentSubIndex={setCurrentSubIndex}
               currentSub={currentSub}
-              // duration={duration}
-              // fullText={fullText}
+              currentSubIndex={currentSubIndex}
+              setShouldRerenderSub={setShouldRerenderSub}
             />
             <Player
               videoRef={videoRef}
@@ -134,6 +135,8 @@ const VideoEditor = () => {
               setCurrentSubIndex={setCurrentSubIndex}
               videoSize={videoSize}
               setVideoSize={setVideoSize}
+              shouldRerenderSub={shouldRerenderSub}
+              setShouldRerenderSub={setShouldRerenderSub}
             />
           </>
         )}

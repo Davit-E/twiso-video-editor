@@ -42,3 +42,10 @@
 .PlayButton:active {
   background: rgba(88, 110, 224, 0.06);
 }
+
+.Sub {
+  margin: 0;
+  padding: 10px;
+  background: white;
+  font-size: 24px;
+}

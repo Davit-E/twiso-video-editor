@@ -5,7 +5,7 @@ import useEditorState from './hooks/useEditorState';
 
 const App = () => {
   const [editorState, editorDispatch] = useEditorState();
-  // console.log(editorState);
+  console.log(editorState);
   return (
     <div className='App'>
       <EditorContext.Provider value={{ editorState, editorDispatch }}>

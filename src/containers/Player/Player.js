@@ -30,6 +30,8 @@ const Player = ({
   setCurrentSub,
   currentSubIndex,
   setCurrentSubIndex,
+  shouldRerenderSub,
+  setShouldRerenderSub,
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const [eventState, eventDispatch] = useEventState();
@@ -72,12 +74,16 @@ const Player = ({
     setSubArr,
     currentSubIndex,
     setCurrentSubIndex,
-    currentWordIndex
+    currentWordIndex,
+    videoCuts,
+    shouldRerenderSub,
+    setShouldRerenderSub,
   );
 
   return (
     <div className={styles.Player} ref={playerRef}>
       <EventContext.Provider value={{ eventState, eventDispatch }}>
+        {/* <p className={styles.Sub}>Adina Jackson family,</p> */}
         <div className={styles.PlayerContent}>
           <Canvas
             canvas={canvas}

@@ -11,6 +11,7 @@ import EditorContext from '../../contexts/EditorContext';
 import { downloadStartHandler } from './utils/download';
 import useDownloadVideo from '../../hooks/useDownloadVideo';
 import DesignControls from './DesignControls/DesignControls';
+import generateUUID from '../utils/generateRandomUUID';
 
 const handleDownload = async (data, download, setData) => {
   try {
@@ -30,6 +31,8 @@ const Navigation = ({
   videoRef,
   videoCuts,
   duration,
+  subArr,
+  currentSub,
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const { isDownloading, downloadVideo, downloadedVideo } = useDownloadVideo();
@@ -38,6 +41,7 @@ const Navigation = ({
   const [frontImage, setFrontImage] = useState(null);
   const [videoInfo, setVideoInfo] = useState(null);
   const [breaks, setBreaks] = useState(null);
+  const [subs, setSubs] = useState(null);
   const uploadRef = useRef(null);
   const downloadRef = useRef(null);
 
@@ -64,12 +68,66 @@ const Navigation = ({
     }
   }, []);
 
+  const generateSubtitles = (arr, object, subState) => {
+    // console.log(arr);
+    // console.log('width', object.width);
+    // console.log('height', object.height);
+    // console.log('top', object.top);
+    // console.log('left', object.left);
+    let paddingX = object.paddingX !== 0 ? object.paddingX / 2 : 0;
+    let paddingY = object.paddingY !== 0 ? object.paddingY / 2 : 0;
+    let captions = [];
+    let config = {
+      x: object.left,
+      y: object.top,
+      fontSize: subState.fontSize,
+      fontColor: subState.fill,
+      fontFamily: subState.fontFamily,
+      backgroundColor: subState.backgroundColor,
+      textAlign: 'center',
+      // padding: `${paddingY}px ${paddingX}px ${paddingY}px ${paddingX}px`,
+      padding: paddingY,
+      fontWeight: subState.fontWeight,
+      fontStyle: subState.fontStyle,
+    };
+    console.log(config);
+    // let prev = null;
+    for (let i = 0; i < arr.length; i++) {
+      let el = arr[i];
+      if (el.silence) {
+        let _id = generateUUID();
+        captions.push({ start: el.start, end: el.end, silence: true, _id });
+      } else if (!el.deleted) {
+        let _id = generateUUID();
+        let notDeleted = el.words.filter((word) => !word.deleted);
+        let text = '';
+        for (let i = 0; i < notDeleted.length; i++) {
+          let el = notDeleted[i];
+          text += el.text;
+        }
+        captions.push({
+          start: el.start,
+          end: el.end,
+          text,
+          silence: false,
+          _id,
+        });
+      }
+    }
+    let subtitles = { captions, config };
+    console.log(subtitles);
+    setSubs(subtitles);
+  };
+
   const downloadClickHandler = () => {
     if (editorState.isCropMode) {
       editorDispatch({ type: 'setIsCropMode', data: false });
     } else if (canvas) {
       videoRef.current.pause();
       generateBreaks(videoCuts, duration);
+      // if (currentSub && subArr) {
+      //   generateSubtitles(subArr, currentSub, editorState.subtitlesState);
+      // }
       downloadStartHandler(
         canvas,
         setBackImage,
@@ -115,15 +173,17 @@ const Navigation = ({
         video: { ...videoData },
         elements,
         breaks: [...breaksData],
+        // subtitles: { ...subsData },
       };
       console.log(data);
       let jsonData = JSON.stringify(data);
-      // console.log(jsonData);
+      console.log(jsonData);
       setDownloadData(jsonData);
       setBackImage(null);
       setFrontImage(null);
       setBreaks(null);
       setVideoInfo(null);
+      setSubs(null);
     },
     []
   );
@@ -143,7 +203,7 @@ const Navigation = ({
           <p className={styles.Creater}>Dmitry</p>
         </div>
 
-        {/* <button
+        <button
           className={styles.UploadVideo}
           onClick={() => uploadRef.current.click()}
         >
@@ -155,7 +215,7 @@ const Navigation = ({
           accept='video/mp4'
           style={{ display: 'none' }}
           onChange={uploadHandler}
-        /> */}
+        />
       </div>
       {duration ? <DesignControls canvas={canvas} /> : null}
       <div className={styles.DownloadUserInfoContainer}>

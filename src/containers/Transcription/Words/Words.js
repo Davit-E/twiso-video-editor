@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './Words.module.css';
 import restoreText from '../../../assets/restoreText.svg';
-
 const Words = ({
   wordsArr,
   currentWordIndex,
@@ -10,22 +9,67 @@ const Words = ({
   inputIndex,
   setInputIndex,
   currentSelection,
-  currentSub
+  currentSub,
+  currentSubIndex,
+  subArr,
+  setShouldRerenderSub
 }) => {
   const [input, setInput] = useState('');
   const inputRef = useRef(null);
 
-  const blurHandler = () => {
+  const handleSubTextChange = (id, text, isSilence) => {
+    if (!isSilence && text && id) {
+      let words = subArr[currentSubIndex].words;
+      console.log(subArr[currentSubIndex]);
+      console.log(words);
+      for (let i = 0; i < words.length; i++) {
+        let word = words[i];
+        if (word.id === id) {
+          let isWhitespace = word.text.indexOf(' ') === 0;
+          word.text = isWhitespace ? ' ' + text : text;
+          if (word.silence) word.silence = false;
+          break;
+        }
+      }
+    } else if (text && isSilence) {
+      subArr[currentSubIndex].silence = false;
+      subArr[currentSubIndex].words = [{ ...subArr[currentSubIndex], text }];
+    } else if (id) {
+      let words = subArr[currentSubIndex].words;
+      console.log(words);
+      let silenceCount = 0;
+      for (let i = 0; i < words.length; i++) {
+        let word = words[i];
+        if (word.id === id) {
+          word.text = '';
+          word.silence = true;
+        }
+        if (word.silence) silenceCount++;
+      }
+      if (silenceCount === words.length) {
+        subArr[currentSubIndex].silence = true;
+        subArr[currentSubIndex].words = null;
+      }
+    }
+    setShouldRerenderSub(true);
+  };
+
+  const blurHandler = (e) => {
+    let id = e.target.parentNode.id;
     let inputVal = input.trim().length > 0 ? input : null;
     if (wordsArr[inputIndex]) {
       if (inputVal && !wordsArr[inputIndex].silence) {
         wordsArr[inputIndex].text = inputVal;
-        // currentSub.text = inputVal;
+        if (currentSub) handleSubTextChange(id, inputVal, false);
       } else if (inputVal) {
         wordsArr[inputIndex].text = inputVal;
-        // currentSub.text = inputVal;
         wordsArr[inputIndex].silence = false;
-      } else wordsArr[inputIndex].silence = true;
+        if (currentSub) handleSubTextChange(id, inputVal, true);
+      } else {
+        if (currentSub && !wordsArr[inputIndex].silence)
+          handleSubTextChange(id, inputVal, false);
+        wordsArr[inputIndex].silence = true;
+      }
     }
     setInput('');
     setInputIndex(null);

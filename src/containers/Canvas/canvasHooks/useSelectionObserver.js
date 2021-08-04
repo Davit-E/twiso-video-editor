@@ -39,13 +39,13 @@ const useSelectionObserver = (isCanvasSet, canvas, state, dispatch) => {
     (e) => {
       if (!e.target.isOnScreen()) {
         if (e.target.id === 'subtitle') {
-          let x =
+          let x = canvas.getWidth() / (canvas.getZoom() * 2);
+          let y =
             canvas.getHeight() / canvas.getZoom() -
             e.target.height -
             e.target.paddingY;
-          let y = canvas.getWidth() / canvas.getZoom();
           e.target.setPositionByOrigin(
-            new fabric.Point(y / 2, x),
+            new fabric.Point(x, y),
             'center',
             'center'
           );

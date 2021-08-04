@@ -1,4 +1,4 @@
-import { findSubIndexWithWordIndex } from './findIndex';
+import { findSubIndexWithWordIndex } from '../utils/findIndex';
 
 export const getPlayerSize = (playerRef, setPlayerSize) => {
   const playerPadding = 32;
@@ -9,6 +9,7 @@ export const getPlayerSize = (playerRef, setPlayerSize) => {
     width = 800;
   }
   setPlayerSize({ width, height });
+  // setPlayerSize({ width: 640, height: 360 });
 };
 
 export const getDimensions = (videoRef, setVideoSize) => {

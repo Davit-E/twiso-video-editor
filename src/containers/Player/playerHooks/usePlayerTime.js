@@ -68,7 +68,8 @@ const usePlayerTime = (
       //   console.log('comparing: ', time, '>', +word.end, time >= +word.end);
       // }
       if (index !== null && nextSub && time > +sub.end) {
-        setCurrentSubIndex((prevState) => prevState + 1);
+        if(!nextSub.deleted) setCurrentSubIndex((prevState) => prevState + 1);
+        else setCurrentSubIndex(nextSub.nextSub);
       }
     },
     [subArr, setCurrentSubIndex]

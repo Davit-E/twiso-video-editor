@@ -25,6 +25,8 @@ const Transcription = ({
   subArr,
   setCurrentSubIndex,
   currentSub,
+  currentSubIndex,
+  setShouldRerenderSub
 }) => {
   const [searchInput, setSearchInput] = useState('');
   const [inputIndex, setInputIndex] = useState(null);
@@ -33,7 +35,6 @@ const Transcription = ({
     let id = e.currentTarget.id;
     let wordIndex = findWordIndexWithId(id, words);
     let subIndex = findSubIndexWithWordIndex(wordIndex, words, subArr);
-    console.log(subIndex);
     if (isPlaying) videoRef.current.pause();
     if (e.detail > 1 && inputIndex === null) setInputIndex(wordIndex);
     if (!isDeleted && inputIndex === null && wordIndex !== null) {
@@ -48,7 +49,9 @@ const Transcription = ({
         setCurrentWordIndex,
         setCurrentSelection,
         setCuts,
-        setPlayerTime
+        setPlayerTime,
+        subArr,
+        setCurrentSubIndex
       );
     }
   };
@@ -60,7 +63,6 @@ const Transcription = ({
       if (anchorNode.parentNode.id === focusNode.parentNode.id) {
         let wordIndex = findWordIndexWithId(anchorNode.parentNode.id, words);
         let subIndex =  findSubIndexWithWordIndex(wordIndex, words, subArr);
-        console.log('hi', subIndex);
         if (anchorNode.parentNode.id && wordIndex !== null) {
           setPlayerTime(wordIndex);
           setCurrentWordIndex(wordIndex);
@@ -98,7 +100,6 @@ const Transcription = ({
         let indexStart = findWordIndexWithId(start, words);
         let indexEnd = findWordIndexWithId(end, words);
         let subIndex = findSubIndexWithWordIndex(indexStart, words, subArr);
-        console.log('hi2', subIndex);
         if (indexStart !== null && indexEnd !== null) {
           setCurrentSelection({ start: indexStart, end: indexEnd });
           setPlayerTime(indexStart);
@@ -207,6 +208,10 @@ const Transcription = ({
             setInputIndex={setInputIndex}
             currentSelection={currentSelection}
             currentSub={currentSub}
+            currentSubIndex={currentSubIndex}
+            subArr={subArr}
+            setCurrentSubIndex={setCurrentSubIndex}
+            setShouldRerenderSub={setShouldRerenderSub}
           />
         ) : null}
       </div>

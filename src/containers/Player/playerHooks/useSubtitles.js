@@ -16,7 +16,10 @@ const useSubtitles = (
   setSubArr,
   currentSubIndex,
   setCurrentSubIndex,
-  currentWordIndex
+  currentWordIndex,
+  videoCuts,
+  shouldRerenderSub,
+  setShouldRerenderSub,
 ) => {
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
@@ -25,7 +28,8 @@ const useSubtitles = (
       setIsFirstLoad(false);
       let subIndex = findSubIndexWithWordIndex(currentWordIndex, words, subArr);
       if (subIndex !== null) setCurrentSubIndex(subIndex);
-    } else if (currentSub && subArr[currentSubIndex]) {
+    } else if (currentSub && subArr && subArr[currentSubIndex]) {
+      if(shouldRerenderSub) setShouldRerenderSub(false)
       displaySub(currentSub, currentSubIndex, subArr);
     }
   }, [
@@ -36,7 +40,15 @@ const useSubtitles = (
     isFirstLoad,
     currentSub,
     currentSubIndex,
+    shouldRerenderSub,
+    setShouldRerenderSub
   ]);
+
+  // useEffect(() => {
+  //   if(currentSub && videoCuts) {
+  //     generateSubtitles(words, setSubArr);
+  //   }
+  // }, [currentSub, videoCuts, setSubArr, words])
 
   useEffect(() => {
     if (canvas && !currentSub && state.isSubtitles) {
@@ -45,7 +57,7 @@ const useSubtitles = (
       canvas.add(sub);
       canvas.requestRenderAll();
       setCurrentSub(sub);
-      if (!subArr) generateSubtitles(words, setSubArr);
+      generateSubtitles(words, setSubArr);
     } else if (currentSub && !state.isSubtitles) {
       canvas.remove(currentSub);
       setCurrentSub(null);
