@@ -12,44 +12,72 @@ const Words = ({
   currentSub,
   currentSubIndex,
   subArr,
-  setShouldRerenderSub
+  setShouldRerenderSub,
 }) => {
   const [input, setInput] = useState('');
   const inputRef = useRef(null);
 
-  const handleSubTextChange = (id, text, isSilence) => {
-    if (!isSilence && text && id) {
-      let words = subArr[currentSubIndex].words;
-      console.log(subArr[currentSubIndex]);
-      console.log(words);
+  const handleNotSilenceAndText = (id, text) => {
+    let words = subArr[currentSubIndex].words;
+    // console.log(subArr[currentSubIndex]);
+    // console.log(words);
+    for (let i = 0; i < words.length; i++) {
+      let word = words[i];
+      if (word.id === id) {
+        let isWhitespace = word.text.indexOf(' ') === 0;
+        word.text = isWhitespace ? ' ' + text : text;
+        if (word.silence) word.silence = false;
+        break;
+      }
+    }
+  };
+
+  const handleSilenceAndText = (id, text) => {
+    let words = subArr[currentSubIndex].words;
+    // console.log(words);
+    if (words) {
       for (let i = 0; i < words.length; i++) {
         let word = words[i];
         if (word.id === id) {
-          let isWhitespace = word.text.indexOf(' ') === 0;
-          word.text = isWhitespace ? ' ' + text : text;
+          let isFirst = i === 0;
+          text = isFirst ? text + ' ' : text;
+          let isNoWhitespace = word.text.indexOf(' ') !== 0;
+          word.text = isNoWhitespace && !isFirst ? ' ' + text : text;
           if (word.silence) word.silence = false;
           break;
         }
       }
-    } else if (text && isSilence) {
+    } else {
       subArr[currentSubIndex].silence = false;
       subArr[currentSubIndex].words = [{ ...subArr[currentSubIndex], text }];
+    }
+  };
+
+  const handleNoText = (id) => {
+    let words = subArr[currentSubIndex].words;
+    // console.log(words);
+    let silenceCount = 0;
+    for (let i = 0; i < words.length; i++) {
+      let word = words[i];
+      if (word.id === id) {
+        word.text = '';
+        word.silence = true;
+      }
+      if (word.silence) silenceCount++;
+    }
+    if (silenceCount === words.length) {
+      subArr[currentSubIndex].silence = true;
+      subArr[currentSubIndex].words = null;
+    }
+  };
+
+  const handleSubTextChange = (id, text, isSilence) => {
+    if (!isSilence && text && id) {
+      handleNotSilenceAndText(id, text);
+    } else if (text && isSilence) {
+      handleSilenceAndText(id, text);
     } else if (id) {
-      let words = subArr[currentSubIndex].words;
-      console.log(words);
-      let silenceCount = 0;
-      for (let i = 0; i < words.length; i++) {
-        let word = words[i];
-        if (word.id === id) {
-          word.text = '';
-          word.silence = true;
-        }
-        if (word.silence) silenceCount++;
-      }
-      if (silenceCount === words.length) {
-        subArr[currentSubIndex].silence = true;
-        subArr[currentSubIndex].words = null;
-      }
+      handleNoText(id);
     }
     setShouldRerenderSub(true);
   };

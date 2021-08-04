@@ -32,13 +32,15 @@ const Video = ({
   //   console.log(e);
   //   console.log(videoRef.current.seekable);
   // };
+
+ 
   return (
     <video
       // style={{ display: viedoForUpload ? 'block' : 'none' }}
       width={videoSize ? videoSize.width : 0}
       height={videoSize ? videoSize.height : 0}
       id='video'
-      preload='true'
+      preload='auto'
       className={styles.Video}
       ref={videoRef}
       controls
@@ -62,9 +64,9 @@ const Video = ({
           setCurrentTime,
           setCurrentSubIndex,
           subArr
-        )
-      }
-      onLoadedMetadata={() => getDimensions(videoRef, setVideoSize)}
+          )
+        }
+        onLoadedMetadata={() => getDimensions(videoRef, setVideoSize)}
       // onSeeking={seeking}
       // onSeeked={seeked}
     />

@@ -21,11 +21,12 @@ const VideoEditor = () => {
   const [currentSub, setCurrentSub] = useState(null);
   const [currentSubIndex, setCurrentSubIndex] = useState(null);
   const [videoSize, setVideoSize] = useState(null);
-  const [shouldRerenderSub, setShouldRerenderSub] = useState(false);
-  const { isUploading, uploadVideo, words, duration, fullText, progress } =
+ const [shouldRerenderSub, setShouldRerenderSub] = useState(false);
+  const { isUploading, uploadVideo,  words, duration, fullText, progress } =
     useUploadVideo();
 
   const videoRef = useRef(null);
+
 
   // useEffect(() => {
   //   console.log('currentSubIndex:', currentSubIndex);
@@ -39,11 +40,11 @@ const VideoEditor = () => {
   //   console.log(currentWordIndex);
   // }, [currentWordIndex]);
 
-  useEffect(() => {
-    videoCuts.forEach((el) => {
-      console.log(el);
-    });
-  }, [videoCuts]);
+  // useEffect(() => {
+  //   videoCuts.forEach((el) => {
+  //     console.log(el);
+  //   });
+  // }, [videoCuts]);
 
   useEffect(() => {
     if (viedoForUpload)
@@ -110,6 +111,8 @@ const VideoEditor = () => {
               currentSub={currentSub}
               currentSubIndex={currentSubIndex}
               setShouldRerenderSub={setShouldRerenderSub}
+              // duration={duration}
+              // fullText={fullText}
             />
             <Player
               videoRef={videoRef}
@@ -118,10 +121,6 @@ const VideoEditor = () => {
               isPlaying={isPlaying}
               words={words}
               currentTime={currentTime}
-              setIsPlaying={setIsPlaying}
-              currentSelection={currentSelection}
-              setCurrentSelection={setCurrentSelection}
-              setCurrentTime={setCurrentTime}
               videoCuts={videoCuts}
               setNextCutIndex={setNextCutIndex}
               setCurrentWordIndex={setCurrentWordIndex}
@@ -134,7 +133,6 @@ const VideoEditor = () => {
               currentSubIndex={currentSubIndex}
               setCurrentSubIndex={setCurrentSubIndex}
               videoSize={videoSize}
-              setVideoSize={setVideoSize}
               shouldRerenderSub={shouldRerenderSub}
               setShouldRerenderSub={setShouldRerenderSub}
             />

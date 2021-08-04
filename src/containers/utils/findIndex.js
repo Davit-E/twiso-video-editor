@@ -1,7 +1,7 @@
 export const findSubIndexWithWordIndex = (wordIndex, words, subArr) => {
   if (subArr) {
     let word = words[wordIndex];
-    console.log(word);
+    // console.log(word);
     for (let i = 0; i < subArr.length; i++) {
       let sub = subArr[i];
       if (sub.words) {

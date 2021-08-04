@@ -203,7 +203,7 @@ const Navigation = ({
           <p className={styles.Creater}>Dmitry</p>
         </div>
 
-        <button
+        {/* <button
           className={styles.UploadVideo}
           onClick={() => uploadRef.current.click()}
         >
@@ -215,7 +215,7 @@ const Navigation = ({
           accept='video/mp4'
           style={{ display: 'none' }}
           onChange={uploadHandler}
-        />
+        /> */}
       </div>
       {duration ? <DesignControls canvas={canvas} /> : null}
       <div className={styles.DownloadUserInfoContainer}>

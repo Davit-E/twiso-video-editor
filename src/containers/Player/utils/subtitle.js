@@ -4,30 +4,60 @@ export const generateSubtitles = (words, setSubArr) => {
   let arr = [];
   let sub = null;
   let firstDeletedIndex = null;
+
+  const checkForPrevDeleted = (word, what, i) => {
+    if (firstDeletedIndex) {
+      arr[firstDeletedIndex].nextSub = arr.length - 1;
+      // console.log(i);
+      // console.log(
+      //   arr[firstDeletedIndex],
+      //   arr[firstDeletedIndex].nextSub,
+      //   'setting nextSub Sub',
+      //   word,
+      //   arr.length - 1,
+      //   what
+      // );
+      firstDeletedIndex = null;
+    }
+  };
+
   for (let i = 0; i < words.length; i++) {
     let word = words[i];
-
+    let nextWord = words[i + 1];
     if (word.deleted) {
+      // console.log('deleted: ', word);
       if (sub) {
         arr.push({ ...sub });
+        checkForPrevDeleted(word, 'deleted and is Sub', i);
         sub = null;
         arr.push({ ...word });
         firstDeletedIndex = arr.length - 1;
-      } else arr.push({ ...word });
+        // console.log('setting reference for nextSub', word, arr.length - 1);
+      } else {
+        arr.push({ ...word });
+        if (!firstDeletedIndex) {
+          firstDeletedIndex = arr.length - 1;
+          // console.log('setting reference for nextSub', word, arr.length - 1);
+        }
+      }
       continue;
     }
 
     let isLast = i === words.length - 1;
     let wordTimeLength = +word.end - +word.start;
-    let isLongSilence = !!word.silence && wordTimeLength >= 0.4;
+    let isLongSilence =
+      !!word.silence &&
+      ((!sub && nextWord && nextWord.deleted) || wordTimeLength >= 0.4);
     if (isLongSilence) {
       if (sub) {
         arr.push({ ...sub });
+        checkForPrevDeleted(word, 'isSub and isLongSilence', i);
         sub = null;
         // console.log('isSub and isLongSilence', i, word.text);
       }
       // console.log(' isLongSilence', i, word.text);
       arr.push({ ...word });
+      checkForPrevDeleted(word, 'isLongSilence', i);
       continue;
     } else if (word.silence) {
       if (sub) {
@@ -36,7 +66,10 @@ export const generateSubtitles = (words, setSubArr) => {
           ...word,
           text: '',
         });
-        if (isLast) arr.push(sub);
+        if (isLast) {
+          arr.push(sub);
+          checkForPrevDeleted(word, 'isSub and isLongSilence', i);
+        }
         // console.log('isSub and silence', i, word.text);
       } else {
         sub = {
@@ -47,6 +80,7 @@ export const generateSubtitles = (words, setSubArr) => {
         };
         if (isLast) {
           arr.push({ ...word });
+          checkForPrevDeleted(word, 'silence', i);
         }
         // console.log('silence', i, word.text);
       }
@@ -67,10 +101,12 @@ export const generateSubtitles = (words, setSubArr) => {
       sub.end = word.end;
       sub.strLength += text.length;
       arr.push({ ...sub });
+      checkForPrevDeleted(word, 'isRoomForWord && containsMark && sub', i);
       sub = null;
       // console.log('isRoomForWord && containsMark && sub', i, word.text);
     } else if (containsMark && sub) {
       arr.push({ ...sub });
+      checkForPrevDeleted(word, 'containsMark && sub', i);
       sub = { words: [] };
       sub.words.push({ ...word });
       sub.start = word.start;
@@ -87,10 +123,7 @@ export const generateSubtitles = (words, setSubArr) => {
         strLength: word.text.length,
       };
       arr.push({ ...sub });
-      if (firstDeletedIndex) {
-        arr[firstDeletedIndex].nextSub = arr.length - 1;
-        firstDeletedIndex = null;
-      }
+      checkForPrevDeleted(word, 'containsMark && sub', i);
       sub = null;
       // console.log('containsMark && sub', i, word.text);
     } else if (isRoomForWord) {
@@ -100,14 +133,14 @@ export const generateSubtitles = (words, setSubArr) => {
       sub.words.push({ ...word, text });
       sub.end = word.end;
       sub.strLength += text.length;
-      if (isLast) arr.push(sub);
+      if (isLast) {
+        arr.push(sub);
+        checkForPrevDeleted(word, 'isRoomForWord', i);
+      }
       // console.log('isRoomForWord', i, word.text);
     } else if (sub) {
       arr.push({ ...sub });
-      if (firstDeletedIndex) {
-        arr[firstDeletedIndex].nextSub = arr.length - 1;
-        firstDeletedIndex = null;
-      }
+      checkForPrevDeleted(word, 'sub', i);
       sub = { words: [] };
       sub.words.push({ ...word });
       sub.start = word.start;
@@ -124,21 +157,13 @@ export const generateSubtitles = (words, setSubArr) => {
       };
       if (isLast) {
         arr.push(sub);
-        if (firstDeletedIndex) {
-          arr[firstDeletedIndex].nextSub = arr.length - 1;
-          firstDeletedIndex = null;
-        }
-      } else if (firstDeletedIndex) {
-        arr[firstDeletedIndex].nextSub = arr.length;
-        firstDeletedIndex = null;
+        checkForPrevDeleted(word, 'end', i);
       }
-
       // console.log('elsee', i, word.text);
     }
-    // console.log(i);
   }
 
-  console.log(arr);
+  // console.log(arr);
   setSubArr(arr);
 };
 

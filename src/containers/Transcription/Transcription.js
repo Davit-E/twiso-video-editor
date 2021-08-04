@@ -8,10 +8,7 @@ import {
   deleteSelection,
 } from './utils/updateTextAndCuts';
 import Words from './Words/Words';
-import {
-  findWordIndexWithId,
-  findSubIndexWithWordIndex,
-} from '../utils/findIndex';
+import { findWordIndexWithId } from '../utils/findIndex';
 const Transcription = ({
   words,
   currentWordIndex,
@@ -26,7 +23,7 @@ const Transcription = ({
   setCurrentSubIndex,
   currentSub,
   currentSubIndex,
-  setShouldRerenderSub
+  setShouldRerenderSub,
 }) => {
   const [searchInput, setSearchInput] = useState('');
   const [inputIndex, setInputIndex] = useState(null);
@@ -34,14 +31,12 @@ const Transcription = ({
   const wordClickHandler = (e, isDeleted) => {
     let id = e.currentTarget.id;
     let wordIndex = findWordIndexWithId(id, words);
-    let subIndex = findSubIndexWithWordIndex(wordIndex, words, subArr);
     if (isPlaying) videoRef.current.pause();
     if (e.detail > 1 && inputIndex === null) setInputIndex(wordIndex);
     if (!isDeleted && inputIndex === null && wordIndex !== null) {
       setCurrentSelection(null);
       setPlayerTime(wordIndex);
       setCurrentWordIndex(wordIndex);
-      if (subIndex !== null) setCurrentSubIndex(subIndex);
     } else if (inputIndex === null) {
       restoreDeleted(
         words,
@@ -50,8 +45,6 @@ const Transcription = ({
         setCurrentSelection,
         setCuts,
         setPlayerTime,
-        subArr,
-        setCurrentSubIndex
       );
     }
   };
@@ -62,11 +55,9 @@ const Transcription = ({
       let end = '';
       if (anchorNode.parentNode.id === focusNode.parentNode.id) {
         let wordIndex = findWordIndexWithId(anchorNode.parentNode.id, words);
-        let subIndex =  findSubIndexWithWordIndex(wordIndex, words, subArr);
         if (anchorNode.parentNode.id && wordIndex !== null) {
           setPlayerTime(wordIndex);
           setCurrentWordIndex(wordIndex);
-          if (subIndex !== null) setCurrentSubIndex(subIndex);
         }
         selection.removeAllRanges();
         setCurrentSelection(null);
@@ -99,23 +90,19 @@ const Transcription = ({
       if (start !== '' && end !== '') {
         let indexStart = findWordIndexWithId(start, words);
         let indexEnd = findWordIndexWithId(end, words);
-        let subIndex = findSubIndexWithWordIndex(indexStart, words, subArr);
         if (indexStart !== null && indexEnd !== null) {
           setCurrentSelection({ start: indexStart, end: indexEnd });
           setPlayerTime(indexStart);
           setCurrentWordIndex(indexStart);
-          if (subIndex !== null) setCurrentSubIndex(subIndex);
         }
       }
       // selection.removeAllRanges();
     },
     [
-      setCurrentSubIndex,
       setCurrentWordIndex,
       setCurrentSelection,
       setPlayerTime,
       words,
-      subArr
     ]
   );
 
@@ -160,8 +147,6 @@ const Transcription = ({
         setCurrentWordIndex,
         setCuts,
         setPlayerTime,
-        setCurrentSubIndex,
-        subArr
       );
     } else if (currentSelection) {
       deleteSelection(
@@ -171,8 +156,6 @@ const Transcription = ({
         setCurrentSelection,
         setCuts,
         setPlayerTime,
-        setCurrentSubIndex,
-        subArr
       );
     }
     let selection = document.getSelection();

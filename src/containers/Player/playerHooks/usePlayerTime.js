@@ -60,10 +60,10 @@ const usePlayerTime = (
   );
 
   const handleCurrentSub = useCallback(
-    (time, index) => {
+    (time, index, arr) => {
       time = +time + 0.05;
-      let sub = subArr[index];
-      let nextSub = subArr[index + 1];
+      let sub = arr[index];
+      let nextSub = arr[index + 1];
       // if (word) {
       //   console.log('comparing: ', time, '>', +word.end, time >= +word.end);
       // }
@@ -72,14 +72,14 @@ const usePlayerTime = (
         else setCurrentSubIndex(nextSub.nextSub);
       }
     },
-    [subArr, setCurrentSubIndex]
+    [setCurrentSubIndex]
   );
 
   useEffect(() => {
-    if (isPlaying && currentSub && currentTime !== null) {
-      handleCurrentSub(currentTime, currentSubIndex);
+    if (isPlaying && currentSub  && subArr && currentTime !== null) {
+      handleCurrentSub(currentTime, currentSubIndex, subArr);
     }
-  }, [isPlaying, currentSub, currentTime, handleCurrentSub, currentSubIndex]);
+  }, [isPlaying, currentSub, currentTime, handleCurrentSub, currentSubIndex, subArr]);
 
   useEffect(() => {
     if (currentTime !== null) handleCurrentWord(currentTime, currentWordIndex);

@@ -78,6 +78,8 @@ const Player = ({
     videoCuts,
     shouldRerenderSub,
     setShouldRerenderSub,
+    isPlaying,
+    videoRef
   );
 
   return (

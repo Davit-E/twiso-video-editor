@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
   newSubtitle,
   generateSubtitles,
@@ -20,49 +20,57 @@ const useSubtitles = (
   videoCuts,
   shouldRerenderSub,
   setShouldRerenderSub,
+  isPlaying,
+  videoRef
 ) => {
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   useEffect(() => {
-    if (isFirstLoad && currentSub && subArr) {
-      setIsFirstLoad(false);
-      let subIndex = findSubIndexWithWordIndex(currentWordIndex, words, subArr);
-      if (subIndex !== null) setCurrentSubIndex(subIndex);
-    } else if (currentSub && subArr && subArr[currentSubIndex]) {
-      if(shouldRerenderSub) setShouldRerenderSub(false)
+    if (currentSub && subArr && subArr[currentSubIndex]) {
+      if (shouldRerenderSub) setShouldRerenderSub(false);
       displaySub(currentSub, currentSubIndex, subArr);
     }
   }, [
-    currentWordIndex,
-    words,
     subArr,
-    setCurrentSubIndex,
-    isFirstLoad,
     currentSub,
     currentSubIndex,
     shouldRerenderSub,
-    setShouldRerenderSub
+    setShouldRerenderSub,
   ]);
 
-  // useEffect(() => {
-  //   if(currentSub && videoCuts) {
-  //     generateSubtitles(words, setSubArr);
-  //   }
-  // }, [currentSub, videoCuts, setSubArr, words])
+  useEffect(() => {
+    if (subArr && !isPlaying) {
+      let subIndex = findSubIndexWithWordIndex(currentWordIndex, words, subArr);
+      if (subIndex !== null) setCurrentSubIndex(subIndex);
+    }
+  }, [
+    subArr,
+    setCurrentSubIndex,
+    words,
+    currentWordIndex,
+    isPlaying,
+  ]);
+
+  useEffect(() => {
+    if (currentSub && videoCuts) {
+      generateSubtitles(words, setSubArr);
+    }
+  }, [currentSub, videoCuts, setSubArr, words]);
 
   useEffect(() => {
     if (canvas && !currentSub && state.isSubtitles) {
+      if (isPlaying) videoRef.current.pause();
       let sub = newSubtitle(canvas, state);
-      console.log('added: ', sub);
+      // console.log('added: ', sub);
       canvas.add(sub);
       canvas.requestRenderAll();
       setCurrentSub(sub);
-      generateSubtitles(words, setSubArr);
     } else if (currentSub && !state.isSubtitles) {
       canvas.remove(currentSub);
       setCurrentSub(null);
     }
   }, [
+    videoRef,
+    isPlaying,
     state.isSubtitles,
     currentSub,
     setCurrentSub,
@@ -81,7 +89,6 @@ const useSubtitles = (
     }
     return () => {
       if (canvas) canvas.off('object:added');
-      setIsFirstLoad(true);
     };
   }, [canvas, currentSub]);
 };

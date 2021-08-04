@@ -1,5 +1,3 @@
-import { findSubIndexWithWordIndex } from '../../utils/findIndex';
-
 const handleDelete = (wordsArr, setCuts, setPlayerTime, wordIndex) => {
   let arr = [];
   let isLastDeleted = false;
@@ -32,7 +30,6 @@ const handleDelete = (wordsArr, setCuts, setPlayerTime, wordIndex) => {
     wordsArr[cutStartIndex].next = wordsArr.length - 1;
   }
   setPlayerTime(wordIndex);
-  console.log(wordsArr);
   setCuts([...arr]);
 };
 
@@ -68,8 +65,6 @@ const findAndSetCurrentWord = (
   setWordIndex,
   setCuts,
   setPlayerTime,
-  setCurrentSubIndex,
-  subArr
 ) => {
   let currentIndex = null;
   for (let i = deletedIndex; i >= 0; i--) {
@@ -91,15 +86,12 @@ const findAndSetCurrentWord = (
   }
 
   setWordIndex(currentIndex);
-  // let subIndex = findSubIndexWithWordIndex(currentIndex, wordsArr, subArr);
-  // setCurrentSubIndex(subIndex);
   handleVideoCuts(
     'delete',
     wordsArr,
     setCuts,
     setPlayerTime,
     currentIndex,
-    subArr
   );
 };
 
@@ -109,21 +101,15 @@ export const deleteWord = (
   setWordIndex,
   setCuts,
   setPlayerTime,
-  setCurrentSubIndex,
-  subArr
 ) => {
   let word = wordsArr[wordIndex];
   word.deleted = true;
-  // handleSubDelete(wordsArr, wordIndex, subArr);
-
   findAndSetCurrentWord(
     wordIndex,
     wordsArr,
     setWordIndex,
     setCuts,
     setPlayerTime,
-    setCurrentSubIndex,
-    subArr
   );
 };
 
@@ -134,8 +120,6 @@ export const deleteSelection = (
   setCurrentSelection,
   setCuts,
   setPlayerTime,
-  setCurrentSubIndex,
-  subArr
 ) => {
   let deletedStartIndex = currentSelection.start;
   let deleteEndIndex = currentSelection.end;
@@ -152,8 +136,6 @@ export const deleteSelection = (
     setWordIndex,
     setCuts,
     setPlayerTime,
-    setCurrentSubIndex,
-    subArr
   );
   setCurrentSelection(null);
 };
@@ -165,8 +147,6 @@ export const restoreDeleted = (
   setCurrentSelection,
   setCuts,
   setPlayerTime,
-  subArr,
-  setCurrentSubIndex
 ) => {
   for (let i = wordIndex; i < wordsArr.length; i++) {
     let word = wordsArr[i];
@@ -176,9 +156,6 @@ export const restoreDeleted = (
     } else break;
   }
   let restoreStart = wordsArr[wordIndex].start;
-  // let subIndex = findSubIndexWithWordIndex(wordIndex, wordsArr, subArr);
-  // setCurrentSubIndex(subIndex);
-
   handleVideoCuts(
     'restore',
     null,
