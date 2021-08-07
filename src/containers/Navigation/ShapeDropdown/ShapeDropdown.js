@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import styles from './ShapeDropdown.module.css';
-import square from '../../../assets/square.svg';
-import circle from '../../../assets/circle.svg';
-import triangle from '../../../assets/triangle.svg';
-import line from '../../../assets/line.svg';
+import square from '../../../assets/editor/square.svg';
+import circle from '../../../assets/editor/circle.svg';
+import triangle from '../../../assets/editor/triangle.svg';
+import line from '../../../assets/editor/line.svg';
 import EditorContext from '../../../contexts/EditorContext';
 
 const ShapeDropdown = () => {

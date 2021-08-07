@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './Words.module.css';
-import restoreText from '../../../assets/restoreText.svg';
+import restoreText from '../../../assets/editor/restoreText.svg';
 const Words = ({
   wordsArr,
   currentWordIndex,
@@ -23,7 +23,7 @@ const Words = ({
     // console.log(words);
     for (let i = 0; i < words.length; i++) {
       let word = words[i];
-      if (word.id === id) {
+      if (word._id === id) {
         let isWhitespace = word.text.indexOf(' ') === 0;
         word.text = isWhitespace ? ' ' + text : text;
         if (word.silence) word.silence = false;
@@ -38,7 +38,7 @@ const Words = ({
     if (words) {
       for (let i = 0; i < words.length; i++) {
         let word = words[i];
-        if (word.id === id) {
+        if (word._id === id) {
           let isFirst = i === 0;
           text = isFirst ? text + ' ' : text;
           let isNoWhitespace = word.text.indexOf(' ') !== 0;
@@ -59,7 +59,7 @@ const Words = ({
     let silenceCount = 0;
     for (let i = 0; i < words.length; i++) {
       let word = words[i];
-      if (word.id === id) {
+      if (word._id === id) {
         word.text = '';
         word.silence = true;
       }
@@ -118,18 +118,18 @@ const Words = ({
   }, [inputIndex, wordsArr]);
 
   return wordsArr.map((word, i) => {
-    if (isLastDeleted && word.deleted) shouldShow = false;
+    if (isLastDeleted && !word.active) shouldShow = false;
     else shouldShow = true;
     let isCurrent =
-      i === currentWordIndex && !currentSelection && !word.deleted;
+      i === currentWordIndex && !currentSelection && word.active;
     let isHighlight =
       !word.silence &&
-      !word.deleted &&
+      word.active &&
       searchInput.trim().length > 1 &&
       word.text.trim().toLowerCase().includes(searchInput.trim().toLowerCase());
 
-    if (!isLastDeleted && word.deleted) isLastDeleted = true;
-    if (isLastDeleted && !word.deleted) isLastDeleted = false;
+    if (!isLastDeleted && !word.active) isLastDeleted = true;
+    if (isLastDeleted && word.active) isLastDeleted = false;
 
     if (currentSelection && currentSelection.start === i) {
       isSelectionMode = true;
@@ -156,7 +156,7 @@ const Words = ({
       </span>
     );
 
-    let content = word.deleted ? (
+    let content = !word.active ? (
       <span className={styles.Deleted}>
         <span className={styles.DeletedImgContainer}>
           <img
@@ -182,15 +182,15 @@ const Words = ({
     return shouldShow ? (
       <span
         style={containerStyle}
-        id={word.id}
-        key={word.id}
+        id={word._id}
+        key={word._id}
         className={[
           styles.WordContainer,
           isCurrent ? styles.CurrentWord : null,
           isHighlight ? styles.Highlight : null,
           isSelectionMode ? styles.InSelection : null,
         ].join(' ')}
-        onClick={(e) => wordClickHandler(e, word.deleted)}
+        onClick={(e) => wordClickHandler(e, !word.active)}
       >
         {content}
       </span>

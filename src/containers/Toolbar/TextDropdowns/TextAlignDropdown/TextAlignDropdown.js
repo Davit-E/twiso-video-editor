@@ -1,9 +1,9 @@
 import React from 'react';
 import styles from './TextAlignDropdown.module.css';
-import textLeft from '../../../../assets/textLeft.svg';
-import textRight from '../../../../assets/textRight.svg';
-import textCenter from '../../../../assets/textCenter.svg';
-import textJustify from '../../../../assets/textJustify.svg';
+import textLeft from '../../../../assets/editor/textLeft.svg';
+import textRight from '../../../../assets/editor/textRight.svg';
+import textCenter from '../../../../assets/editor/textCenter.svg';
+import textJustify from '../../../../assets/editor/textJustify.svg';
 
 const TextAlignDropdown = ({ setIsDropDown, dispatch, current }) => {
   const optionsClickHandler = (e) => {

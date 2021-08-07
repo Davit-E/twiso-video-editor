@@ -5,7 +5,7 @@ import EventContext from '../../contexts/EventContext';
 import useEventState from '../../hooks/useEventsState';
 import EditorContext from '../../contexts/EditorContext';
 import CanvasToolbar from '../CanvasToolbar/CanvasToolbar';
-import play from '../../assets/play.svg';
+import play from '../../assets/editor/play.svg';
 import usePlayerSize from './playerHooks/usePlayerSize';
 import usePlayerTime from './playerHooks/usePlayerTime';
 import useSubtitles from './playerHooks/useSubtitles';
@@ -92,6 +92,7 @@ const Player = ({
             setCanvas={setCanvas}
             video={videoRef.current}
             currentSub={currentSub}
+            currentTime={currentTime}
           />
           {canvas ? (
             <>

@@ -6,7 +6,7 @@ import Player from '../Player/Player';
 import Uploader from '../Uploader/Uploader';
 import useUploadVideo from '../../hooks/useUploadVideo';
 import Video from '../Video/Video';
-// import { words } from './sampleWords2';
+// import { words } from './sampleWords';
 
 const VideoEditor = () => {
   const [currentSelection, setCurrentSelection] = useState(null);
@@ -21,12 +21,11 @@ const VideoEditor = () => {
   const [currentSub, setCurrentSub] = useState(null);
   const [currentSubIndex, setCurrentSubIndex] = useState(null);
   const [videoSize, setVideoSize] = useState(null);
- const [shouldRerenderSub, setShouldRerenderSub] = useState(false);
-  const { isUploading, uploadVideo,  words, duration, fullText, progress } =
+  const [shouldRerenderSub, setShouldRerenderSub] = useState(false);
+  const { isUploading, uploadVideo, words, videoUrl, duration, progress } =
     useUploadVideo();
 
   const videoRef = useRef(null);
-
 
   // useEffect(() => {
   //   console.log('currentSubIndex:', currentSubIndex);
@@ -47,9 +46,13 @@ const VideoEditor = () => {
   // }, [videoCuts]);
 
   useEffect(() => {
-    if (viedoForUpload)
-      videoRef.current.src = URL.createObjectURL(viedoForUpload);
-  }, [viedoForUpload, videoRef]);
+    if (videoUrl) videoRef.current.src = videoUrl;
+  }, [videoUrl, videoRef]);
+
+  // useEffect(() => {
+  //   if (viedoForUpload)
+  //     videoRef.current.src = URL.createObjectURL(viedoForUpload);
+  // }, [viedoForUpload, videoRef]);
 
   const setPlayerTime = (wordIndex) => {
     let endTime = '0';
@@ -111,8 +114,6 @@ const VideoEditor = () => {
               currentSub={currentSub}
               currentSubIndex={currentSubIndex}
               setShouldRerenderSub={setShouldRerenderSub}
-              // duration={duration}
-              // fullText={fullText}
             />
             <Player
               videoRef={videoRef}

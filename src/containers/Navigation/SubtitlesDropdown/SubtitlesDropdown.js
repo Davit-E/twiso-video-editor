@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import styles from './SubtitlesDropdown.module.css';
 import EditorContext from '../../../contexts/EditorContext';
-import { ReactComponent as SubtitlesOn } from '../../../assets/subtitlesOn.svg';
-import { ReactComponent as SubtitlesOff } from '../../../assets/subtitlesOff.svg';
+import { ReactComponent as SubtitlesOn } from '../../../assets/editor/subtitlesOn.svg';
+import { ReactComponent as SubtitlesOff } from '../../../assets/editor/subtitlesOff.svg';
 
 const SubtitlesDropdown = () => {
   const { editorState, editorDispatch } = useContext(EditorContext);

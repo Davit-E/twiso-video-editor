@@ -1,7 +1,7 @@
 import { fabric } from 'fabric';
-import ctrlScale from '../../assets/ctrlScale.svg';
-import ctrlStretch from '../../assets/ctrlStretch.svg';
-import ctrlRotate from '../../assets/ctrlRotate.svg';
+import ctrlScale from '../../assets/editor/ctrlScale.svg';
+import ctrlStretch from '../../assets/editor/ctrlStretch.svg';
+import ctrlRotate from '../../assets/editor/ctrlRotate.svg';
 
 const fabricConfig = () => {
   fabric.Object.prototype.transparentCorners = false;

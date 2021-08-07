@@ -3,8 +3,8 @@ import styles from './CanvasToolbar.module.css';
 import ResizeDropdown from './ResizeDropdown/ResizeDropdown';
 import EditorContext from '../../contexts/EditorContext';
 import Backdrop from '../../components/Backdrop/Backdrop';
-import { ReactComponent as Templates } from '../../assets/templates.svg';
-import { ReactComponent as Resize } from '../../assets/resize.svg';
+import { ReactComponent as Templates } from '../../assets/editor/templates.svg';
+import { ReactComponent as Resize } from '../../assets/editor/resize.svg';
 import { SketchPicker } from 'react-color';
 
 const CanvasToolbar = ({ player }) => {

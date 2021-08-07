@@ -1,0 +1,42 @@
+.SignUp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 13.875rem;
+}
+.Heading {
+  margin: 0;
+  font-weight: 700;
+  font-size: 2.25rem;
+  line-height: 3.25rem;
+}
+.Subheading {
+  margin: 0;
+  line-height: 1.75rem;
+  color: #000000;
+}
+
+.SignUpLink {
+  font-weight: bold;
+  color: #6f7bd0;
+  cursor: pointer;
+}
+.FormContent {
+  width: 26rem;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Form {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.GoogleLogo {
+  margin-right: 1.125rem;
+}

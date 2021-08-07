@@ -1,0 +1,37 @@
+.Dropdown {
+  list-style-type: none;
+  margin: 0;
+  padding: 0.375rem 0;
+  position: absolute;
+  top: 1rem;
+  left: -1.9375rem;
+  width: 25rem;
+  height: auto;
+  background: white;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.05), 0px 4px 12px rgba(0, 0, 0, 0.04);
+  border-radius: 6px;
+}
+
+.Option {
+  width: 100%;
+  padding: 0.25rem;
+  display: flex;
+}
+
+.Option:hover {
+  background: rgba(111, 123, 208, 0.8);
+  color: white;
+}
+
+.Current {
+  background: rgba(111, 123, 208, 0.8);
+  color: white;
+}
+
+.CheckMark {
+  width: 1.875rem;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

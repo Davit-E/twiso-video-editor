@@ -1,4 +1,4 @@
-const handleDelete = (wordsArr, setCuts, setPlayerTime, wordIndex) => {
+export const handleDeleted = (wordsArr, setCuts, setPlayerTime, wordIndex) => {
   let arr = [];
   let isLastDeleted = false;
   let cutStart = 0;
@@ -7,16 +7,16 @@ const handleDelete = (wordsArr, setCuts, setPlayerTime, wordIndex) => {
   let cutEnd = 0;
   for (let i = 0; i < wordsArr.length; i++) {
     let word = wordsArr[i];
-    if (!word.deleted && isLastDeleted) {
+    if (word.active && isLastDeleted) {
       isLastDeleted = false;
       wordsArr[cutStartIndex].next = i;
       arr.push({ start: cutStart, end: cutEnd });
-    } else if (word.deleted && !isLastDeleted) {
+    } else if (!word.active && !isLastDeleted) {
       isLastDeleted = true;
       cutStart = word.start;
       cutStartIndex = i;
       cutEnd = word.end;
-    } else if (word.deleted && isLastDeleted) {
+    } else if (!word.active && isLastDeleted) {
       cutEnd = word.end;
       cutEndIndex = i;
     }
@@ -29,7 +29,7 @@ const handleDelete = (wordsArr, setCuts, setPlayerTime, wordIndex) => {
   } else if (isLastDeleted) {
     wordsArr[cutStartIndex].next = wordsArr.length - 1;
   }
-  setPlayerTime(wordIndex);
+  if (wordIndex !== null) setPlayerTime(wordIndex);
   setCuts([...arr]);
 };
 
@@ -54,7 +54,7 @@ const handleVideoCuts = (
   restoreStart
 ) => {
   if (type === 'delete') {
-    handleDelete(wordsArr, setCuts, setPlayerTime, wordIndex);
+    handleDeleted(wordsArr, setCuts, setPlayerTime, wordIndex);
   } else if (type === 'restore')
     handleRestore(setCuts, setPlayerTime, wordIndex, restoreStart);
 };
@@ -64,12 +64,12 @@ const findAndSetCurrentWord = (
   wordsArr,
   setWordIndex,
   setCuts,
-  setPlayerTime,
+  setPlayerTime
 ) => {
   let currentIndex = null;
   for (let i = deletedIndex; i >= 0; i--) {
     let word = wordsArr[i];
-    if (!word.deleted) {
+    if (word.active) {
       currentIndex = i;
       break;
     }
@@ -78,7 +78,7 @@ const findAndSetCurrentWord = (
   if (currentIndex === null) {
     for (let i = deletedIndex; i < wordsArr.length; i++) {
       let word = wordsArr[i];
-      if (!word.deleted) {
+      if (word.active) {
         currentIndex = i;
         break;
       }
@@ -86,13 +86,7 @@ const findAndSetCurrentWord = (
   }
 
   setWordIndex(currentIndex);
-  handleVideoCuts(
-    'delete',
-    wordsArr,
-    setCuts,
-    setPlayerTime,
-    currentIndex,
-  );
+  handleVideoCuts('delete', wordsArr, setCuts, setPlayerTime, currentIndex);
 };
 
 export const deleteWord = (
@@ -100,16 +94,16 @@ export const deleteWord = (
   wordIndex,
   setWordIndex,
   setCuts,
-  setPlayerTime,
+  setPlayerTime
 ) => {
   let word = wordsArr[wordIndex];
-  word.deleted = true;
+  word.active = false;
   findAndSetCurrentWord(
     wordIndex,
     wordsArr,
     setWordIndex,
     setCuts,
-    setPlayerTime,
+    setPlayerTime
   );
 };
 
@@ -119,14 +113,14 @@ export const deleteSelection = (
   currentSelection,
   setCurrentSelection,
   setCuts,
-  setPlayerTime,
+  setPlayerTime
 ) => {
   let deletedStartIndex = currentSelection.start;
   let deleteEndIndex = currentSelection.end;
 
   for (let i = deletedStartIndex; i < wordsArr.length; i++) {
     let word = wordsArr[i];
-    word.deleted = true;
+    word.active = false;
     if (i === deleteEndIndex) break;
   }
 
@@ -135,7 +129,7 @@ export const deleteSelection = (
     wordsArr,
     setWordIndex,
     setCuts,
-    setPlayerTime,
+    setPlayerTime
   );
   setCurrentSelection(null);
 };
@@ -146,12 +140,12 @@ export const restoreDeleted = (
   setWordIndex,
   setCurrentSelection,
   setCuts,
-  setPlayerTime,
+  setPlayerTime
 ) => {
   for (let i = wordIndex; i < wordsArr.length; i++) {
     let word = wordsArr[i];
-    if (word.deleted) {
-      word.deleted = false;
+    if (!word.active) {
+      word.active = true;
       if (word.next !== null) word.next = null;
     } else break;
   }

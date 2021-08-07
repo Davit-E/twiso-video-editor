@@ -4,7 +4,7 @@ import axios from '../axios-instance';
 const useUploadVideo = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [duration, setDuration] = useState(null);
-  const [fullText, setFullText] = useState(null);
+  const [videoUrl, setVideoUrl] = useState(null);
   const [progress, setProgress] = useState(0);
   const words = useRef(null);
 
@@ -22,7 +22,7 @@ const useUploadVideo = () => {
   const axiosUploadVideo = useCallback((formData) => {
     return new Promise((resolve, reject) => {
       axios
-        .post('/upload', formData, {
+        .post('/videos', formData, {
           onUploadProgress,
           // onDownloadProgress,
           headers: {
@@ -48,8 +48,8 @@ const useUploadVideo = () => {
         console.log(res);
         console.log(res.data);
         setDuration(res.data.duration);
-        words.current = res.data.text_breakup;
-        setFullText(res.data.full_text);
+        words.current = res.data.subtitles.captions;
+        setVideoUrl(res.data.original_video_url);
       } catch (err) {
         console.log('Error Uploading Video', err);
       } finally {
@@ -66,7 +66,7 @@ const useUploadVideo = () => {
     uploadVideo,
     words: words.current,
     duration,
-    fullText,
+    videoUrl,
     progress,
   };
 };

@@ -1,0 +1,75 @@
+.Auth {
+  display: flex;
+  min-height: 100vh;
+  background: white;
+}
+
+.Auth *::selection {
+  background: #c5caec;
+}
+
+.Testimonial {
+  max-width: 50rem;
+  position: relative;
+  flex: 1;
+  padding: 0 1rem;
+}
+
+.Background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(
+    71.92deg,
+    #5167f1 32.58%,
+    rgba(81, 103, 241, 0) 134.7%
+  );
+  transform: matrix(-1, 0, 0, 1, 0, 0);
+  opacity: 0.15;
+  min-width: 100%;
+  min-height: 100%;
+  z-index: 0;
+}
+
+.TestimonialContent {
+  position: relative;
+  margin-top: 6.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+}
+
+.Twiso {
+}
+.Heading {
+  margin: 0;
+  margin-top: 1.25rem;
+  font-size: 1.25rem;
+  line-height: 2rem;
+  color: #6f7bd0;
+}
+
+.Subheading {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 2rem;
+  font-weight: 600;
+  color: #6f7bd0;
+}
+
+.Mascot {
+  margin-top: 5rem;
+  user-select: none;
+  width: 33.125rem;
+  height: auto;
+}
+
+
+.Account {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  padding: 0 1rem;
+}

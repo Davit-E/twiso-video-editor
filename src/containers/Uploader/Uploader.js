@@ -1,18 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import styles from './Uploader.module.css';
 
-const handleUpload = async (file, setFile, upload) => {
-  const formData = new FormData();
-  formData.append('video', file);
-  try {
-    await upload(formData);
-  } catch (err) {
-    console.log(err);
-  } finally {
-    // setFile(null);
-  }
-};
-
 const Uploader = ({
   viedoForUpload,
   setVideoForUpload,
@@ -24,9 +12,12 @@ const Uploader = ({
   const uploadHandler = () => {
     setVideoForUpload(uploadRef.current.files[0]);
   };
+  
   useEffect(() => {
     if (viedoForUpload) {
-      handleUpload(viedoForUpload, setVideoForUpload, uploadVideo);
+      const formData = new FormData();
+      formData.append('video', viedoForUpload);
+      uploadVideo(formData);
     }
   }, [viedoForUpload, uploadVideo, setVideoForUpload]);
 

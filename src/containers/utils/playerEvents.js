@@ -62,7 +62,7 @@ export const handleEnd = (
   let word = words[0];
   let wordIndex = 0;
   let start = word.start;
-  if (word.deleted && word.next !== null) {
+  if (!word.active && word.next !== null) {
     wordIndex = word.next;
     start = words[wordIndex].start;
   }

@@ -1,4 +1,4 @@
-const rgba2hex = (color) => {
+const rgbaTohex = (color) => {
   let rgb = color
       .replace(/\s/g, '')
       .match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
@@ -9,11 +9,11 @@ const rgba2hex = (color) => {
         (rgb[3] | (1 << 8)).toString(16).slice(1)
       : color;
 
-  let a = alpha !== '' ? alpha : '01'
-  
+  let a = alpha !== '' ? alpha : '01';
+
   a = ((+a * 255) | (1 << 8)).toString(16).slice(1);
-  hex = '#' + hex + a;
+  hex = hex + a;
   return hex;
 };
 
-export default rgba2hex;
+export default rgbaTohex;

@@ -18,7 +18,7 @@ const useDownloadVideo = () => {
   const axiosDownloadVideo = useCallback((data) => {
     return new Promise((resolve, reject) => {
       axios
-        .post('/download-video', data, {
+        .post('/videos/download', data, {
           onUploadProgress,
           onDownloadProgress,
           headers: {
@@ -51,7 +51,7 @@ const useDownloadVideo = () => {
     [axiosDownloadVideo]
   );
 
-  return { isDownloading, downloadVideo, downloadedVideo };
+  return { isDownloading, downloadVideo, downloadedVideo, setDownloadedVideo };
 };
 
 export default useDownloadVideo;

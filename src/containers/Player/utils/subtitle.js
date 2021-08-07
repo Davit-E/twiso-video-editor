@@ -24,11 +24,10 @@ export const generateSubtitles = (words, setSubArr) => {
   for (let i = 0; i < words.length; i++) {
     let word = words[i];
     let nextWord = words[i + 1];
-    if (word.deleted) {
-      // console.log('deleted: ', word);
+    if (!word.active) {
       if (sub) {
         arr.push({ ...sub });
-        checkForPrevDeleted(word, 'deleted and is Sub', i);
+        checkForPrevDeleted(word, 'not active and is Sub', i);
         sub = null;
         arr.push({ ...word });
         firstDeletedIndex = arr.length - 1;
@@ -47,7 +46,7 @@ export const generateSubtitles = (words, setSubArr) => {
     let wordTimeLength = +word.end - +word.start;
     let isLongSilence =
       !!word.silence &&
-      ((!sub && nextWord && nextWord.deleted) || wordTimeLength >= 0.4);
+      ((!sub && nextWord && !nextWord.active) || wordTimeLength >= 0.4);
     if (isLongSilence) {
       if (sub) {
         arr.push({ ...sub });
@@ -77,6 +76,7 @@ export const generateSubtitles = (words, setSubArr) => {
           start: word.start,
           end: word.end,
           strLength: 0,
+          active: true,
         };
         if (isLast) {
           arr.push({ ...word });
@@ -107,11 +107,13 @@ export const generateSubtitles = (words, setSubArr) => {
     } else if (containsMark && sub) {
       arr.push({ ...sub });
       checkForPrevDeleted(word, 'containsMark && sub', i);
-      sub = { words: [] };
-      sub.words.push({ ...word });
-      sub.start = word.start;
-      sub.end = word.end;
-      sub.strLength = word.text.length;
+      sub = {
+        words: [{ ...word }],
+        start: word.start,
+        end: word.end,
+        strLength: word.text.length,
+        active: true,
+      };
       arr.push({ ...sub });
       sub = null;
       // console.log('containsMark && sub', i, word.text);
@@ -121,6 +123,7 @@ export const generateSubtitles = (words, setSubArr) => {
         start: word.start,
         end: word.end,
         strLength: word.text.length,
+        active: true,
       };
       arr.push({ ...sub });
       checkForPrevDeleted(word, 'containsMark && sub', i);
@@ -141,11 +144,13 @@ export const generateSubtitles = (words, setSubArr) => {
     } else if (sub) {
       arr.push({ ...sub });
       checkForPrevDeleted(word, 'sub', i);
-      sub = { words: [] };
-      sub.words.push({ ...word });
-      sub.start = word.start;
-      sub.end = word.end;
-      sub.strLength = word.text.length;
+      sub = {
+        words: [{ ...word }],
+        start: word.start,
+        end: word.end,
+        strLength: word.text.length,
+        active: true,
+      };
       if (isLast) arr.push(sub);
       // console.log('sub', i, word.text);
     } else {
@@ -154,6 +159,7 @@ export const generateSubtitles = (words, setSubArr) => {
         start: word.start,
         end: word.end,
         strLength: word.text.length,
+        active: true,
       };
       if (isLast) {
         arr.push(sub);
@@ -191,15 +197,13 @@ export const newSubtitle = (canvas, state) => {
 };
 
 export const displaySub = (sub, subIndex, arr) => {
-  // console.log(sub);
   if (arr[subIndex].silence) sub.visible = false;
-  else if (!arr[subIndex].deleted) {
+  else if (arr[subIndex].active) {
     let text = '';
     for (let i = 0; i < arr[subIndex].words.length; i++) {
       let word = arr[subIndex].words[i];
       text += word.text;
     }
-    // console.log(text);
     sub.set({ text, visible: true });
   }
 };

@@ -122,3 +122,13 @@
   width: 500px;
   height: auto;
 }
+
+.Close {
+  margin: 0;
+  cursor: pointer;
+  position: absolute;
+  top: -5rem;
+  background: #8f98df;
+  color: white;
+  padding: 1rem;
+}

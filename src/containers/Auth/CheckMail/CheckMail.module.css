@@ -1,0 +1,32 @@
+.CheckMail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 19rem;
+  text-align: center;
+}
+
+.Heading {
+  margin: 0;
+  font-weight: 700;
+  font-size: 2.25rem;
+  line-height: 3.25rem;
+}
+.Subheading {
+  margin: 0;
+  margin-top: 0.375rem;
+  line-height: 1.75rem;
+  color: #000000;
+  font-size: 1.125rem;
+  max-width: 25.1875rem;
+  letter-spacing: -0.03rem;
+}
+
+.EditorLink {
+  margin-top: 20rem;
+  padding: 1rem;
+  color: white;
+  background: #6F7BD0;
+  border-radius: 30px;
+  cursor: pointer;
+}

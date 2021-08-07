@@ -1,19 +1,5 @@
 import { fabric } from 'fabric';
 
-const getRect = (video) => {
-  return new fabric.Rect({
-    left: video.left,
-    top: video.top,
-    width: video.width * video.scaleX,
-    height: video.height * video.scaleY,
-    noScaleCache: false,
-    strokeUniform: true,
-    fill: 'rgba(0,0,0,1)',
-    strokeWidth: 0,
-    id: 'videoRect',
-  });
-};
-
 const toBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -104,7 +90,7 @@ const handleBackImg = (newCanvas, objects, index, setBackImage) => {
   });
 };
 
-export const downloadStartHandler = async (
+export const prepareCanvas = async (
   canvas,
   setBackImage,
   setFrontImage,
@@ -112,12 +98,9 @@ export const downloadStartHandler = async (
   viedoForUpload
 ) => {
   let videoIndex = await getVideoData(canvas, setVideoInfo, viedoForUpload);
-  // let rect = getRect(video);
-  // console.log(rect);
   let newCanvas = new fabric.Canvas();
   let jsonCanvas = JSON.stringify(canvas);
   newCanvas.loadFromJSON(jsonCanvas, () => {
-    // newCanvas.add(rect);
     newCanvas.setDimensions({
       width: canvas.getWidth() / canvas.getZoom(),
       height: canvas.getHeight() / canvas.getZoom(),

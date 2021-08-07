@@ -6,22 +6,12 @@ import React, {
   useCallback,
 } from 'react';
 import styles from './Navigation.module.css';
-import backArrow from '../../assets/backArrow.svg';
+import backArrow from '../../assets/editor/backArrow.svg';
 import EditorContext from '../../contexts/EditorContext';
-import { downloadStartHandler } from './utils/download';
+import { prepareCanvas } from './utils/prepareCanvas';
+import { prepareBreaks, prepareSubs } from './utils/prepareBreaksAndSubs';
 import useDownloadVideo from '../../hooks/useDownloadVideo';
 import DesignControls from './DesignControls/DesignControls';
-import generateUUID from '../utils/generateRandomUUID';
-
-const handleDownload = async (data, download, setData) => {
-  try {
-    await download(data);
-  } catch (err) {
-    console.log(err);
-  } finally {
-    setData(null);
-  }
-};
 
 const Navigation = ({
   viedoForUpload,
@@ -35,100 +25,61 @@ const Navigation = ({
   currentSub,
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
-  const { isDownloading, downloadVideo, downloadedVideo } = useDownloadVideo();
+  const { isDownloading, downloadVideo, downloadedVideo, setDownloadedVideo } =
+    useDownloadVideo();
   const [downloadData, setDownloadData] = useState(null);
   const [backImage, setBackImage] = useState(null);
   const [frontImage, setFrontImage] = useState(null);
   const [videoInfo, setVideoInfo] = useState(null);
   const [breaks, setBreaks] = useState(null);
   const [subs, setSubs] = useState(null);
-  const uploadRef = useRef(null);
+  // const uploadRef = useRef(null);
   const downloadRef = useRef(null);
 
-  const uploadHandler = () => {
-    setVideoForUpload(uploadRef.current.files[0]);
+  const closeHandler = (e) => {
+    setDownloadedVideo(null)
   };
+
+  // const uploadHandler = () => {
+  //   setVideoForUpload(uploadRef.current.files[0]);
+  // };
 
   useEffect(() => {
     if (downloadData) {
-      handleDownload(downloadData, downloadVideo, setDownloadData);
+      downloadVideo(downloadData);
+      setDownloadData(null);
     }
   }, [downloadData, downloadVideo]);
 
-  const imageDownloadHandler = useCallback((back, front) => {
-    downloadRef.current.href = back;
-    downloadRef.current.download = 'design.png';
-    downloadRef.current.click();
-    if (front) {
-      downloadRef.current.href = front;
-      downloadRef.current.download = 'design2.png';
-      downloadRef.current.click();
-      setBackImage(null);
-      setFrontImage(null);
-    }
-  }, []);
+  // const imageDownloadHandler = useCallback((back, front) => {
+  //   downloadRef.current.href = back;
+  //   downloadRef.current.download = 'design.png';
+  //   downloadRef.current.click();
+  //   if (front) {
+  //     downloadRef.current.href = front;
+  //     downloadRef.current.download = 'design2.png';
+  //     downloadRef.current.click();
+  //     setBackImage(null);
+  //     setFrontImage(null);
+  //   }
+  // }, []);
 
-  const generateSubtitles = (arr, object, subState) => {
-    // console.log(arr);
-    // console.log('width', object.width);
-    // console.log('height', object.height);
-    // console.log('top', object.top);
-    // console.log('left', object.left);
-    let paddingX = object.paddingX !== 0 ? object.paddingX / 2 : 0;
-    let paddingY = object.paddingY !== 0 ? object.paddingY / 2 : 0;
-    let captions = [];
-    let config = {
-      x: object.left,
-      y: object.top,
-      fontSize: subState.fontSize,
-      fontColor: subState.fill,
-      fontFamily: subState.fontFamily,
-      backgroundColor: subState.backgroundColor,
-      textAlign: 'center',
-      // padding: `${paddingY}px ${paddingX}px ${paddingY}px ${paddingX}px`,
-      padding: paddingY,
-      fontWeight: subState.fontWeight,
-      fontStyle: subState.fontStyle,
-    };
-    console.log(config);
-    // let prev = null;
-    for (let i = 0; i < arr.length; i++) {
-      let el = arr[i];
-      if (el.silence) {
-        let _id = generateUUID();
-        captions.push({ start: el.start, end: el.end, silence: true, _id });
-      } else if (!el.deleted) {
-        let _id = generateUUID();
-        let notDeleted = el.words.filter((word) => !word.deleted);
-        let text = '';
-        for (let i = 0; i < notDeleted.length; i++) {
-          let el = notDeleted[i];
-          text += el.text;
-        }
-        captions.push({
-          start: el.start,
-          end: el.end,
-          text,
-          silence: false,
-          _id,
-        });
-      }
-    }
-    let subtitles = { captions, config };
-    console.log(subtitles);
-    setSubs(subtitles);
-  };
+  // useEffect(() => {
+  //   if (backImage && frontImage !== null) {
+  //     imageDownloadHandler(backImage, frontImage);
+  //   }
+  // }, [backImage, frontImage, imageDownloadHandler]);
 
   const downloadClickHandler = () => {
     if (editorState.isCropMode) {
       editorDispatch({ type: 'setIsCropMode', data: false });
     } else if (canvas) {
       videoRef.current.pause();
-      generateBreaks(videoCuts, duration);
-      // if (currentSub && subArr) {
-      //   generateSubtitles(subArr, currentSub, editorState.subtitlesState);
-      // }
-      downloadStartHandler(
+      prepareBreaks(videoCuts, duration, setBreaks);
+      if (currentSub && subArr) {
+        prepareSubs(subArr, currentSub, editorState.subtitlesState, setSubs);
+      } else setSubs({ captions: [], config: {} });
+      prepareCanvas(
         canvas,
         setBackImage,
         setFrontImage,
@@ -138,42 +89,15 @@ const Navigation = ({
     }
   };
 
-  // useEffect(() => {
-  //   if (backImage && frontImage !== null) {
-  //     imageDownloadHandler(backImage, frontImage);
-  //   }
-  // }, [backImage, frontImage, imageDownloadHandler]);
-
-  const generateBreaks = (cuts, endTime) => {
-    console.log(cuts);
-    let videoBreaks = [];
-    let prev = null;
-    for (let i = 0; i < cuts.length; i++) {
-      let el = cuts[i];
-      if (i === 0 && el.start !== 0) {
-        videoBreaks.push({ start: 0, end: el.start });
-      } else if (el.start !== 0) {
-        videoBreaks.push({ start: prev, end: el.start });
-      }
-      prev = el.end;
-
-      if (i === cuts.length - 1 && el.end !== endTime) {
-        videoBreaks.push({ start: el.end, end: endTime });
-      }
-    }
-    console.log(videoBreaks);
-    setBreaks(videoBreaks);
-  };
-
   const prepareData = useCallback(
-    (backImg, frontImg, videoData, breaksData) => {
+    (backImg, frontImg, videoData, breaksData, subsData) => {
       let elements = [{ ...backImg }];
       if (frontImg) elements.push({ ...frontImg });
       let data = {
         video: { ...videoData },
         elements,
         breaks: [...breaksData],
-        // subtitles: { ...subsData },
+        subtitles: { ...subsData },
       };
       console.log(data);
       let jsonData = JSON.stringify(data);
@@ -189,10 +113,10 @@ const Navigation = ({
   );
 
   useEffect(() => {
-    if (backImage && frontImage !== null && videoInfo && breaks) {
-      prepareData(backImage, frontImage, videoInfo, breaks);
+    if (backImage && frontImage !== null && videoInfo && breaks && subs) {
+      prepareData(backImage, frontImage, videoInfo, breaks, subs);
     }
-  }, [backImage, frontImage, videoInfo, prepareData, breaks]);
+  }, [backImage, frontImage, videoInfo, prepareData, breaks, subs]);
 
   return (
     <header className={styles.Navigation}>
@@ -235,8 +159,15 @@ const Navigation = ({
       </a>
       {downloadedVideo ? (
         <div className={styles.DownloadVideoContainer}>
+          <h2 className={styles.Close} onClick={closeHandler}>
+            Close
+          </h2>
           <video
             className={styles.DownloadVideo}
+            style={{
+              width: canvas.getWidth(),
+              height: 'auto',
+            }}
             // style={{ display: 'absolute' }}
             // onPlay={() => videoRef.current.play()}
             id='video'

@@ -1,13 +1,13 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import styles from './TextToolbar.module.css';
-import downArrow from '../../../assets/downArrow.svg';
-import bold from '../../../assets/bold.svg';
-import subBackground from '../../../assets/subBackground.svg';
-import italic from '../../../assets/italic.svg';
-import textLeft from '../../../assets/textLeft.svg';
-import textRight from '../../../assets/textRight.svg';
-import textCenter from '../../../assets/textCenter.svg';
-import textJustify from '../../../assets/textJustify.svg';
+import downArrow from '../../../assets/editor/downArrow.svg';
+import bold from '../../../assets/editor/bold.svg';
+import subBackground from '../../../assets/editor/subBackground.svg';
+import italic from '../../../assets/editor/italic.svg';
+import textLeft from '../../../assets/editor/textLeft.svg';
+import textRight from '../../../assets/editor/textRight.svg';
+import textCenter from '../../../assets/editor/textCenter.svg';
+import textJustify from '../../../assets/editor/textJustify.svg';
 import TextDropdowns from '../TextDropdowns/TextDropdowns';
 import EditorContext from '../../../contexts/EditorContext';
 import {

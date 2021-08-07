@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
 import styles from './ImageToolbar.module.css';
 import EditorContext from '../../../contexts/EditorContext';
-import replaceImage from '../../../assets/replaceImage.svg';
-import cornerRadius from '../../../assets/cornerRadius.svg';
-import cropImage from '../../../assets/cropImage.svg';
+import replaceImage from '../../../assets/editor/replaceImage.svg';
+import cornerRadius from '../../../assets/editor/cornerRadius.svg';
+import cropImage from '../../../assets/editor/cropImage.svg';
 
 const ImageToolbar = () => {
   const { editorState, editorDispatch } = useContext(EditorContext);

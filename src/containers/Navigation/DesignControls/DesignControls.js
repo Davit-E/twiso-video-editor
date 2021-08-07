@@ -6,12 +6,12 @@ import Backdrop from '../../../components/Backdrop/Backdrop';
 import ImageDropdown from '../ImageDropdown/ImageDropdown';
 import ShapeDropdown from '../ShapeDropdown/ShapeDropdown';
 import SubtitlesDropdown from '../SubtitlesDropdown/SubtitlesDropdown';
-import addText from '../../../assets/addText.svg';
-import addImage from '../../../assets/addImage.svg';
-import addShape from '../../../assets/addShape.svg';
-import subtitles from '../../../assets/subtitles.svg';
-import photo from '../../../assets/photo.jpg';
-import photo2 from '../../../assets/photo2.jpg';
+import addText from '../../../assets/editor/addText.svg';
+import addImage from '../../../assets/editor/addImage.svg';
+import addShape from '../../../assets/editor/addShape.svg';
+import subtitles from '../../../assets/editor/subtitles.svg';
+import photo from '../../../assets/editor/photo.jpg';
+import photo2 from '../../../assets/editor/photo2.jpg';
 
 const DesignControls = ({ canvas }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);

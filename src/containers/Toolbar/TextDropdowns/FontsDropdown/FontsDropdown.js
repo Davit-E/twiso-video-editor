@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './FontsDropdown.module.css';
-import search from '../../../../assets/search.svg';
+import search from '../../../../assets/editor/search.svg';
 import fonts from './fontsData';
 
 const FontsDropdown = ({ setIsDropDown, dispatch, isSub }) => {

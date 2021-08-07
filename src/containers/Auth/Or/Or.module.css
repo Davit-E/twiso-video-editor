@@ -1,0 +1,18 @@
+.Or {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.Line {
+  height: 1px;
+  background: #d5d8e0;
+  width: 11.6875rem;
+}
+.Text {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #7e829a;
+}

@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import styles from './ShapeToolbar.module.css';
-import downArrow from '../../../assets/downArrow.svg';
-import cornerRadius from '../../../assets/cornerRadius.svg';
+import downArrow from '../../../assets/editor/downArrow.svg';
+import cornerRadius from '../../../assets/editor/cornerRadius.svg';
 import EditorContext from '../../../contexts/EditorContext';
 import ShapeDropdowns from '../ShapeDropdowns/ShapeDropdowns';
 import {

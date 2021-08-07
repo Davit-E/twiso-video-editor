@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fabric } from 'fabric';
 
-const useAddVideo = (video, canvas) => {
+const useAddVideo = (video, canvas, currentTime) => {
   const [isFirtLoad, setIsFirtLoad] = useState(true);
   useEffect(() => {
     if (isFirtLoad && video && canvas) {
@@ -16,7 +16,7 @@ const useAddVideo = (video, canvas) => {
       });
       fabricVideo.controls.mtr.visible = false;
       canvas.add(fabricVideo);
-      video.currentTime = 0.001;
+      video.currentTime = currentTime > 0 ? currentTime : 0.001;
       // fabricVideo.scaleToWidth(canvas.getWidth());s
       fabricVideo.scaleToHeight(canvas.getHeight());
       // console.log(canvas.getHeight());
@@ -32,7 +32,7 @@ const useAddVideo = (video, canvas) => {
         fabric.util.requestAnimFrame(render);
       });
     }
-  }, [video, canvas, isFirtLoad]);
+  }, [video, canvas, isFirtLoad, currentTime]);
 };
 
 export default useAddVideo;

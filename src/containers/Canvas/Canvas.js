@@ -20,6 +20,7 @@ const Canvas = ({
   setCanvas,
   video,
   currentSub,
+  currentTime,
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const [objectIdCount, setObjectIdCount] = useState(1);
@@ -54,7 +55,7 @@ const Canvas = ({
     currentSub
   );
   useClickListener(canvas, editorState);
-  useAddVideo(video, canvas);
+  useAddVideo(video, canvas, currentTime);
 
   return (
     <div className={styles.CanvasComponent} id='canvasComponent'>

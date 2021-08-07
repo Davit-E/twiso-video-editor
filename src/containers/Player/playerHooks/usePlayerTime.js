@@ -49,7 +49,7 @@ const usePlayerTime = (
       // }
       if (index !== null && nextWord && time > +word.end) {
         let isShortTime = +word.end - word.start <= 0.05 && !isPlaying;
-        if (!isShortTime && nextWord.deleted && nextWord.next !== null) {
+        if (!isShortTime && !nextWord.active && nextWord.next !== null) {
           setCurrentWordIndex(nextWord.next);
         } else if (!isShortTime) {
           setCurrentWordIndex((prevState) => prevState + 1);
@@ -68,7 +68,7 @@ const usePlayerTime = (
       //   console.log('comparing: ', time, '>', +word.end, time >= +word.end);
       // }
       if (index !== null && nextSub && time > +sub.end) {
-        if(!nextSub.deleted) setCurrentSubIndex((prevState) => prevState + 1);
+        if(nextSub.active) setCurrentSubIndex((prevState) => prevState + 1);
         else setCurrentSubIndex(nextSub.nextSub);
       }
     },

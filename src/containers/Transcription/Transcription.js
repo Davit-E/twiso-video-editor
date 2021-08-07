@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styles from './Transcription.module.css';
-import cut from '../../assets/cut.svg';
-import search from '../../assets/search.svg';
+import cut from '../../assets/editor/cut.svg';
+import search from '../../assets/editor/search.svg';
 import {
   deleteWord,
   restoreDeleted,
   deleteSelection,
+  handleDeleted,
 } from './utils/updateTextAndCuts';
 import Words from './Words/Words';
 import { findWordIndexWithId } from '../utils/findIndex';
+
 const Transcription = ({
   words,
   currentWordIndex,
@@ -27,6 +29,21 @@ const Transcription = ({
 }) => {
   const [searchInput, setSearchInput] = useState('');
   const [inputIndex, setInputIndex] = useState(null);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
+
+  useEffect(() => {
+    if (isFirstLoad) {
+      setIsFirstLoad(null);
+      handleDeleted(words, setCuts, null, null);
+    }
+  }, [
+    isFirstLoad,
+    words,
+    setCuts,
+    setPlayerTime,
+    currentWordIndex,
+    setCurrentWordIndex,
+  ]);
 
   const wordClickHandler = (e, isDeleted) => {
     let id = e.currentTarget.id;
@@ -44,7 +61,7 @@ const Transcription = ({
         setCurrentWordIndex,
         setCurrentSelection,
         setCuts,
-        setPlayerTime,
+        setPlayerTime
       );
     }
   };
@@ -98,12 +115,7 @@ const Transcription = ({
       }
       // selection.removeAllRanges();
     },
-    [
-      setCurrentWordIndex,
-      setCurrentSelection,
-      setPlayerTime,
-      words,
-    ]
+    [setCurrentWordIndex, setCurrentSelection, setPlayerTime, words]
   );
 
   const mouseUpHandler = useCallback(
@@ -146,7 +158,7 @@ const Transcription = ({
         currentWordIndex,
         setCurrentWordIndex,
         setCuts,
-        setPlayerTime,
+        setPlayerTime
       );
     } else if (currentSelection) {
       deleteSelection(
@@ -155,7 +167,7 @@ const Transcription = ({
         currentSelection,
         setCurrentSelection,
         setCuts,
-        setPlayerTime,
+        setPlayerTime
       );
     }
     let selection = document.getSelection();
