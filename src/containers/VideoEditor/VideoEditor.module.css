@@ -1,7 +1,7 @@
-.VideoEditor {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+.DownloadCanvas {
+  position: absolute;
+  width: auto;
+  height: auto;
 }
 
 .Main {
@@ -9,11 +9,5 @@
   display: flex;
   align-items: stretch;
   justify-content: flex-start;
-  padding: 0.625rem 2.5rem 1rem 2.5rem;
-}
-
-.DownloadCanvas {
-  position: absolute;
-  width: auto;
-  height: auto;
+  padding-bottom: 1rem;
 }

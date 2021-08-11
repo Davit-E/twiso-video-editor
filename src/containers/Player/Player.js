@@ -106,7 +106,7 @@ const Player = ({
                   <img src={play} alt='play' />
                 </div>
               </div>
-              <CanvasToolbar player={playerRef.current} />
+              <CanvasToolbar />
             </>
           ) : null}
         </div>

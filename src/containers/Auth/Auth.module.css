@@ -4,10 +4,6 @@
   background: white;
 }
 
-.Auth *::selection {
-  background: #c5caec;
-}
-
 .Testimonial {
   max-width: 50rem;
   position: relative;

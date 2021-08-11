@@ -4,9 +4,12 @@ import google from '../../../assets/auth/google.svg';
 import Button from '../Button/Button';
 import Or from '../Or/Or';
 import Input from '../Input/Input';
+import CheckMail from '../CheckMail/CheckMail';
 import { checkEmailValidity } from '../utils/validation';
+import { Link } from 'react-router-dom';
 
-const SignIn = ({ setIsSignIn, setIsSent }) => {
+const SignIn = ({ authUrl }) => {
+  const [isSent, setIsSent] = useState(false);
   const [email, setEmail] = useState({
     value: '',
     invalid: false,
@@ -20,21 +23,21 @@ const SignIn = ({ setIsSignIn, setIsSent }) => {
     e.preventDefault();
     let isValid = checkEmailValidity(email.value);
     if (!isValid) setEmail((prevState) => ({ ...prevState, invalid: true }));
-    else setIsSent(true)
+    else setIsSent(true);
   };
 
   const signInWithGoogleClickHandler = (e) => {
     console.log('Sign in with google');
   };
 
-  return (
+  const signInContent = (
     <div className={styles.SignIn}>
       <h2 className={styles.Heading}>Welcome to Twiso!</h2>
       <p className={styles.Subheading}>
         Don't have an account?{' '}
-        <span className={styles.SignUpLink} onClick={() => setIsSignIn(false)}>
+        <Link to={`${authUrl}/sign-up`} className={styles.SignUpLink}>
           Sign up for free
-        </span>
+        </Link>
       </p>
       <div className={styles.FormContent}>
         <Button onClick={signInWithGoogleClickHandler}>
@@ -49,6 +52,8 @@ const SignIn = ({ setIsSignIn, setIsSent }) => {
       </div>
     </div>
   );
+
+  return !isSent ? signInContent : <CheckMail />;
 };
 
 export default SignIn;

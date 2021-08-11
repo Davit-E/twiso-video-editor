@@ -68,7 +68,7 @@ export const handleEnd = (
   }
   setCurrentWordIndex(wordIndex);
   let subIndex = findSubIndexWithWordIndex(wordIndex, words, subArr);
-  console.log(subIndex);
+  // console.log(subIndex);
   setCurrentSubIndex(subIndex);
   setCurrentTime(+start);
   // console.log('start time: ', start);

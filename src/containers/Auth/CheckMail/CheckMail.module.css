@@ -1,4 +1,5 @@
 .CheckMail {
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -23,10 +24,11 @@
 }
 
 .EditorLink {
-  margin-top: 20rem;
+  position: absolute;
   padding: 1rem;
   color: white;
   background: #6F7BD0;
   border-radius: 30px;
   cursor: pointer;
+  bottom: 70px;
 }

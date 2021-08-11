@@ -1,19 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './Auth.module.css';
 import saly from '../../assets/auth/saly.png';
 import twiso from '../../assets/auth/twiso.svg';
 import SignIn from './SignIn/SignIn';
 import SignUp from './SignUp/SignUp';
-import CheckMail from './CheckMail/CheckMail';
+import { useRouteMatch, Switch, Route, Redirect } from 'react-router-dom';
 
-const Auth = ({ setIsAuthenticated, isSent, setIsSent }) => {
-  const [isSignIn, setIsSignIn] = useState(true);
-
-  let authComponent = isSignIn ? (
-    <SignIn setIsSignIn={setIsSignIn} setIsSent={setIsSent} />
-  ) : (
-    <SignUp setIsSignIn={setIsSignIn} setIsSent={setIsSent} />
-  );
+const Auth = () => {
+  const match = useRouteMatch();
 
   return (
     <div className={styles.Auth}>
@@ -27,11 +21,15 @@ const Auth = ({ setIsAuthenticated, isSent, setIsSent }) => {
         </div>
       </div>
       <div className={styles.Account}>
-        {isSent ? (
-          <CheckMail setIsAuthenticated={setIsAuthenticated} />
-        ) : (
-          authComponent
-        )}
+        <Switch>
+          <Route exact path={`${match.path}/sign-in`}>
+            <SignIn authUrl={match.path} />
+          </Route>
+          <Route exact path={`${match.path}/sign-up`}>
+            <SignUp authUrl={match.path} />
+          </Route>
+          <Redirect to={`${match.path}/sign-in`} />
+        </Switch>
       </div>
     </div>
   );

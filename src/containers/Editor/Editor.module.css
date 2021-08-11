@@ -1,9 +1,5 @@
-.App {
+.Editor {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-}
-
-.App *::selection {
-  background: #c5caec;
 }

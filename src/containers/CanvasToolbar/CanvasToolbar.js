@@ -7,9 +7,11 @@ import { ReactComponent as Templates } from '../../assets/editor/templates.svg';
 import { ReactComponent as Resize } from '../../assets/editor/resize.svg';
 import { SketchPicker } from 'react-color';
 
-const CanvasToolbar = ({ player }) => {
+const CanvasToolbar = () => {
   const { editorState, editorDispatch } = useContext(EditorContext);
-  const [bgColor, setBgColor] = useState(editorState.canvasState.backgroundColor);
+  const [bgColor, setBgColor] = useState(
+    editorState.canvasState.backgroundColor
+  );
   const backgroundColorRef = useRef(null);
   const bgDropdownRef = useRef(null);
   const resizeDropdownRef = useRef(null);

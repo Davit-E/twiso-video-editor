@@ -1,28 +1,49 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
-import VideoEditor from './containers/VideoEditor/VideoEditor';
-import EditorContext from './contexts/EditorContext';
-import useEditorState from './hooks/useEditorState';
+import Editor from './containers/Editor/Editor';
 import Auth from './containers/Auth/Auth';
-const App = () => {
-  const [editorState, editorDispatch] = useEditorState();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isSent, setIsSent] = useState(false);
+import UserContext from './contexts/UserContext';
+import useUserState from './hooks/useUserState';
+import {
+  HashRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from 'react-router-dom';
+import CustomRoute from './components/CustomRoute/CustomRoute';
 
-  // console.log(editorState);
+const App = () => {
+  const [userState, userDispatch] = useUserState();
+
   return (
     <div className='App'>
-      {isAuthenticated ? (
-        <EditorContext.Provider value={{ editorState, editorDispatch }}>
-          <VideoEditor />
-        </EditorContext.Provider>
-      ) : (
-        <Auth
-          setIsAuthenticated={setIsAuthenticated}
-          isSent={isSent}
-          setIsSent={setIsSent}
-        />
-      )}
+      <UserContext.Provider value={{ userState, userDispatch }}>
+        <Router basename='/'>
+          <Switch>
+            <CustomRoute
+              path='/auth'
+              redirect='/editor'
+              where='in the App auth route'
+              allowed={!userState.isAuthenticated}
+              component={Auth}
+            />
+             <CustomRoute
+              path='/editor'
+              redirect='/auth'
+              where='in the App editor route'
+              allowed={userState.isAuthenticated}
+              component={Editor}
+            />
+            <Route path='/'>
+              {userState.isAuthenticated ? (
+                <Redirect to='/editor' />
+              ) : (
+                <Redirect to='/auth' />
+              )}
+            </Route>
+          </Switch>
+        </Router>
+      </UserContext.Provider>
     </div>
   );
 };

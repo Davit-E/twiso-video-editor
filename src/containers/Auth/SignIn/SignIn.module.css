@@ -20,6 +20,7 @@
   font-weight: bold;
   color: #6f7bd0;
   cursor: pointer;
+  text-decoration: none;
 }
 .FormContent {
   width: 26rem;

@@ -6,17 +6,16 @@ import React, {
   useCallback,
 } from 'react';
 import styles from './Navigation.module.css';
-import backArrow from '../../assets/editor/backArrow.svg';
 import EditorContext from '../../contexts/EditorContext';
 import { prepareCanvas } from './utils/prepareCanvas';
 import { prepareBreaks, prepareSubs } from './utils/prepareBreaksAndSubs';
 import useDownloadVideo from '../../hooks/useDownloadVideo';
 import DesignControls from './DesignControls/DesignControls';
+import Navbar from '../../components/Navbar/Navbar';
 
 const Navigation = ({
   viedoForUpload,
   setVideoForUpload,
-  isUploading,
   canvas,
   videoRef,
   videoCuts,
@@ -33,11 +32,17 @@ const Navigation = ({
   const [videoInfo, setVideoInfo] = useState(null);
   const [breaks, setBreaks] = useState(null);
   const [subs, setSubs] = useState(null);
-  // const uploadRef = useRef(null);
   const downloadRef = useRef(null);
+  const isMounted = useRef(false);
+  // const uploadRef = useRef(null);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => (isMounted.current = false);
+  }, []);
 
   const closeHandler = (e) => {
-    setDownloadedVideo(null)
+    setDownloadedVideo(null);
   };
 
   // const uploadHandler = () => {
@@ -84,7 +89,8 @@ const Navigation = ({
         setBackImage,
         setFrontImage,
         setVideoInfo,
-        viedoForUpload
+        viedoForUpload,
+        isMounted
       );
     }
   };
@@ -119,19 +125,13 @@ const Navigation = ({
   }, [backImage, frontImage, videoInfo, prepareData, breaks, subs]);
 
   return (
-    <header className={styles.Navigation}>
-      <div className={styles.BackFileInfoContainer}>
-        <img className={styles.BackArrow} src={backArrow} alt='back' />
-        <div className={styles.FileInfoContainer}>
-          <p className={styles.FileName}>Untitled</p>
-          <p className={styles.Creater}>Dmitry</p>
-        </div>
-
+    <Navbar>
+      <div className={styles.Navigation}>
         {/* <button
           className={styles.UploadVideo}
           onClick={() => uploadRef.current.click()}
         >
-          {!isUploading ? 'Upload video' : 'Loading...'}
+          Upload video
         </button>
         <input
           ref={uploadRef}
@@ -140,44 +140,44 @@ const Navigation = ({
           style={{ display: 'none' }}
           onChange={uploadHandler}
         /> */}
+        {canvas ? (
+          <>
+            <DesignControls canvas={canvas} />
+            <button
+              id='downloadDesign'
+              className={styles.DownloadButton}
+              onClick={downloadClickHandler}
+            >
+              {!isDownloading ? 'Download' : 'Loading...'}
+            </button>
+          </>
+        ) : null}
+
+        <a className={styles.DownloadLink} ref={downloadRef} href='/'>
+          Download
+        </a>
+        {downloadedVideo ? (
+          <div className={styles.DownloadVideoContainer}>
+            <h2 className={styles.Close} onClick={closeHandler}>
+              Close
+            </h2>
+            <video
+              className={styles.DownloadVideo}
+              style={{
+                width: canvas.getWidth(),
+                height: 'auto',
+              }}
+              // style={{ display: 'absolute' }}
+              // onPlay={() => videoRef.current.play()}
+              id='video'
+              preload='true'
+              src={downloadedVideo}
+              controls
+            />
+          </div>
+        ) : null}
       </div>
-      {duration ? <DesignControls canvas={canvas} /> : null}
-      <div className={styles.DownloadUserInfoContainer}>
-        <button
-          id='downloadDesign'
-          className={styles.DownloadButton}
-          onClick={downloadClickHandler}
-        >
-          {!isDownloading ? 'Download' : 'Loading...'}
-        </button>
-        <div className={styles.User}>
-          <p className={styles.UserInitials}>DE</p>
-        </div>
-      </div>
-      <a className={styles.DownloadLink} ref={downloadRef} href='/'>
-        Download
-      </a>
-      {downloadedVideo ? (
-        <div className={styles.DownloadVideoContainer}>
-          <h2 className={styles.Close} onClick={closeHandler}>
-            Close
-          </h2>
-          <video
-            className={styles.DownloadVideo}
-            style={{
-              width: canvas.getWidth(),
-              height: 'auto',
-            }}
-            // style={{ display: 'absolute' }}
-            // onPlay={() => videoRef.current.play()}
-            id='video'
-            preload='true'
-            src={downloadedVideo}
-            controls
-          />
-        </div>
-      ) : null}
-    </header>
+    </Navbar>
   );
 };
 

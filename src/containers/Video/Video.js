@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Video.module.css';
 import {
   getDimensions,
@@ -32,6 +32,12 @@ const Video = ({
   //   console.log(e);
   //   console.log(videoRef.current.seekable);
   // };
+
+  useEffect(() => {
+    return () => {
+      if(intervalId) clearInterval(intervalId)
+    }
+  }, [intervalId])
 
  
   return (

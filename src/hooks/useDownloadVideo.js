@@ -1,9 +1,10 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useRef, useEffect } from 'react';
 import axios from '../axios-instance';
 
 const useDownloadVideo = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadedVideo, setDownloadedVideo] = useState(false);
+  const isMounted = useRef(false);
 
   const onUploadProgress = (e) => {
     const currentProgress = Math.round((e.loaded * 100) / e.total);
@@ -40,16 +41,21 @@ const useDownloadVideo = () => {
       try {
         const res = await axiosDownloadVideo(data);
         console.log(res);
-        setDownloadedVideo(res.data.url)
+        if (isMounted.current) setDownloadedVideo(res.data.url);
       } catch (err) {
         console.log('Error Downloading Video', err);
       } finally {
-        setIsDownloading(false);
+        if (isMounted.current) setIsDownloading(false);
         return;
       }
     },
     [axiosDownloadVideo]
   );
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => (isMounted.current = false);
+  }, []);
 
   return { isDownloading, downloadVideo, downloadedVideo, setDownloadedVideo };
 };

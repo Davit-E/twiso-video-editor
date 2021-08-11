@@ -5,9 +5,12 @@ import Button from '../Button/Button';
 import Or from '../Or/Or';
 import Input from '../Input/Input';
 import Select from '../Select/Select';
+import CheckMail from '../CheckMail/CheckMail';
 import { checkEmailValidity } from '../utils/validation';
+import { Link } from 'react-router-dom';
 
-const SignUp = ({ setIsSignIn, setIsSent }) => {
+const SignUp = ({ authUrl }) => {
+  const [isSent, setIsSent] = useState(false);
   const [name, setName] = useState({
     value: '',
     invalid: false,
@@ -48,24 +51,24 @@ const SignUp = ({ setIsSignIn, setIsSent }) => {
       setEmail((prevState) => ({ ...prevState, invalid: true }));
     }
     if (!isNameValid) setName((prevState) => ({ ...prevState, invalid: true }));
-    if (!isWorkTypeValid)
+    if (!isWorkTypeValid) {
       setWorkType((prevState) => ({ ...prevState, invalid: true }));
-    if (isEmailValid && isNameValid && isWorkTypeValid)
-      setIsSent(true);
+    }
+    if (isEmailValid && isNameValid && isWorkTypeValid) setIsSent(true);
   };
 
   const signUpWithGoogleClickHandler = (e) => {
     console.log('Sign up with google');
   };
 
-  return (
+  const signUpContent = (
     <div className={styles.SignUp}>
       <h2 className={styles.Heading}>Create Account</h2>
       <p className={styles.Subheading}>
         Already have an account?{' '}
-        <span className={styles.SignUpLink} onClick={() => setIsSignIn(true)}>
+        <Link to={`${authUrl}/sign-in`} className={styles.SignInLink}>
           Sign in
-        </span>
+        </Link>
       </p>
       <div className={styles.FormContent}>
         <Button onClick={signUpWithGoogleClickHandler}>
@@ -82,6 +85,8 @@ const SignUp = ({ setIsSignIn, setIsSent }) => {
       </div>
     </div>
   );
+
+  return !isSent ? signUpContent : <CheckMail />;
 };
 
 export default SignUp;
