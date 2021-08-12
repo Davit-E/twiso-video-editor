@@ -16,7 +16,6 @@
   margin-bottom: 1.875rem;
 }
 
-
 /* .UploadVideo {
   border: none;
   background: #6f7bd0;
@@ -30,9 +29,8 @@
   background: #5f68b3;
 } */
 
-.DropArea{
+.DropArea {
   height: 17.1875rem;
-  border: 1px dashed #b5b5b5;
   border-radius: 4px;
   min-width: 20.6875rem;
   max-width: 51.6875rem;
@@ -42,10 +40,11 @@
   align-items: center;
   justify-content: center;
   padding: 0 1rem;
+  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23B5B5B5FF' stroke-width='2' stroke-dasharray='8%2c 13' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
 }
 
-.DropArea:hover{
-  border: 1px dashed #6f7bd0;
+.DropArea:hover {
+  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%236F7BD0FF' stroke-width='2' stroke-dasharray='8%2c 13' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
 }
 
 .DropAreaContent {
@@ -55,7 +54,7 @@
 }
 
 .DropAreaText {
-  margin-left: 1.25rem
+  margin-left: 1.25rem;
 }
 
 .DropAreaHeading {
@@ -71,14 +70,14 @@
   margin: 0;
   font-weight: 500;
   font-size: 0.875rem;
-  color: #B5B5B5;
+  color: #b5b5b5;
 }
 
 .DropAreaBrowse {
   text-decoration: underline;
-  color: #6F7BD0;
+  color: #6f7bd0;
 }
 
 .Active {
-  border: 1px dashed #6f7bd0;
+  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%236F7BD0FF' stroke-width='2' stroke-dasharray='8%2c 13' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
 }
