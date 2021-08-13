@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Editor from './containers/Editor/Editor';
 import Auth from './containers/Auth/Auth';
+import Homepage from './containers/Homepage/Homepage';
 import UserContext from './contexts/UserContext';
 import useUserState from './hooks/useUserState';
 import {
@@ -22,12 +23,19 @@ const App = () => {
           <Switch>
             <CustomRoute
               path='/auth'
-              redirect='/editor'
+              redirect='/home'
               where='in the App auth route'
               allowed={!userState.isAuthenticated}
               component={Auth}
             />
-             <CustomRoute
+            <CustomRoute
+              path='/home'
+              redirect='/auth'
+              where='in the App home route'
+              allowed={userState.isAuthenticated}
+              component={Homepage}
+            />
+            <CustomRoute
               path='/editor'
               redirect='/auth'
               where='in the App editor route'
@@ -36,7 +44,7 @@ const App = () => {
             />
             <Route path='/'>
               {userState.isAuthenticated ? (
-                <Redirect to='/editor' />
+                <Redirect to='/home' />
               ) : (
                 <Redirect to='/auth' />
               )}

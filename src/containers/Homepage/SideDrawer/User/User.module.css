@@ -1,0 +1,45 @@
+.User {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 1.75rem;
+  width: 100%;
+}
+
+.UserName {
+  display: flex;
+  align-items: center;
+}
+
+.Initials {
+  background: #d18a72;
+  color: white;
+  width: 1.875rem;
+  height: 1.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+}
+
+.Letter {
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+.Name {
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #3c3c3c;
+  margin-left: 0.75rem;
+}
+
+.Dots {
+  width: 0.8125rem;
+  height: 0.8125rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 1.4375rem;
+}

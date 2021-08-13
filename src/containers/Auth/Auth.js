@@ -16,7 +16,7 @@ const Auth = () => {
         <div className={styles.TestimonialContent}>
           <img src={twiso} alt='twiso' className={styles.Twiso} />
           <p className={styles.Heading}>Transcribe. Edit. Design.</p>
-          <p className={styles.Subheading}>All in on one place.</p>
+          <p className={styles.Subheading}>All in one place.</p>
           <img src={saly} alt='saly' className={styles.Mascot} />
         </div>
       </div>

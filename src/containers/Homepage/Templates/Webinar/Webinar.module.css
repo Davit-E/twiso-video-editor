@@ -1,0 +1,46 @@
+.Webinar {
+  margin-top: 2.5rem;
+}
+.Heading {
+  margin: 0;
+  margin-bottom: 0.375rem;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.25rem;
+}
+
+.Subheading {
+  margin: 0;
+  margin-bottom: 1rem;
+  font-weight: normal;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  color: #3c3c3c;
+}
+
+.TemplatesList {
+  padding-right: 4.25rem;
+  width: auto;
+  height: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(377px, 1fr));
+  grid-gap: 0.9375rem;
+}
+
+.Template {
+  /* max-width: 760px; */
+  padding-bottom: 56.25%;
+  color: #545464;
+  border: 1px solid #f3f3f3;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border 0.1s ease-out;
+  user-select: none;
+  object-fit: cover;
+  background-position: center center;
+  background-size: cover;
+}
+
+.Template:hover {
+  border: 1px solid #6f7bd0;
+}

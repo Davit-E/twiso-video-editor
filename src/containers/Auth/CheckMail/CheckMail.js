@@ -2,14 +2,11 @@ import React, { useContext } from 'react';
 import styles from './CheckMail.module.css';
 import UserContext from '../../../contexts/UserContext';
 import mail from '../../../assets/auth/mail.svg';
-import { useHistory } from 'react-router-dom';
 
 const CheckMail = () => {
   const { userDispatch } = useContext(UserContext);
-  const history = useHistory();
   const clickHandler = () => {
     userDispatch({ type: 'setIsAuthenticated', data: true });
-    history.push('/editor');
   };
 
   return (

@@ -1,0 +1,14 @@
+.Homepage {
+  display: flex;
+  min-height: 100vh;
+  background: #f8f9fb;
+}
+
+.Main {
+  display: flex;
+  flex: 1 1;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+}
