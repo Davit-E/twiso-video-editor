@@ -69,19 +69,19 @@ const Templates = () => {
           <Webinar />
         </Route>
         <Route exact path={`${match.path}/podcast`}>
-          <h1>Podcast</h1>
+          <h1 className={styles.Heading}>Podcast</h1>
         </Route>
         <Route exact path={`${match.path}/vlog`}>
-          <h1>Vlog</h1>
+          <h1 className={styles.Heading}>Vlog</h1>
         </Route>
         <Route exact path={`${match.path}/demo-recording`}>
-          <h1>Demo recording</h1>
+          <h1 className={styles.Heading}>Demo recording</h1>
         </Route>
         <Route exact path={`${match.path}/video-testimonial`}>
-          <h1>Video testimonial</h1>
+          <h1 className={styles.Heading}>Video testimonial</h1>
         </Route>
         <Route exact path={`${match.path}/training-onboarding`}>
-          <h1>Training & onboarding</h1>
+          <h1 className={styles.Heading}>Training & onboarding</h1>
         </Route>
         <Redirect to={`${match.path}/webinar`} />
       </Switch>

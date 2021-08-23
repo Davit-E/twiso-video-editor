@@ -1,5 +1,6 @@
 .Webinar {
   margin-top: 2.5rem;
+  /* max-width: 1300px; */
 }
 .Heading {
   margin: 0;
@@ -7,6 +8,7 @@
   font-weight: 600;
   font-size: 1.25rem;
   line-height: 1.25rem;
+  margin-left: 3.625rem;
 }
 
 .Subheading {
@@ -16,20 +18,27 @@
   font-size: 0.75rem;
   line-height: 1.25rem;
   color: #3c3c3c;
+  margin-left: 3.625rem;
 }
 
 .TemplatesList {
-  padding-right: 4.25rem;
+  margin: 0 2.875rem;
   width: auto;
   height: auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(377px, 1fr));
-  grid-gap: 0.9375rem;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
 .Template {
-  /* max-width: 760px; */
-  padding-bottom: 56.25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px;
+  width: 20%;
+}
+
+.TemplateInner {
   color: #545464;
   border: 1px solid #f3f3f3;
   border-radius: 6px;
@@ -39,8 +48,30 @@
   object-fit: cover;
   background-position: center center;
   background-size: cover;
+  padding-top: 56.25%;
 }
 
-.Template:hover {
+.TemplateInner:hover {
   border: 1px solid #6f7bd0;
+}
+
+@media (min-height: 600px) and (max-width: 2000px) {
+  .Template {
+    width: 25%;
+  }
+}
+@media (min-height: 600px) and (max-width: 1600px) {
+  .Template {
+    width: 33.33%;
+  }
+}
+@media (min-height: 600px) and (max-width: 1100px) {
+  .Template {
+    width: 50%;
+  }
+}
+@media (min-height: 600px) and (max-width: 800px) {
+  .Template {
+    width: 100%;
+  }
 }

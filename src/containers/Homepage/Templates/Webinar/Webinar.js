@@ -15,30 +15,42 @@ const Webinar = () => {
         Make your webinar branded and professional looking
       </p>
       <div className={styles.TemplatesList}>
-        <div
-          className={styles.Template}
-          style={{ backgroundImage: `url(${pic1})` }}
-        ></div>
-        <div
-          className={styles.Template}
-          style={{ backgroundImage: `url(${pic2})` }}
-        ></div>
-        <div
-          className={styles.Template}
-          style={{ backgroundImage: `url(${pic3})` }}
-        ></div>
-        <div
-          className={styles.Template}
-          style={{ backgroundImage: `url(${pic4})` }}
-        ></div>
-        <div
-          className={styles.Template}
-          style={{ backgroundImage: `url(${pic5})` }}
-        ></div>
-        <div
-          className={styles.Template}
-          style={{ backgroundImage: `url(${pic6})` }}
-        ></div>
+        <div className={styles.Template}>
+          <div
+            className={styles.TemplateInner}
+            style={{ backgroundImage: `url(${pic1})` }}
+          ></div>
+        </div>
+        <div className={styles.Template}>
+          <div
+            className={styles.TemplateInner}
+            style={{ backgroundImage: `url(${pic2})` }}
+          ></div>
+        </div>
+        <div className={styles.Template}>
+          <div
+            className={styles.TemplateInner}
+            style={{ backgroundImage: `url(${pic3})` }}
+          ></div>
+        </div>
+        <div className={styles.Template}>
+          <div
+            className={styles.TemplateInner}
+            style={{ backgroundImage: `url(${pic4})` }}
+          ></div>
+        </div>
+        <div className={styles.Template}>
+          <div
+            className={styles.TemplateInner}
+            style={{ backgroundImage: `url(${pic5})` }}
+          ></div>
+        </div>
+        <div className={styles.Template}>
+          <div
+            className={styles.TemplateInner}
+            style={{ backgroundImage: `url(${pic6})` }}
+          ></div>
+        </div>
       </div>
     </div>
   );

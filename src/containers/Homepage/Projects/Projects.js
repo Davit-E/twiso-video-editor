@@ -10,13 +10,25 @@ const Projects = () => {
         All your video and audio files in one place.
       </p>
       <div className={styles.ProjectsList}>
-        <Link className={styles.AddProject} to='/editor/new'>
-          <span>+ Add new</span>
-        </Link>
-        <Project color='#eabd4b' name='Name' date='12.02.2021' />
-        <Project color='#6F7BD0' name='Name' date='12.02.2021' />
-        <Project color='#DF7C6E' name='Name' date='12.02.2021' />
-        <Project color='#eabd4b' name='Name' date='12.02.2021' />
+        <div className={styles.AddProject}>
+          <Link className={styles.AddProjectInner} to='/editor/new'>
+            <div className={styles.AddProjectText}>
+              <span>+ Add new</span>
+            </div>
+          </Link>
+        </div>
+        <div className={styles.ProjectContainer}>
+          <Project color='#eabd4b' name='Name' date='12.02.2021' />
+        </div>
+        <div className={styles.ProjectContainer}>
+          <Project color='#6F7BD0' name='Name' date='12.02.2021' />
+        </div>
+        <div className={styles.ProjectContainer}>
+          <Project color='#DF7C6E' name='Name' date='12.02.2021' />
+        </div>
+        <div className={styles.ProjectContainer}>
+          <Project color='#eabd4b' name='Name' date='12.02.2021' />
+        </div>
       </div>
     </div>
   );

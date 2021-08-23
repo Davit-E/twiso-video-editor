@@ -17,8 +17,21 @@
   flex: 1;
 }
 
+.BackButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
+  padding: 0.5rem  0.3rem;
+  border-radius: 3px;
+  transition: background 0.1s ease-out;
+}
+
+.BackButton:hover {
+  background: rgba(111, 122, 208, 0.12);
+}
+
 .BackArrow {
-  margin-right: 1rem;
   cursor: pointer;
 }
 

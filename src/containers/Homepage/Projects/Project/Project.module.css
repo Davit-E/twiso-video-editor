@@ -1,14 +1,16 @@
 .Project {
   box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.03);
-  height: 11.8125rem;
   border-radius: 6px;
   cursor: pointer;
   text-decoration: none;
-  transition: border 0.1s ease-out;
+  transition: box-shadow 0.1s ease-out;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   overflow: hidden;
+  width: 100%;
+  padding-top: 56.25%;
+  position: relative;
 }
 
 .Project:hover {
@@ -24,6 +26,7 @@
   justify-content: space-between;
   padding-left: 0.9375rem;
   padding-right: 1.25rem;
+  position: absolute;
 }
 
 .Name {
@@ -36,5 +39,6 @@
   margin: 0;
   font-size: 0.625rem;
   line-height: 0.9375rem;
-  color: #787878
+  color: #787878;
 }
+

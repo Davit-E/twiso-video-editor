@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 
 const usePlayerSize = (
   isFirstLoad,
@@ -9,16 +9,19 @@ const usePlayerSize = (
   playerRef,
   setPlayerSize
 ) => {
-  useEffect(() => {
+  
+  const handleSize = useCallback(() => {
     getPlayerSize(playerRef, setPlayerSize);
-  }, [playerRef, setPlayerSize, getPlayerSize]);
+  }, [getPlayerSize, playerRef, setPlayerSize]);
 
   useEffect(() => {
-    window.addEventListener('resize', () =>
-      getPlayerSize(playerRef, setPlayerSize)
-    );
-    return () => window.removeEventListener('resize', getPlayerSize);
-  }, [getPlayerSize, playerRef, setPlayerSize]);
+    handleSize();
+  }, [handleSize]);
+
+  useEffect(() => {
+    window.addEventListener('resize', handleSize);
+    return () => window.removeEventListener('resize', handleSize);
+  }, [handleSize]);
 
   useEffect(() => {
     if (videoSize && playerSize) {
