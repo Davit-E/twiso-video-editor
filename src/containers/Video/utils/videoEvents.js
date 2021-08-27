@@ -14,7 +14,7 @@ export const handlePlay = (
   setIsPlaying(true);
   let interval = setInterval(() => {
     // console.log('interval: ', videoRef.current.currentTime);
-    setCurrentTime(videoRef.current.currentTime);
+    if (videoRef.current) setCurrentTime(videoRef.current.currentTime);
   }, 10);
   setIntervalId(interval);
 };
