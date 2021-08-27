@@ -1115,7 +1115,7 @@ export const words = [
   {
     active: true,
     _id: 'qjs313ufgkj0f8neqobwu3',
-    text: 'sa_id',
+    text: 'said',
     start: '35.10',
     end: '35.30',
   },
@@ -1619,7 +1619,7 @@ export const words = [
   {
     active: true,
     _id: '8p3e7kgejm4g5co87an3ji',
-    text: 'viv_idly,',
+    text: 'vividly,',
     start: '55.80',
     end: '56.10',
   },
@@ -1801,7 +1801,7 @@ export const words = [
   {
     active: true,
     _id: 'tqit51xe14zy9fquop1dj',
-    text: 'viv_idly',
+    text: 'vividly',
     start: '62.90',
     end: '63.50',
   },
@@ -2333,7 +2333,7 @@ export const words = [
   {
     active: true,
     _id: 'f7ihc6mnawdu1lugk1mwd',
-    text: 'sa_id,',
+    text: 'said,',
     start: '82.70',
     end: '82.90',
   },
@@ -2473,7 +2473,7 @@ export const words = [
   {
     active: true,
     _id: 'icx6b8ak0oyoo0yezfxa',
-    text: 'viv_idly',
+    text: 'vividly',
     start: '87.50',
     end: '87.90',
   },

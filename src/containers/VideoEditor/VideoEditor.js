@@ -8,21 +8,13 @@ import useEditorState from '../../hooks/useEditorState';
 import EditorContext from '../../contexts/EditorContext';
 
 const VideoEditor = ({
-  canvas,
-  setCanvas,
-  subArr,
-  setSubArr,
-  currentSub,
-  setCurrentSub,
-  videoCuts,
-  setVideoCuts,
   viedoForUpload,
   videoUrl,
   words,
   videoRef,
   duration,
-  setVideoForUpload,
-  clearState
+  clearState,
+  speakers,
 }) => {
   const [editorState, editorDispatch] = useEditorState();
   const [currentSelection, setCurrentSelection] = useState(null);
@@ -33,10 +25,13 @@ const VideoEditor = ({
   const [currentSubIndex, setCurrentSubIndex] = useState(null);
   const [videoSize, setVideoSize] = useState(null);
   const [shouldRerenderSub, setShouldRerenderSub] = useState(false);
-
-  useEffect(() => {
-    return () => clearState();
-  }, [clearState]);
+  const [canvas, setCanvas] = useState(null);
+  const [currentSub, setCurrentSub] = useState(null);
+  const [subArr, setSubArr] = useState(null);
+  const [videoCuts, setVideoCuts] = useState([]);
+  // useEffect(() => {
+  //   return () => clearState();
+  // }, [clearState]);
 
   // useEffect(() => {
   //   console.log('currentSubIndex:', currentSubIndex);
@@ -59,11 +54,6 @@ const VideoEditor = ({
   useEffect(() => {
     if (videoUrl) videoRef.current.src = videoUrl;
   }, [videoUrl, videoRef]);
-
-  // useEffect(() => {
-  //   if (viedoForUpload)
-  //     videoRef.current.src = URL.createObjectURL(viedoForUpload);
-  // }, [viedoForUpload, videoRef]);
 
   const setPlayerTime = (wordIndex) => {
     let endTime = '0';
@@ -88,8 +78,6 @@ const VideoEditor = ({
     <>
       <EditorContext.Provider value={{ editorState, editorDispatch }}>
         <Navigation
-          viedoForUpload={viedoForUpload}
-          setVideoForUpload={setVideoForUpload}
           canvas={canvas}
           videoRef={videoRef}
           videoCuts={videoCuts}
@@ -97,6 +85,7 @@ const VideoEditor = ({
           words={words}
           subArr={subArr}
           currentSub={currentSub}
+          viedoForUpload={viedoForUpload}
         />
         <main className={styles.Main}>
           <Transcription
@@ -137,6 +126,7 @@ const VideoEditor = ({
             videoSize={videoSize}
             shouldRerenderSub={shouldRerenderSub}
             setShouldRerenderSub={setShouldRerenderSub}
+            speakers={speakers}
           />
           <Video
             videoRef={videoRef}

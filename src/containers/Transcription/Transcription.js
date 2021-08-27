@@ -9,7 +9,7 @@ import {
   handleDeleted,
 } from './utils/updateTextAndCuts';
 import Words from './Words/Words';
-import { findWordIndexWithId } from '../utils/findIndex';
+import { findWordIndexWithId } from '../../utils/findIndex';
 
 const Transcription = ({
   words,

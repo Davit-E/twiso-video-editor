@@ -1,0 +1,11 @@
+.Canvas {
+  height: auto;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  /* border: 1px solid black; */
+}
+
+canvas {
+  box-shadow: none;
+}

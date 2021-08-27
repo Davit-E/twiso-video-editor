@@ -37,7 +37,7 @@ const Uploader = ({
       formData.append('video', viedoForUpload);
       uploadVideo(formData);
     }
-  }, [viedoForUpload, uploadVideo, setVideoForUpload]);
+  }, [viedoForUpload, uploadVideo]);
 
   return (
     <>

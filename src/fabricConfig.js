@@ -1,7 +1,7 @@
 import { fabric } from 'fabric';
-import ctrlScale from '../../assets/editor/ctrlScale.svg';
-import ctrlStretch from '../../assets/editor/ctrlStretch.svg';
-import ctrlRotate from '../../assets/editor/ctrlRotate.svg';
+import ctrlScale from './assets/editor/ctrlScale.svg';
+import ctrlStretch from './assets/editor/ctrlStretch.svg';
+import ctrlRotate from './assets/editor/ctrlRotate.svg';
 
 const fabricConfig = () => {
   fabric.Object.prototype.transparentCorners = false;
@@ -287,9 +287,47 @@ fabric.Subtitle = fabric.util.createClass(fabric.IText, {
   //   // should be casted
   //   this._removeShadow(ctx);
   // },
-
 });
 
-fabric.Subtitle.prototype.controls = {}
+fabric.Subtitle.prototype.controls = {};
+
+fabric.Video = fabric.util.createClass(fabric.Image, {
+  type: 'video',
+  cropRect: null,
+
+  initialize: function (video, options) {
+    const defaultOpts = {
+      lockRotation: true,
+      objectCaching: true,
+      cacheProperties: ['time'],
+    };
+    options = options || {};
+
+    this.callSuper(
+      'initialize',
+      video,
+      Object.assign({}, defaultOpts, options)
+    );
+  },
+
+  _draw: function (video, ctx, w, h) {
+    const c = this.cropRect;
+    const d = {
+      x: -this.width / 2,
+      y: -this.height / 2,
+      w: this.width,
+      h: this.height,
+    };
+    if (c) {
+      ctx.drawImage(video, c.x, c.y, c.w, c.h, d.x, d.y, d.w, d.h);
+    } else {
+      ctx.drawImage(video, d.x, d.y, d.w, d.h);
+    }
+  },
+
+  _render: function (ctx) {
+    this._draw(this.getElement(), ctx);
+  },
+});
 
 export default fabricConfig;

@@ -5,6 +5,7 @@ import Auth from './containers/Auth/Auth';
 import Homepage from './containers/Homepage/Homepage';
 import UserContext from './contexts/UserContext';
 import useUserState from './hooks/useUserState';
+import fabricConfig from './fabricConfig';
 import {
   HashRouter as Router,
   Route,
@@ -12,6 +13,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 import CustomRoute from './components/CustomRoute/CustomRoute';
+fabricConfig();
 
 const App = () => {
   const [userState, userDispatch] = useUserState();

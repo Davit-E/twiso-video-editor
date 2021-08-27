@@ -19,7 +19,7 @@ const useDownloadVideo = () => {
   const axiosDownloadVideo = useCallback((data) => {
     return new Promise((resolve, reject) => {
       axios
-        .post('/videos/download', data, {
+        .post('/download-video', data, {
           onUploadProgress,
           onDownloadProgress,
           headers: {

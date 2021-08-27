@@ -1,29 +1,4 @@
-import { findSubIndexWithWordIndex } from '../utils/findIndex';
-
-export const getPlayerSize = (playerRef, setPlayerSize) => {
-  const playerPadding = 32;
-  let width = window.innerWidth - playerRef.current.offsetLeft - playerPadding;
-  let height = playerRef.current.offsetHeight;
-  if (width > 800) {
-    height = (height * 800) / width;
-    width = 800;
-  }
-  setPlayerSize({ width, height });
-  // setPlayerSize({ width: 640, height: 360 });
-};
-
-export const getDimensions = (videoRef, setVideoSize) => {
-  let width = videoRef.current.videoWidth;
-  let height = videoRef.current.videoHeight;
-  setVideoSize({ width, height });
-};
-
-export const playClickHandler = (isPlaying, videoRef, state) => {
-  if (isPlaying) videoRef.current.pause();
-  else if (!state.isCropMode && !state.shouldCropImage) {
-    videoRef.current.play();
-  }
-};
+import { findSubIndexWithWordIndex } from '../../../utils/findIndex';
 
 export const handlePlay = (
   currentSelection,

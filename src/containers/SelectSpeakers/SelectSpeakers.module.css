@@ -1,0 +1,103 @@
+.SelectSpeakers {
+  flex: 1 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: #ffffff;
+  padding-top: 1.875rem;
+  padding-bottom: 2.625rem;
+  margin: 0 2.5rem 1rem 2.5rem;
+}
+
+.Heading {
+  margin: 0;
+  margin-bottom: 0.625rem;
+  font-weight: 600;
+  font-size: 1.25rem;
+  letter-spacing: -0.03em;
+  color: #464646;
+  text-align: center;
+}
+
+.Video {
+  display: none;
+}
+
+.SelectedText {
+  line-height: 1.1875rem;
+  color: #464646;
+  margin-top: 1.3125rem;
+  margin-bottom: 1rem;
+}
+
+.SelectedNumber {
+  font-weight: 600;
+}
+
+.SelectSpeakers button {
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+}
+
+.SpeakerButtons {
+  display: flex;
+  width: 7.875rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2.625rem;
+}
+
+.AddSpeakerButton,
+.RemoveSpeakerButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.AddSpeakers,
+.RemoveSpeakers {
+  padding: 0;
+  user-select: none;
+  background: transparent;
+}
+
+
+.AddSpeakersText,
+.RemoveSpeakersText {
+  font-weight: 500;
+  font-size: 0.6875rem;
+  line-height: 0.75rem;
+  color: #464646;
+  user-select: none;
+  margin: 0;
+  margin-top: 0.3rem;
+}
+
+.NextSteps {
+}
+
+.Confirm {
+  font-weight: 500;
+  font-size: 0.74rem;
+  line-height: 1rem;
+  background: #6f7bd0;
+  border-radius: 4px;
+  color: #ffffff;
+  padding: 0.5rem 1.875rem;
+  user-select: none;
+}
+
+.Skip {
+  margin: 0;
+  font-weight: 500;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: #9d9d9d;
+  padding: 0.5rem;
+  background: transparent;
+  margin-left: 1.125rem;
+  user-select: none;
+}

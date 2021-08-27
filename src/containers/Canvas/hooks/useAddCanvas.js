@@ -7,10 +7,11 @@ const addCanvas = (state, id) => {
     height: state.initialHeight,
     backgroundColor: 'rgba(255,255,255,1)',
     preserveObjectStacking: true,
-    fireRightClick: true,  
-    stopContextMenu: true,  
+    fireRightClick: true,
+    stopContextMenu: true,
+    selection: false,
   });
-  
+
   let ratio = Math.min(
     state.width / state.initialWidth,
     state.height / state.initialHeight
@@ -23,17 +24,17 @@ const addCanvas = (state, id) => {
   return canvas;
 };
 
-const useAddCanvas = (state, setCanvas, setIsCanvasSet) => {
+const useAddCanvas = (state, setCanvas, setIsCanvasSet, id) => {
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   useEffect(() => {
-    if (isFirstLoad && state.canvasState.initialWidth > 0) {
-      let canvas = addCanvas(state.canvasState, 'canvas');
+    if (isFirstLoad && state.initialWidth > 0) {
+      let canvas = addCanvas(state, id);
       setCanvas(canvas);
       setIsCanvasSet(true);
       setIsFirstLoad(false);
     }
-  }, [setCanvas, setIsCanvasSet, state.canvasState, isFirstLoad]);
+  }, [setCanvas, setIsCanvasSet, state, isFirstLoad, id]);
 };
 
 export default useAddCanvas;

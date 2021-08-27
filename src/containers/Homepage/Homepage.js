@@ -4,8 +4,8 @@ import SideDrawer from './SideDrawer/SideDrawer';
 import Navbar from './Navbar/Navbar';
 import Projects from './Projects/Projects';
 import Templates from './Templates/Templates';
-
 import { useRouteMatch, Switch, Route, Redirect } from 'react-router-dom';
+
 const Homepage = () => {
   const match = useRouteMatch();
 

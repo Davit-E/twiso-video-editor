@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import styles from './ContextMenu.module.css';
 import EventContext from '../../../contexts/EventContext';
-import { handlePaste } from '../canvasHooks/utils/pasteObject';
+import { handlePaste } from '../utils/pasteObject';
 
 const ContextMenu = ({
   canvas,
@@ -23,6 +23,8 @@ const ContextMenu = ({
   const [activeObj, setActiveObj] = useState(false);
   const [canOnlyPaste, setCanOnlyPaste] = useState(false);
   const menuRef = useRef(null);
+  const isMountedRef = useRef(true);
+  useEffect(() => () => (isMountedRef.current = false), []);
 
   const handleClick = useCallback(
     (e) => {
@@ -57,7 +59,7 @@ const ContextMenu = ({
 
   const optionClickHandler = (e) => {
     let id = e.currentTarget.id;
-    if (id === 'delete' && activeObj.id !== 'video') {
+    if (id === 'delete' && activeObj.type !== 'video') {
       canvas.remove(activeObj);
       canvas.discardActiveObject().requestRenderAll();
       eventDispatch({ type: 'setRightClickEvent', data: null });
@@ -93,12 +95,14 @@ const ContextMenu = ({
     if (isCanvasSet && eventState.rightClickEvent) {
       handleClick(eventState.rightClickEvent);
       setTimeout(() => {
-        setIsMounted(true);
+        if (isMountedRef.current) setIsMounted(true);
       }, 400);
     }
-    return () => setIsMounted(false);
+    return () => {
+      if (isMountedRef.current) setIsMounted(false);
+    };
   }, [isCanvasSet, eventState.rightClickEvent, handleClick]);
-  let isVideo = activeObj && activeObj.id === 'video';
+  let isVideo = activeObj && activeObj.type === 'video';
   let content = (
     <>
       <div

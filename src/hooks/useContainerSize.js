@@ -1,18 +1,19 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
+import { getContainerSize } from '../utils/getSize';
 
-const usePlayerSize = (
-  isFirstLoad,
+const useContainerSize = (
   videoSize,
-  playerSize,
+  containerSize,
   dispatch,
-  getPlayerSize,
-  playerRef,
-  setPlayerSize
+  containerRef,
+  setContainerSize,
+  containerPadding
 ) => {
-  
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
+
   const handleSize = useCallback(() => {
-    getPlayerSize(playerRef, setPlayerSize);
-  }, [getPlayerSize, playerRef, setPlayerSize]);
+    getContainerSize(containerRef, setContainerSize, containerPadding);
+  }, [containerRef, setContainerSize, containerPadding]);
 
   useEffect(() => {
     handleSize();
@@ -24,15 +25,13 @@ const usePlayerSize = (
   }, [handleSize]);
 
   useEffect(() => {
-    if (videoSize && playerSize) {
-      // console.log('video: ', videoSize);
-      // console.log('player: ', playerSize);
-      let width = playerSize.width;
+    if (videoSize && containerSize) {
+      let width = containerSize.width;
       let height = (videoSize.height * width) / videoSize.width;
       // console.log(width, height);
       let isInRange = width > 100;
-      if (isFirstLoad.current && isInRange) {
-        isFirstLoad.current = false;
+      if (isFirstLoad && isInRange) {
+        setIsFirstLoad(false);
         dispatch({
           type: 'setCanvasInitialSize',
           data: {
@@ -46,7 +45,7 @@ const usePlayerSize = (
         dispatch({ type: 'setCanvasSize', data: { width, height } });
       }
     }
-  }, [isFirstLoad, playerSize, videoSize, dispatch]);
+  }, [isFirstLoad, containerSize, videoSize, dispatch]);
 };
 
-export default usePlayerSize;
+export default useContainerSize;

@@ -14,7 +14,7 @@ const getVideoData = async (canvas, setVideoInfo, viedoForUpload, isMounted) => 
   let videoIndex = 0;
   for (let i = 0; i < objects.length; i++) {
     let el = objects[i];
-    if (el.id === 'video') {
+    if (el.type === 'video') {
       videoIndex = i;
       video = el;
       // console.log('angle: ', el.angle);

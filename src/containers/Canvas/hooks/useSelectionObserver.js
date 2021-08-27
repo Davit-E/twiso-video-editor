@@ -7,7 +7,7 @@ import {
   onUpdated,
   onTextEnter,
   onTextExit,
-} from './utils/onCanvasEvents';
+} from '../utils/onCanvasEvents';
 import { fabric } from 'fabric';
 
 const removeListeners = (c) => {

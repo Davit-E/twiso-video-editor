@@ -7,9 +7,9 @@ const initialState = {
     width: 0,
     height: 0,
     backgroundColor: 'rgba(255,255,255,1)',
+    shouldUpdateCanvas: false,
+    shouldUpdateCanvasSize: false,
   },
-  shouldUpdateCanvas: false,
-  shouldUpdateCanvasSize: false,
   shapeToAdd: null,
   imageToAdd: null,
   currentCoords: null,
@@ -101,10 +101,6 @@ const reducer = (state, action) => {
       return { ...state, shouldUpdateShape: action.data };
     case 'setShouldUpdateImage':
       return { ...state, shouldUpdateImage: action.data };
-    case 'setShouldUpdateCanvas':
-      return { ...state, shouldUpdateCanvas: action.data };
-    case 'setShouldUpdateCanvasSize':
-      return { ...state, shouldUpdateCanvasSize: action.data };
     case 'setCurrentObject':
       return { ...state, currentObject: action.data };
     case 'setShapeToAdd':
@@ -121,21 +117,37 @@ const reducer = (state, action) => {
       return { ...state, subtitlesState: { ...action.data } };
     case 'setShouldReplaceImage':
       return { ...state, shouldReplaceImage: action.data };
+    case 'setShouldUpdateCanvas':
+      return {
+        ...state,
+        canvasState: {
+          ...state.canvasState,
+          shouldUpdateCanvas: action.data,
+        },
+      };
+    case 'setShouldUpdateCanvasSize':
+      return {
+        ...state,
+        canvasState: {
+          ...state.canvasState,
+          shouldUpdateCanvasSize: action.data,
+        },
+      };
     case 'setCanvasBackgroundColor':
       return {
         ...state,
-        shouldUpdateCanvas: true,
         canvasState: {
           ...state.canvasState,
+          shouldUpdateCanvas: true,
           backgroundColor: action.data,
         },
       };
     case 'setCanvasSize':
       return {
         ...state,
-        shouldUpdateCanvasSize: true,
         canvasState: {
           ...state.canvasState,
+          shouldUpdateCanvasSize: true,
           width: action.data.width,
           height: action.data.height,
         },

@@ -4,7 +4,7 @@ import {
   generateSubtitles,
   displaySub,
 } from '../utils/subtitle.js';
-import { findSubIndexWithWordIndex } from '../../utils/findIndex';
+import { findSubIndexWithWordIndex } from '../../../utils/findIndex';
 
 const useSubtitles = (
   state,

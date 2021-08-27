@@ -1,4 +1,4 @@
-import generateUUID from '../../utils/generateRandomUUID';
+import generateUUID from '../../../utils/generateRandomUUID';
 import rgbaToHex from './rgbaToHex';
 
 export const prepareBreaks = (cuts, endTime, setBreaks) => {

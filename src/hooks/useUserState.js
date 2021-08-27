@@ -1,7 +1,7 @@
 import { useReducer } from 'react';
 
 const initialState = {
-  isAuthenticated: false,
+  isAuthenticated: true,
 };
 
 const reducer = (state, action) => {

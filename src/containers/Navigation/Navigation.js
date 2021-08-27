@@ -14,14 +14,13 @@ import DesignControls from './DesignControls/DesignControls';
 import Navbar from '../../components/Navbar/Navbar';
 
 const Navigation = ({
-  viedoForUpload,
-  setVideoForUpload,
   canvas,
   videoRef,
   videoCuts,
   duration,
   subArr,
   currentSub,
+  viedoForUpload,
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const { isDownloading, downloadVideo, downloadedVideo, setDownloadedVideo } =
@@ -44,10 +43,6 @@ const Navigation = ({
   const closeHandler = (e) => {
     setDownloadedVideo(null);
   };
-
-  // const uploadHandler = () => {
-  //   setVideoForUpload(uploadRef.current.files[0]);
-  // };
 
   useEffect(() => {
     if (downloadData) {
@@ -127,19 +122,6 @@ const Navigation = ({
   return (
     <Navbar>
       <div className={styles.Navigation}>
-        {/* <button
-          className={styles.UploadVideo}
-          onClick={() => uploadRef.current.click()}
-        >
-          Upload video
-        </button>
-        <input
-          ref={uploadRef}
-          type='file'
-          accept='video/mp4'
-          style={{ display: 'none' }}
-          onChange={uploadHandler}
-        /> */}
         {canvas ? (
           <>
             <DesignControls canvas={canvas} />

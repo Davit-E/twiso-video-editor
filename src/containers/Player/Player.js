@@ -1,15 +1,14 @@
 import React, { useRef, useContext, useState } from 'react';
 import styles from './Player.module.css';
-import Canvas from '../Canvas/Canvas';
+import PlayerCanvas from '../Canvas/PlayerCanvas/PlayerCanvas';
 import EventContext from '../../contexts/EventContext';
 import useEventState from '../../hooks/useEventsState';
 import EditorContext from '../../contexts/EditorContext';
 import CanvasToolbar from '../CanvasToolbar/CanvasToolbar';
 import play from '../../assets/editor/play.svg';
-import usePlayerSize from './playerHooks/usePlayerSize';
-import usePlayerTime from './playerHooks/usePlayerTime';
-import useSubtitles from './playerHooks/useSubtitles';
-import { getPlayerSize, playClickHandler } from '../utils/playerEvents';
+import useContainerSize from '../../hooks/useContainerSize';
+import usePlayerTime from './hooks/usePlayerTime';
+import useSubtitles from './hooks/useSubtitles';
 
 const Player = ({
   videoRef,
@@ -32,20 +31,27 @@ const Player = ({
   setCurrentSubIndex,
   shouldRerenderSub,
   setShouldRerenderSub,
+  speakers,
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const [eventState, eventDispatch] = useEventState();
-  const [playerSize, setPlayerSize] = useState(null);
-  const playerRef = useRef(null);
-  const isFirstLoad = useRef(true);
-  usePlayerSize(
-    isFirstLoad,
+  const [containerSize, setContainerSize] = useState(null);
+  const containerPadding = 32;
+  const containerRef = useRef(null);
+  const playClickHandler = () => {
+    if (isPlaying) videoRef.current.pause();
+    else if (!editorState.isCropMode && !editorState.shouldCropImage) {
+      videoRef.current.play();
+    }
+  };
+
+  useContainerSize(
     videoSize,
-    playerSize,
+    containerSize,
     editorDispatch,
-    getPlayerSize,
-    playerRef,
-    setPlayerSize
+    containerRef,
+    setContainerSize,
+    containerPadding
   );
 
   usePlayerTime(
@@ -83,26 +89,22 @@ const Player = ({
   );
 
   return (
-    <div className={styles.Player} ref={playerRef}>
+    <div className={styles.Player} ref={containerRef}>
       <EventContext.Provider value={{ eventState, eventDispatch }}>
         {/* <p className={styles.Sub}>Adina Jackson family,</p> */}
         <div className={styles.PlayerContent}>
-          <Canvas
+          <PlayerCanvas
             canvas={canvas}
             setCanvas={setCanvas}
             video={videoRef.current}
             currentSub={currentSub}
             currentTime={currentTime}
+            speakers={speakers}
           />
           {canvas ? (
             <>
               <div className={styles.PlayerControls}>
-                <div
-                  className={styles.PlayButton}
-                  onClick={() =>
-                    playClickHandler(isPlaying, videoRef, editorState)
-                  }
-                >
+                <div className={styles.PlayButton} onClick={playClickHandler}>
                   <img src={play} alt='play' />
                 </div>
               </div>

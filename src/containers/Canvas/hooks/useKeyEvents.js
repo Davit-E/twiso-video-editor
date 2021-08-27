@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { handlePaste } from './utils/pasteObject';
+import { handlePaste } from '../utils/pasteObject';
 
 const deleteHandler = (canvas) => {
   let active = canvas.getActiveObject();
@@ -8,7 +8,7 @@ const deleteHandler = (canvas) => {
     !isInput &&
     active &&
     !active.isEditing &&
-    active.id !== 'video' &&
+    active.type !== 'video' &&
     active.id !== 'subtitle'
   ) {
     canvas.remove(active);
@@ -99,7 +99,7 @@ const useKeyEvents = (
     } else if (shouldRun && isCopying) {
       setShouldRun(false);
       let active = canvas.getActiveObject();
-      if (active && active.id !== 'video' && active.id !== 'subtitle') {
+      if (active && active.type !== 'video' && active.id !== 'subtitle') {
         setClipboard({
           object: active,
           coords: { top: active.top, left: active.left },

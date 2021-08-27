@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Video.module.css';
-import {
-  getDimensions,
-  handlePlay,
-  handleEnd,
-  handlePause,
-} from '../utils/playerEvents';
+import { getVideoSize } from '../../utils/getSize';
+import { handlePlay, handleEnd, handlePause } from './utils/videoEvents';
 
 const Video = ({
   videoRef,
@@ -35,11 +31,10 @@ const Video = ({
 
   useEffect(() => {
     return () => {
-      if(intervalId) clearInterval(intervalId)
-    }
-  }, [intervalId])
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [intervalId]);
 
- 
   return (
     <video
       // style={{ display: viedoForUpload ? 'block' : 'none' }}
@@ -70,9 +65,9 @@ const Video = ({
           setCurrentTime,
           setCurrentSubIndex,
           subArr
-          )
-        }
-        onLoadedMetadata={() => getDimensions(videoRef, setVideoSize)}
+        )
+      }
+      onLoadedMetadata={() => getVideoSize(videoRef, setVideoSize)}
       // onSeeking={seeking}
       // onSeeked={seeked}
     />

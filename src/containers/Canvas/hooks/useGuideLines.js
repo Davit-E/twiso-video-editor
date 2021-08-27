@@ -1,18 +1,22 @@
-import { useCallback, useEffect, useState, useContext } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   drawVerticalLine,
   drawHorizontalLine,
   objectMovingObserver,
-} from './utils/aligningGuidelines';
-import EventContext from '../../../contexts/EventContext';
+} from '../utils/aligningGuidelines';
 import {
   showVerticalCenterLine,
   showHorizontalCenterLine,
   objectMovingCenterObserver,
-} from './utils/centeringGuidelines';
+} from '../utils/centeringGuidelines';
 
-const useGuideLines = (state, isCanvasSet, canvas) => {
-  const { eventState, eventDispatch } = useContext(EventContext);
+const useGuideLines = (
+  state,
+  isCanvasSet,
+  canvas,
+  eventState,
+  eventDispatch
+) => {
   const [ctx, setCtx] = useState(null);
   const [viewportTransform, setViewportTransform] = useState(null);
   const [verticalLines, setVerticalLines] = useState([]);
@@ -182,7 +186,7 @@ const useGuideLines = (state, isCanvasSet, canvas) => {
     if (isCanvasSet && ctx && !state.isCropMode) {
       canvas.on('mouse:down', handleMouseDown);
       canvas.on('object:moving', (e) => {
-        if (!eventState.isMoving) {
+        if (eventDispatch && !eventState.isMoving) {
           eventDispatch({ type: 'setIsMoving', data: true });
         }
         handleMoving(e);
@@ -190,7 +194,7 @@ const useGuideLines = (state, isCanvasSet, canvas) => {
       canvas.on('before:render', handleBeforeRender);
       canvas.on('after:render', handleAfterRender);
       canvas.on('mouse:up', (e) => {
-        if (e.button === 3) {
+        if (eventDispatch && e.button === 3) {
           eventDispatch({ type: 'setRightClickEvent', data: e });
           e.e.preventDefault();
         }

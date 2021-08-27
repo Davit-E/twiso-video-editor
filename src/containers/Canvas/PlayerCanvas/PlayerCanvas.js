@@ -1,34 +1,36 @@
 import React, { useState, useContext, useCallback } from 'react';
-import styles from './Canvas.module.css';
-import EditorContext from '../../contexts/EditorContext';
-import fabricConfig from './fabricConfig';
-import useAddObject from './canvasHooks/useAddObject';
-import useSelectionObserver from './canvasHooks/useSelectionObserver';
-import useGuidelines from './canvasHooks/useGuideLines';
-import useUpdateObject from './canvasHooks/useUpdateObject';
-import Toolbar from '../Toolbar/Toolbar';
-import useCropImage from './canvasHooks/useCropImage';
-import useAddCanvas from './canvasHooks/useAddCanvas';
-import useAddVideo from './canvasHooks/useAddVideo';
-import useKeyEvents from './canvasHooks/useKeyEvents';
-import useClickListener from './canvasHooks/useClickListener';
-import ContextMenu from './ContextMenu/ContextMenu';
-fabricConfig();
+import styles from './PlayerCanvas.module.css';
+import EditorContext from '../../../contexts/EditorContext';
+import useAddObject from '../hooks/useAddObject';
+import useSelectionObserver from '../hooks/useSelectionObserver';
+import useGuideLines from '../hooks/useGuideLines';
+import useUpdateObject from '../hooks/useUpdateObject';
+import useUpdateCanvas from '../hooks/useUpdateCanvas';
+import useCropImage from '../hooks/useCropImage';
+import useAddCanvas from '../hooks/useAddCanvas';
+import useAddVideo from '../hooks/useAddVideo';
+import useKeyEvents from '../hooks/useKeyEvents';
+import useClickListener from '../hooks/useClickListener';
+import Toolbar from '../../Toolbar/Toolbar';
+import ContextMenu from '../ContextMenu/ContextMenu';
+import EventContext from '../../../contexts/EventContext';
 
-const Canvas = ({
+const PlayerCanvas = ({
   canvas,
   setCanvas,
   video,
   currentSub,
   currentTime,
+  speakers,
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
+  const { eventState, eventDispatch } = useContext(EventContext);
   const [objectIdCount, setObjectIdCount] = useState(1);
   const [isCanvasSet, setIsCanvasSet] = useState(false);
   const [clipboard, setClipboard] = useState(null);
   const updatetObjectId = useCallback(() => setObjectIdCount((i) => i + 1), []);
 
-  useGuidelines(editorState, isCanvasSet, canvas);
+  useGuideLines(editorState, isCanvasSet, canvas, eventState, eventDispatch);
   useAddObject(
     editorState,
     editorDispatch,
@@ -38,6 +40,7 @@ const Canvas = ({
   );
   useSelectionObserver(isCanvasSet, canvas, editorState, editorDispatch);
   useUpdateObject(editorState, editorDispatch, canvas);
+  useUpdateCanvas(editorState.canvasState, editorDispatch, canvas);
   useCropImage(
     editorState,
     editorDispatch,
@@ -45,7 +48,7 @@ const Canvas = ({
     objectIdCount,
     updatetObjectId
   );
-  useAddCanvas(editorState, setCanvas, setIsCanvasSet);
+  useAddCanvas(editorState.canvasState, setCanvas, setIsCanvasSet, 'canvas');
   useKeyEvents(
     canvas,
     clipboard,
@@ -55,7 +58,7 @@ const Canvas = ({
     currentSub
   );
   useClickListener(canvas, editorState);
-  useAddVideo(video, canvas, currentTime);
+  useAddVideo(video, canvas, currentTime, true, null, speakers);
 
   return (
     <div className={styles.CanvasComponent} id='canvasComponent'>
@@ -76,4 +79,4 @@ const Canvas = ({
   );
 };
 
-export default Canvas;
+export default PlayerCanvas;

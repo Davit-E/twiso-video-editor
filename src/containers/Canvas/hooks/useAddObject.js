@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { addNewImage, addNewShape, addNewText } from './utils/addObject';
+import { addNewImage, addNewShape, addNewText } from '../utils/addObject';
 
 const useAddObject = (state, dispatch, canvas, id, updateId) => {
   useEffect(() => {
