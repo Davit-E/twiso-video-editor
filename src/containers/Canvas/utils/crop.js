@@ -64,8 +64,14 @@ export const getSpeakerBox = (boxSize, boxId, updateBoxId) => {
   return box;
 };
 
-
-export const addSpeaker = (boxArr, boxId, canvas, setBoxArr, updateBoxId, video) => {
+export const addSpeaker = (
+  boxArr,
+  boxId,
+  canvas,
+  setBoxArr,
+  updateBoxId,
+  video
+) => {
   let size = null;
   if (boxArr.length === 0) {
     size = {
@@ -184,4 +190,51 @@ export const cropImage = (active, box, setCropped) => {
       setCropped(img);
     });
   });
+  // console.log('active: ', active);
+  // console.log(active.width);
+  // console.log(active.height);
+  // let prevCrop = active.cropRect;
+  // console.log(prevCrop);
+  // console.log('boxTop: ' + box.top, 'activeTop: ' + active.top);
+  // let newTop = (box.top - active.top) / active.scaleY;
+  // let newLeft = (box.left - active.left) / active.scaleX;
+  // let ratioX = box.scaleX;
+  // let ratioY = box.scaleY;
+  // let newWidthRatio = 1;
+  // let newHeightRatio = 1;
+  // if (prevCrop) {
+  //   newWidthRatio = prevCrop.w / active.width;
+  //   newHeightRatio = prevCrop.h / active.height;
+  //   ratioX *= newWidthRatio;
+  //   ratioY *= newHeightRatio;
+  //   newTop += prevCrop.y;
+  //   newLeft += prevCrop.x;
+  //   console.log(newLeft, newTop);
+  //   // console.log(newWidthRatio, newHeightRatio);
+  //   console.log(box.width, ratioX);
+  //   console.log(box.height, ratioY);
+  // }
+  // // let w = box.width * box.scaleX;
+  // // let h = box.height * box.scaleY;
+  // // let x = box.lineCoords.tl.x / canvas.getZoom();
+  // // let y = box.lineCoords.tr.y / canvas.getZoom();
+
+  // fabric.ImageWithCrop.fromURL(active._element.currentSrc, (image) => {
+  //   image.id = active.id;
+  //   image.width = box.width * ratioX;
+  //   image.height = box.height * ratioY;
+  //   // image.scaleToWidth(box.width * box.scaleX);
+  //   // image.scaleX = ratioX;
+  //   // image.scaleY = ratioY;
+  //   image.cropRect = {
+  //     x: newLeft,
+  //     y: newTop,
+  //     w: box.width * ratioX,
+  //     h: box.height * ratioY,
+  //   };
+  //   console.log(image.cropRect);
+  //   console.log(image);
+  //   setCropped(image);
+  // });
+
 };

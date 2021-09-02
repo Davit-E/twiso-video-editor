@@ -41,3 +41,9 @@
 .GoogleLogo {
   margin-right: 1.125rem;
 }
+
+.GoogleLink{
+  text-decoration: none;
+  width: 100%;
+  height: auto;
+}

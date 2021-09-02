@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import Editor from './containers/Editor/Editor';
 import Auth from './containers/Auth/Auth';
@@ -13,10 +13,24 @@ import {
   Redirect,
 } from 'react-router-dom';
 import CustomRoute from './components/CustomRoute/CustomRoute';
-fabricConfig();
+import useTrackTime from './hooks/useTrackTime';
+import useRefreshToken from './hooks/useRefreshToken';
+import setAuthToken from './utils/setAuthToken';
 
+fabricConfig();
 const App = () => {
   const [userState, userDispatch] = useUserState();
+  const { refreshToken, newToken, refreshError } = useRefreshToken();
+  useTrackTime(refreshToken);
+  useEffect(() => {
+    if (newToken) {
+      localStorage.setItem('token', newToken);
+      setAuthToken(newToken);
+    } else if (refreshError) {
+      localStorage.removeItem('token');
+      userDispatch({ type: 'setIsAuthenticated', data: false });
+    }
+  }, [newToken, refreshError, userDispatch]);
 
   return (
     <div className='App'>

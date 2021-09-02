@@ -1,13 +1,14 @@
-import React, { useContext } from 'react';
+import React from // useContext
+'react';
 import styles from './CheckMail.module.css';
-import UserContext from '../../../contexts/UserContext';
+// import UserContext from '../../../contexts/UserContext';
 import mail from '../../../assets/auth/mail.svg';
 
 const CheckMail = () => {
-  const { userDispatch } = useContext(UserContext);
-  const clickHandler = () => {
-    userDispatch({ type: 'setIsAuthenticated', data: true });
-  };
+  // const { userDispatch } = useContext(UserContext);
+  // const clickHandler = () => {
+  //   userDispatch({ type: 'setIsAuthenticated', data: true });
+  // };
 
   return (
     <div className={styles.CheckMail}>
@@ -17,9 +18,9 @@ const CheckMail = () => {
         We sent you an activation link. Please be sure to check your spam folder
         too.
       </p>
-      <div className={styles.EditorLink} onClick={clickHandler}>
+      {/* <div className={styles.EditorLink} onClick={clickHandler}>
         Go to editor
-      </div>
+      </div> */}
     </div>
   );
 };

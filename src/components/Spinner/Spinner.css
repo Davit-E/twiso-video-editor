@@ -1,5 +1,6 @@
 .spinner {
-  margin: 0 auto;
+  margin: auto;
+  position: relative;
 }
 .loader {
   font-size: 10px;

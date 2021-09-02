@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './SignUp.module.css';
 import google from '../../../assets/auth/google.svg';
 import Button from '../Button/Button';
@@ -8,9 +8,12 @@ import Select from '../Select/Select';
 import CheckMail from '../CheckMail/CheckMail';
 import { checkEmailValidity } from '../utils/validation';
 import { Link } from 'react-router-dom';
+import useMagicLink from '../../../hooks/useMagicLink';
+import Spinner from '../../../components/Spinner2/Spinner';
 
-const SignUp = ({ authUrl }) => {
+const SignUp = ({ authUrl, isLoading, setIsLoading, checkTokenValidity }) => {
   const [isSent, setIsSent] = useState(false);
+  const { magicLink, magickRes, magickError } = useMagicLink();
   const [name, setName] = useState({
     value: '',
     invalid: false,
@@ -42,6 +45,24 @@ const SignUp = ({ authUrl }) => {
     errorMessage: 'Please fill out this field',
   });
 
+  useEffect(() => {
+    let token = localStorage.getItem('token');
+    if (token) {
+      console.log(token);
+      checkTokenValidity(token);
+    } else setIsLoading(false);
+  }, [checkTokenValidity, setIsLoading]);
+
+  useEffect(() => {
+    if (magickRes) setIsSent(true);
+  }, [magickRes]);
+
+  useEffect(() => {
+    if (magickError) {
+      setIsLoading(false);
+    }
+  }, [magickError, setIsLoading]);
+
   const createAccountClickHandler = (e) => {
     e.preventDefault();
     let isEmailValid = checkEmailValidity(email.value);
@@ -54,14 +75,18 @@ const SignUp = ({ authUrl }) => {
     if (!isWorkTypeValid) {
       setWorkType((prevState) => ({ ...prevState, invalid: true }));
     }
-    if (isEmailValid && isNameValid && isWorkTypeValid) setIsSent(true);
+    if (isEmailValid && isNameValid && isWorkTypeValid) {
+      setIsLoading(true);
+      let jsonData = JSON.stringify({
+        email: email.value,
+        firstName: name.value,
+        workType: workType.value.type,
+      });
+      magicLink(jsonData);
+    }
   };
 
-  const signUpWithGoogleClickHandler = (e) => {
-    console.log('Sign up with google');
-  };
-
-  const signUpContent = (
+  let signUpContent = (
     <div className={styles.SignUp}>
       <h2 className={styles.Heading}>Create Account</h2>
       <p className={styles.Subheading}>
@@ -71,10 +96,15 @@ const SignUp = ({ authUrl }) => {
         </Link>
       </p>
       <div className={styles.FormContent}>
-        <Button onClick={signUpWithGoogleClickHandler}>
-          <img src={google} alt='google' className={styles.GoogleLogo} />
-          Sign Up with Google
-        </Button>
+        <a
+          className={styles.GoogleLink}
+          href={`${process.env.REACT_APP_API_BASE_URL_AUTH}/api/v1/auth/google`}
+        >
+          <Button>
+            <img src={google} alt='google' className={styles.GoogleLogo} />
+            Sign Up with Google
+          </Button>
+        </a>
         <Or />
         <form className={styles.Form}>
           <Input {...name} setValue={setName} />
@@ -85,6 +115,9 @@ const SignUp = ({ authUrl }) => {
       </div>
     </div>
   );
+
+  if (isLoading)
+    signUpContent = <Spinner size={{ width: '100px', height: '100px' }} />;
 
   return !isSent ? signUpContent : <CheckMail />;
 };
