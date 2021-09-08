@@ -1,12 +1,12 @@
 .Navbar {
   width: 100%;
+  min-height: 3.125rem;
   height: 3.125rem;
   background: white;
   border: 1px solid #eff1f4;
   display: flex;
   justify-content: space-between;
   padding: 0 2rem;
-  margin-bottom: 0.5rem;
 }
 
 .BackFileInfoContainer {

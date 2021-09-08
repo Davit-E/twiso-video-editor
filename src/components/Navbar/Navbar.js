@@ -3,13 +3,18 @@ import styles from './Navbar.module.css';
 import backArrow from '../../assets/editor/backArrow.svg';
 import { useHistory } from 'react-router-dom';
 
-const Navbar = ({ children }) => {
+const Navbar = ({ children, setPreviewUrl }) => {
   const history = useHistory();
+
+  const backHandler = () => {
+    if (!setPreviewUrl) history.goBack();
+    else setPreviewUrl(null);
+  };
 
   return (
     <header className={styles.Navbar}>
       <div className={styles.BackFileInfoContainer}>
-        <div className={styles.BackButton} onClick={() => history.goBack()}>
+        <div className={styles.BackButton} onClick={backHandler}>
           <img className={styles.BackArrow} src={backArrow} alt='back' />
         </div>
         <div className={styles.FileInfoContainer}>

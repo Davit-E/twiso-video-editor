@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useContext } from 'react';
 import styles from './Auth.module.css';
 import saly from '../../assets/auth/saly.png';
-import twiso from '../../assets/auth/twiso.svg';
+import twiso from '../../assets/twiso.svg';
 import SignIn from './SignIn/SignIn';
 import SignUp from './SignUp/SignUp';
 import Token from './Token/Token';

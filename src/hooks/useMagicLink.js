@@ -1,5 +1,5 @@
 import { useCallback, useState, useRef, useEffect } from 'react';
-import axios from '../axios-instance-auth';
+import axios from '../axios-instance';
 
 const useMagicLink = () => {
   const [magickRes, setMagickRes] = useState(null);

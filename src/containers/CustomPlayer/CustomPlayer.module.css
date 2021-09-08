@@ -1,0 +1,19 @@
+.VideoContainer {
+  width: 100%;
+  height: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Video {
+  width: 100%;
+  height: auto;
+}
+
+/* 
+.Video::-webkit-media-controls {
+  display:none !important;
+} */
+

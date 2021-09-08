@@ -21,6 +21,8 @@ const Navigation = ({
   subArr,
   currentSub,
   viedoForUpload,
+  setPreviewUrl,
+  videoUrl
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const { isDownloading, downloadVideo, downloadedVideo, setDownloadedVideo } =
@@ -39,6 +41,12 @@ const Navigation = ({
     isMounted.current = true;
     return () => (isMounted.current = false);
   }, []);
+
+  useEffect(() => {
+    if (downloadedVideo) {
+      setPreviewUrl(downloadedVideo);
+    }
+  }, [downloadedVideo, setPreviewUrl]);
 
   const closeHandler = (e) => {
     setDownloadedVideo(null);
@@ -89,6 +97,10 @@ const Navigation = ({
       );
     }
   };
+
+  // const downloadClickHandler2 = () => {
+  //   setPreviewUrl(videoUrl);
+  // };
 
   const prepareData = useCallback(
     (backImg, frontImg, videoData, breaksData, subsData) => {

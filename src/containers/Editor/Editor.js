@@ -29,19 +29,6 @@ const Editor = () => {
   return (
     <div className={styles.Editor}>
       <Switch>
-        {/* <CustomRoute
-          path={`${match.path}/new`}
-          redirect={`${match.path}/video-editor`}
-          where='in the Editor new route'
-          allowed={!isFinishedTranscribing}
-          component={Uploader}
-          viedoForUpload={viedoForUpload}
-          setVideoForUpload={setVideoForUpload}
-          setIsFinished={setIsFinishedTranscribing}
-          setVideoUrl={setVideoUrl}
-          setDuration={setDuration}
-          wordsRef={words}
-        /> */}
         <CustomRoute
           path={`${match.path}/new`}
           redirect={`${match.path}/speakers`}

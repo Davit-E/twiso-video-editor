@@ -1,0 +1,85 @@
+.Controls {
+  background: #6f7bd0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
+  height: 2.5rem;
+  bottom: 0;
+  /* padding: 0 0.5rem; */
+}
+
+.PlayPause,
+.Volume,
+.FullScreen {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  width: 2.5rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* border-radius: 30px; */
+  user-select: none;
+  transition: background 0.2s ease-out;
+  /* transform: scale(1.2);
+  transition: transform 200ms ease 0s */
+}
+
+.PlayPause:focus,
+.Volume:focus,
+.FullScreen:focus {
+  outline: none;
+}
+.PlayPause:hover,
+.Volume:hover,
+.FullScreen:hover {
+  background: rgba(197, 202, 236, 0.2);
+}
+
+.PlayPause {
+  padding-left: 2px;
+}
+
+.Time {
+  line-height: 1.1875rem;
+  color: #ffffff;
+  margin-right: 0.875rem;
+  margin-left: 0.5rem;
+}
+
+.Timeline {
+  flex: 1;
+  margin-right: 0.5rem;
+}
+
+.Volume {
+  position: relative;
+}
+
+.VolumeButton {
+  
+}
+
+.VolumeBar {
+  position: absolute;
+  top: -1.8rem;
+  transform: rotate(-90deg);
+  background: #6f7bd0;
+  background: rgba(0, 0, 0, 0.6);
+  height: 1.5rem;
+  width: 100%;
+  padding: 0 1rem;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* transform: scale(0); */
+  transition: 0.4s all ease;
+}
+
+.Volume:hover .VolumeBar {
+}

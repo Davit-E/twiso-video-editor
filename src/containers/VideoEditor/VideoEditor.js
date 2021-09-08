@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styles from './VideoEditor.module.css';
 import Transcription from '../Transcription/Transcription';
 import Player from '../Player/Player';
@@ -6,6 +6,8 @@ import Video from '../Video/Video';
 import Navigation from '../Navigation/Navigation';
 import useEditorState from '../../hooks/useEditorState';
 import EditorContext from '../../contexts/EditorContext';
+// import Preview from '../Preview/Preview';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 
 const VideoEditor = ({
   viedoForUpload,
@@ -29,6 +31,10 @@ const VideoEditor = ({
   const [currentSub, setCurrentSub] = useState(null);
   const [subArr, setSubArr] = useState(null);
   const [videoCuts, setVideoCuts] = useState([]);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const match = useRouteMatch();
+  const history = useHistory();
+  const isPreviewRef = useRef(true);
   // useEffect(() => {
   //   return () => clearState();
   // }, [clearState]);
@@ -74,6 +80,14 @@ const VideoEditor = ({
     setNextCutIndex(cutIndex);
   };
 
+  useEffect(() => {
+    if (isPreviewRef.current && previewUrl) {
+      isPreviewRef.current = false;
+      if (isPlaying && videoRef.current) videoRef.current.pause();
+      // history.push(`${match.path}/preview`);
+    }
+  }, [previewUrl, history, match.path, isPlaying, videoRef]);
+
   return (
     <>
       <EditorContext.Provider value={{ editorState, editorDispatch }}>
@@ -86,6 +100,9 @@ const VideoEditor = ({
           subArr={subArr}
           currentSub={currentSub}
           viedoForUpload={viedoForUpload}
+          setPreviewUrl={setPreviewUrl}
+          previewUrl={previewUrl}
+          videoUrl={videoUrl}
         />
         <main className={styles.Main}>
           <Transcription
@@ -143,10 +160,22 @@ const VideoEditor = ({
             setCurrentSubIndex={setCurrentSubIndex}
             subArr={subArr}
           />
+
           {/* <div className={styles.DownloadCanvas}>
           <canvas id='downloadCanvas' />
         </div> */}
         </main>
+        {/* {previewUrl ? (
+          <Preview
+            previewUrl={previewUrl}
+            setPreviewUrl={setPreviewUrl}
+            words={words}
+          />
+        ) : null} */}
+        {/* <Route
+          path={`${match.path}/preview`}
+          component={() => <Preview previewUrl={previewUrl} words={words} />}
+        /> */}
       </EditorContext.Provider>
     </>
   );

@@ -98,7 +98,7 @@ const SignUp = ({ authUrl, isLoading, setIsLoading, checkTokenValidity }) => {
       <div className={styles.FormContent}>
         <a
           className={styles.GoogleLink}
-          href={`${process.env.REACT_APP_API_BASE_URL_AUTH}/api/v1/auth/google`}
+          href={`${process.env.REACT_APP_API_BASE_URL_TEST}/api/v1/auth/google`}
         >
           <Button>
             <img src={google} alt='google' className={styles.GoogleLogo} />

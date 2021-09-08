@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './Projects.module.css';
 import { Link } from 'react-router-dom';
 import Project from './Project/Project';
+import useGetVideos from '../../../hooks/useGetVideos';
 const Projects = () => {
+  const { downloadVideos } = useGetVideos();
+
+  useEffect(() => {
+    downloadVideos()
+  }, [downloadVideos])
+
   return (
     <div className={styles.Projects}>
       <h2 className={styles.Heading}>My projects</h2>

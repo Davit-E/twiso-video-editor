@@ -1,0 +1,132 @@
+.Preview {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #f8f8f8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.Main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.Main::-webkit-scrollbar {
+  width: 10px;
+}
+
+.Main::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #d9d9d9;
+}
+
+.Main::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.MainContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 90%;
+  max-width: 60.3125rem;
+  padding-top: 3.25rem;
+  padding-bottom: 5rem;
+}
+
+.VideoFooter {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.25rem;
+}
+.Title {
+  margin: 0;
+  font-weight: 500;
+  font-size: 1.25rem;
+}
+
+.DownloadAndLink {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Download {
+  color: #6f7bd0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  margin-right: 0.5rem;
+}
+
+.CopyLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #6f7bd0;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0.5rem 1.125rem;
+  border-radius: 30px;
+  width: 9.75rem;
+}
+
+.HeadlineAndExport {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 7.5rem;
+  margin-bottom: 0.625rem;
+}
+
+.Headline {
+  margin: 0;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.75rem;
+  line-height: 2.125rem;
+  color: #b3b3b3;
+}
+
+.ExportButton {
+  background: transparent;
+  border: 1px solid #d8d8d8;
+  box-sizing: border-box;
+  border-radius: 30px;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 0.75rem;
+  color: #afafaf;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.875rem 0.5rem 1rem;
+  width: 6.875rem;
+}
+
+.Text {
+  margin: 0;
+  width: 100%;
+  font-family: Arial;
+  line-height: 190%;
+  color: #464646;
+}
