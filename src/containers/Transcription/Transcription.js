@@ -21,10 +21,8 @@ const Transcription = ({
   currentSelection,
   setCurrentSelection,
   setPlayerTime,
-  subArr,
-  setCurrentSubIndex,
   currentSub,
-  currentSubIndex,
+  fabricSub,
   setShouldRerenderSub,
 }) => {
   const [searchInput, setSearchInput] = useState('');
@@ -202,10 +200,8 @@ const Transcription = ({
             inputIndex={inputIndex}
             setInputIndex={setInputIndex}
             currentSelection={currentSelection}
+            fabricSub={fabricSub}
             currentSub={currentSub}
-            currentSubIndex={currentSubIndex}
-            subArr={subArr}
-            setCurrentSubIndex={setCurrentSubIndex}
             setShouldRerenderSub={setShouldRerenderSub}
           />
         ) : null}

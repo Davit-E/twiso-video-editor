@@ -1,4 +1,4 @@
-import { findSubIndexWithWordIndex } from '../../../utils/findIndex';
+import { findSubWithWordIndex } from '../../../utils/findIndex';
 
 export const handlePlay = (
   currentSelection,
@@ -30,8 +30,8 @@ export const handleEnd = (
   words,
   setCurrentWordIndex,
   setCurrentTime,
-  setCurrentSubIndex,
-  subArr
+  setCurrentSub,
+  subList
 ) => {
   if (videoCuts.length > 0) setNextCutIndex(0);
   let word = words[0];
@@ -42,9 +42,9 @@ export const handleEnd = (
     start = words[wordIndex].start;
   }
   setCurrentWordIndex(wordIndex);
-  let subIndex = findSubIndexWithWordIndex(wordIndex, words, subArr);
-  // console.log(subIndex);
-  setCurrentSubIndex(subIndex);
+  let sub = findSubWithWordIndex(wordIndex, words, subList);
+  // console.log(sub);
+  setCurrentSub(sub);
   setCurrentTime(+start);
   // console.log('start time: ', start);
   // console.log('start index: ', index);

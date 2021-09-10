@@ -1,21 +1,18 @@
 import { useEffect } from 'react';
-import {
-  newSubtitle,
-  generateSubtitles,
-  displaySub,
-} from '../utils/subtitle.js';
-import { findSubIndexWithWordIndex } from '../../../utils/findIndex';
+import { generateSubtitles } from '../utils/generateSubtitles';
+import { newSubtitle, displaySub } from '../utils/subtitle.js';
+import { findSubWithWordIndex } from '../../../utils/findIndex';
 
 const useSubtitles = (
   state,
   canvas,
+  fabricSub,
+  setFabricSub,
+  words,
+  subList,
+  setSubList,
   currentSub,
   setCurrentSub,
-  words,
-  subArr,
-  setSubArr,
-  currentSubIndex,
-  setCurrentSubIndex,
   currentWordIndex,
   videoCuts,
   shouldRerenderSub,
@@ -23,74 +20,61 @@ const useSubtitles = (
   isPlaying,
   videoRef
 ) => {
-
   useEffect(() => {
-    if (currentSub && subArr && subArr[currentSubIndex]) {
+    if (fabricSub && currentSub) {
       if (shouldRerenderSub) setShouldRerenderSub(false);
-      displaySub(currentSub, currentSubIndex, subArr);
+      displaySub(fabricSub, currentSub);
     }
-  }, [
-    subArr,
-    currentSub,
-    currentSubIndex,
-    shouldRerenderSub,
-    setShouldRerenderSub,
-  ]);
+  }, [fabricSub, currentSub, shouldRerenderSub, setShouldRerenderSub, subList]);
 
   useEffect(() => {
-    if (subArr && !isPlaying) {
-      let subIndex = findSubIndexWithWordIndex(currentWordIndex, words, subArr);
-      if (subIndex !== null) setCurrentSubIndex(subIndex);
+    if (subList && !isPlaying) {
+      let sub = findSubWithWordIndex(currentWordIndex, words, subList);
+      if (sub !== null) setCurrentSub(sub);
     }
-  }, [
-    subArr,
-    setCurrentSubIndex,
-    words,
-    currentWordIndex,
-    isPlaying,
-  ]);
+  }, [subList, setCurrentSub, words, currentWordIndex, isPlaying]);
 
   useEffect(() => {
-    if (currentSub && videoCuts) {
-      generateSubtitles(words, setSubArr);
+    if (fabricSub && videoCuts) {
+      generateSubtitles(words, setSubList);
     }
-  }, [currentSub, videoCuts, setSubArr, words]);
+  }, [fabricSub, videoCuts, setSubList, words]);
 
   useEffect(() => {
-    if (canvas && !currentSub && state.isSubtitles) {
+    if (canvas && !fabricSub && state.isSubtitles) {
       if (isPlaying) videoRef.current.pause();
       let sub = newSubtitle(canvas, state);
       // console.log('added: ', sub);
       canvas.add(sub);
       canvas.requestRenderAll();
-      setCurrentSub(sub);
-    } else if (currentSub && !state.isSubtitles) {
-      canvas.remove(currentSub);
-      setCurrentSub(null);
+      setFabricSub(sub);
+    } else if (fabricSub && !state.isSubtitles) {
+      canvas.remove(fabricSub);
+      setFabricSub(null);
     }
   }, [
     videoRef,
     isPlaying,
     state.isSubtitles,
-    currentSub,
-    setCurrentSub,
+    fabricSub,
+    setFabricSub,
     canvas,
     state,
-    subArr,
+    subList,
     words,
-    setSubArr,
+    setSubList,
   ]);
 
   useEffect(() => {
-    if (canvas && currentSub) {
+    if (canvas && fabricSub) {
       canvas.on('object:added', (e) => {
-        canvas.bringToFront(currentSub);
+        canvas.bringToFront(fabricSub);
       });
     }
     return () => {
       if (canvas) canvas.off('object:added');
     };
-  }, [canvas, currentSub]);
+  }, [canvas, fabricSub]);
 };
 
 export default useSubtitles;

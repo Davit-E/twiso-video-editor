@@ -43,6 +43,11 @@
   padding-bottom: 5rem;
 }
 
+.CustomPlayer {
+  width: 100%;
+  height: auto;
+}
+
 .VideoFooter {
   display: flex;
   width: 100%;

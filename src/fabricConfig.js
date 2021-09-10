@@ -291,6 +291,28 @@ fabric.Subtitle = fabric.util.createClass(fabric.IText, {
 
 fabric.Subtitle.prototype.controls = {};
 
+fabric.SubtitleResizable = fabric.util.createClass(fabric.Textbox, {
+  type: 'subtitle',
+
+  _getNonTransformedDimensions() {
+    // Object dimensions
+    return new fabric.Point(
+      this.width + this.paddingX,
+      this.height + this.paddingY
+    );
+  },
+
+  _calculateCurrentDimensions() {
+    // Controls dimensions
+    return fabric.util.transformPoint(
+      this._getTransformedDimensions(),
+      this.getViewportTransform(),
+      true
+    );
+  },
+});
+
+
 fabric.Video = fabric.util.createClass(fabric.Image, {
   type: 'video',
   cropRect: null,

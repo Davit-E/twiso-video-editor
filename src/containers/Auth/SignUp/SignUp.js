@@ -48,7 +48,6 @@ const SignUp = ({ authUrl, isLoading, setIsLoading, checkTokenValidity }) => {
   useEffect(() => {
     let token = localStorage.getItem('token');
     if (token) {
-      console.log(token);
       checkTokenValidity(token);
     } else setIsLoading(false);
   }, [checkTokenValidity, setIsLoading]);

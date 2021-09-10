@@ -24,12 +24,12 @@ const VideoEditor = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(null);
   const [nextCutIndex, setNextCutIndex] = useState(null);
-  const [currentSubIndex, setCurrentSubIndex] = useState(null);
   const [videoSize, setVideoSize] = useState(null);
   const [shouldRerenderSub, setShouldRerenderSub] = useState(false);
   const [canvas, setCanvas] = useState(null);
+  const [fabricSub, setFabricSub] = useState(null);
   const [currentSub, setCurrentSub] = useState(null);
-  const [subArr, setSubArr] = useState(null);
+  const [subList, setSubList] = useState(null);
   const [videoCuts, setVideoCuts] = useState([]);
   const [previewUrl, setPreviewUrl] = useState(null);
   const match = useRouteMatch();
@@ -40,8 +40,12 @@ const VideoEditor = ({
   // }, [clearState]);
 
   // useEffect(() => {
-  //   console.log('currentSubIndex:', currentSubIndex);
-  // }, [currentSubIndex]);
+  //   console.log('currentSub:', currentSub);
+  // }, [currentSub]);
+
+  // useEffect(() => {
+  //   console.log('subList:', subList);
+  // }, [subList]);
 
   // useEffect(() => {
   //   console.log(nextCutIndex);
@@ -97,8 +101,8 @@ const VideoEditor = ({
           videoCuts={videoCuts}
           duration={duration}
           words={words}
-          subArr={subArr}
-          currentSub={currentSub}
+          subList={subList}
+          fabricSub={fabricSub}
           viedoForUpload={viedoForUpload}
           setPreviewUrl={setPreviewUrl}
           previewUrl={previewUrl}
@@ -116,10 +120,9 @@ const VideoEditor = ({
             currentSelection={currentSelection}
             setCurrentSelection={setCurrentSelection}
             setPlayerTime={setPlayerTime}
-            subArr={subArr}
-            setCurrentSubIndex={setCurrentSubIndex}
             currentSub={currentSub}
-            currentSubIndex={currentSubIndex}
+            setCurrentSub={setCurrentSub}
+            fabricSub={fabricSub}
             setShouldRerenderSub={setShouldRerenderSub}
           />
           <Player
@@ -134,12 +137,12 @@ const VideoEditor = ({
             setCurrentWordIndex={setCurrentWordIndex}
             nextCutIndex={nextCutIndex}
             currentWordIndex={currentWordIndex}
-            subArr={subArr}
-            setSubArr={setSubArr}
+            subList={subList}
+            setSubList={setSubList}
+            fabricSub={fabricSub}
+            setFabricSub={setFabricSub}
             currentSub={currentSub}
             setCurrentSub={setCurrentSub}
-            currentSubIndex={currentSubIndex}
-            setCurrentSubIndex={setCurrentSubIndex}
             videoSize={videoSize}
             shouldRerenderSub={shouldRerenderSub}
             setShouldRerenderSub={setShouldRerenderSub}
@@ -157,10 +160,9 @@ const VideoEditor = ({
             setVideoSize={setVideoSize}
             setNextCutIndex={setNextCutIndex}
             setCurrentWordIndex={setCurrentWordIndex}
-            setCurrentSubIndex={setCurrentSubIndex}
-            subArr={subArr}
+            setCurrentSub={setCurrentSub}
+            subList={subList}
           />
-
           {/* <div className={styles.DownloadCanvas}>
           <canvas id='downloadCanvas' />
         </div> */}

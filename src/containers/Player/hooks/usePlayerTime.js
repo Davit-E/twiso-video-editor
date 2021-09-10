@@ -10,10 +10,9 @@ const usePlayerTime = (
   setNextCutIndex,
   currentWordIndex,
   setCurrentWordIndex,
-  subArr,
-  currentSubIndex,
-  setCurrentSubIndex,
-  currentSub
+  currentSub,
+  setCurrentSub,
+  fabricSub
 ) => {
   const handleVideoCuts = useCallback(
     (time) => {
@@ -60,26 +59,25 @@ const usePlayerTime = (
   );
 
   const handleCurrentSub = useCallback(
-    (time, index, arr) => {
+    (time, sub) => {
       time = +time + 0.05;
-      let sub = arr[index];
-      let nextSub = arr[index + 1];
+      let nextSub = sub.next;
       // if (word) {
       //   console.log('comparing: ', time, '>', +word.end, time >= +word.end);
       // }
-      if (index !== null && nextSub && time > +sub.end) {
-        if(nextSub.active) setCurrentSubIndex((prevState) => prevState + 1);
-        else setCurrentSubIndex(nextSub.nextSub);
+      if (sub && nextSub && time > +sub.val.end) {
+        if (nextSub.val.active) setCurrentSub(prevState => prevState.next);
+        else setCurrentSub(nextSub.nextSub);
       }
     },
-    [setCurrentSubIndex]
+    [setCurrentSub]
   );
 
   useEffect(() => {
-    if (isPlaying && currentSub  && subArr && currentTime !== null) {
-      handleCurrentSub(currentTime, currentSubIndex, subArr);
+    if (isPlaying && fabricSub && currentSub && currentTime !== null) {
+      handleCurrentSub(currentTime, currentSub);
     }
-  }, [isPlaying, currentSub, currentTime, handleCurrentSub, currentSubIndex, subArr]);
+  }, [isPlaying, fabricSub, currentTime, handleCurrentSub, currentSub]);
 
   useEffect(() => {
     if (currentTime !== null) handleCurrentWord(currentTime, currentWordIndex);

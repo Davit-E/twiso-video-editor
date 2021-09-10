@@ -9,17 +9,16 @@ const Words = ({
   inputIndex,
   setInputIndex,
   currentSelection,
+  fabricSub,
   currentSub,
-  currentSubIndex,
-  subArr,
   setShouldRerenderSub,
 }) => {
   const [input, setInput] = useState('');
   const inputRef = useRef(null);
 
   const handleNotSilenceAndText = (id, text) => {
-    let words = subArr[currentSubIndex].words;
-    // console.log(subArr[currentSubIndex]);
+    let words = currentSub.val.words;
+    // console.log(currentSub.val);
     // console.log(words);
     for (let i = 0; i < words.length; i++) {
       let word = words[i];
@@ -33,7 +32,7 @@ const Words = ({
   };
 
   const handleSilenceAndText = (id, text) => {
-    let words = subArr[currentSubIndex].words;
+    let words = currentSub.val.words;
     // console.log(words);
     if (words) {
       for (let i = 0; i < words.length; i++) {
@@ -48,13 +47,13 @@ const Words = ({
         }
       }
     } else {
-      subArr[currentSubIndex].silence = false;
-      subArr[currentSubIndex].words = [{ ...subArr[currentSubIndex], text }];
+      currentSub.val.silence = false;
+      currentSub.val.words = [{ ...currentSub.val, text }];
     }
   };
 
   const handleNoText = (id) => {
-    let words = subArr[currentSubIndex].words;
+    let words = currentSub.val.words;
     // console.log(words);
     let silenceCount = 0;
     for (let i = 0; i < words.length; i++) {
@@ -66,8 +65,8 @@ const Words = ({
       if (word.silence) silenceCount++;
     }
     if (silenceCount === words.length) {
-      subArr[currentSubIndex].silence = true;
-      subArr[currentSubIndex].words = null;
+      currentSub.val.silence = true;
+      currentSub.val.words = null;
     }
   };
 
@@ -88,13 +87,13 @@ const Words = ({
     if (wordsArr[inputIndex]) {
       if (inputVal && !wordsArr[inputIndex].silence) {
         wordsArr[inputIndex].text = inputVal;
-        if (currentSub) handleSubTextChange(id, inputVal, false);
+        if (fabricSub) handleSubTextChange(id, inputVal, false);
       } else if (inputVal) {
         wordsArr[inputIndex].text = inputVal;
         wordsArr[inputIndex].silence = false;
-        if (currentSub) handleSubTextChange(id, inputVal, true);
+        if (fabricSub) handleSubTextChange(id, inputVal, true);
       } else {
-        if (currentSub && !wordsArr[inputIndex].silence)
+        if (fabricSub && !wordsArr[inputIndex].silence)
           handleSubTextChange(id, inputVal, false);
         wordsArr[inputIndex].silence = true;
       }

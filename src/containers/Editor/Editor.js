@@ -5,7 +5,7 @@ import VideoEditor from '../VideoEditor/VideoEditor';
 import { useRouteMatch, Switch, Redirect } from 'react-router-dom';
 import CustomRoute from '../../components/CustomRoute/CustomRoute';
 import SelectSpeakers from '../SelectSpeakers/SelectSpeakers';
-// import UploaderMock from '../UploaderMock/UploaderMock';
+import UploaderMock from '../UploaderMock/UploaderMock';
 
 const Editor = () => {
   const [viedoForUpload, setVideoForUpload] = useState(null);
@@ -32,6 +32,8 @@ const Editor = () => {
         <CustomRoute
           path={`${match.path}/new`}
           redirect={`${match.path}/speakers`}
+          /////////////////////////////////////////
+          // redirect={`${match.path}/video-editor`}
           where='in the Editor new route'
           allowed={!isFinishedTranscribing}
           component={Uploader}

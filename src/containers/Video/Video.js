@@ -15,8 +15,8 @@ const Video = ({
   setVideoSize,
   setNextCutIndex,
   setCurrentWordIndex,
-  setCurrentSubIndex,
-  subArr,
+  setCurrentSub,
+  subList,
 }) => {
   const [intervalId, setIntervalId] = useState(null);
   // const seeking = (e) => {
@@ -63,8 +63,8 @@ const Video = ({
           words,
           setCurrentWordIndex,
           setCurrentTime,
-          setCurrentSubIndex,
-          subArr
+          setCurrentSub,
+          subList
         )
       }
       onLoadedMetadata={() => getVideoSize(videoRef, setVideoSize)}

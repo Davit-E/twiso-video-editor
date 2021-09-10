@@ -77,7 +77,7 @@ const useKeyEvents = (
   setClipboard,
   objId,
   updateId,
-  currentSub
+  fabricSub
 ) => {
   const [isPasting, setIsPasting] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
@@ -94,7 +94,7 @@ const useKeyEvents = (
         updateId,
         setClipboard,
         null,
-        currentSub
+        fabricSub
       );
     } else if (shouldRun && isCopying) {
       setShouldRun(false);
@@ -110,7 +110,7 @@ const useKeyEvents = (
       let active = canvas.getActiveObject();
       if (active && active.id !== 'subtitle') {
         canvas.bringToFront(active);
-        if (currentSub) canvas.bringToFront(currentSub);
+        if (fabricSub) canvas.bringToFront(fabricSub);
       }
     } else if (shouldRun && isSendToBack) {
       setShouldRun(false);
@@ -128,7 +128,7 @@ const useKeyEvents = (
     clipboard,
     updateId,
     shouldRun,
-    currentSub,
+    fabricSub,
   ]);
 
   useEffect(() => {

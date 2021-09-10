@@ -5,7 +5,7 @@ export const handlePaste = (
   updateId,
   setClipboard,
   dispatch,
-  currentSub
+  fabricSub
 ) => {
   let top = clipboard.coords.top + 15;
   let left = clipboard.coords.left + 15;
@@ -28,7 +28,7 @@ export const handlePaste = (
       cloned.strokeUniform = true;
     }
     canvas.add(cloned).setActiveObject(cloned);
-    if (currentSub) canvas.bringToFront(currentSub);
+    if (fabricSub) canvas.bringToFront(fabricSub);
     canvas.requestRenderAll();
     setClipboard({
       object: clipboard.object,

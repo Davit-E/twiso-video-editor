@@ -23,12 +23,12 @@ const Player = ({
   setCurrentWordIndex,
   nextCutIndex,
   currentWordIndex,
-  subArr,
-  setSubArr,
+  subList,
+  setSubList,
+  fabricSub,
+  setFabricSub,
   currentSub,
   setCurrentSub,
-  currentSubIndex,
-  setCurrentSubIndex,
   shouldRerenderSub,
   setShouldRerenderSub,
   speakers,
@@ -64,22 +64,21 @@ const Player = ({
     setNextCutIndex,
     currentWordIndex,
     setCurrentWordIndex,
-    subArr,
-    currentSubIndex,
-    setCurrentSubIndex,
-    currentSub
+    currentSub,
+    setCurrentSub,
+    fabricSub
   );
 
   useSubtitles(
     editorState,
     canvas,
+    fabricSub,
+    setFabricSub,
+    words,
+    subList,
+    setSubList,
     currentSub,
     setCurrentSub,
-    words,
-    subArr,
-    setSubArr,
-    currentSubIndex,
-    setCurrentSubIndex,
     currentWordIndex,
     videoCuts,
     shouldRerenderSub,
@@ -97,7 +96,7 @@ const Player = ({
             canvas={canvas}
             setCanvas={setCanvas}
             video={videoRef.current}
-            currentSub={currentSub}
+            fabricSub={fabricSub}
             currentTime={currentTime}
             speakers={speakers}
           />

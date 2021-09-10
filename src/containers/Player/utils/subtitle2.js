@@ -1,14 +1,13 @@
 import { fabric } from 'fabric';
 
 export const newSubtitle = (canvas, state) => {
-  let subtitle = new fabric.SubtitleResizable(' ', {
+  let subtitle = new fabric.Subtitle(' ', {
     paddingX: 20,
     paddingY: 20,
-    width: 550,
     // bgCornerRadius: 5,
-    editable: false,
     originX: 'center',
     originY: 'center',
+    editable: false,
     textAlign: 'center',
     ...state.subtitlesState,
     id: 'subtitle',
@@ -23,7 +22,6 @@ export const newSubtitle = (canvas, state) => {
   subtitle.setPositionByOrigin(new fabric.Point(x, y), 'center', 'center');
   return subtitle;
 };
-
 
 export const displaySub = (fabricSub, currentSub) => {
   if (currentSub.val.silence) fabricSub.visible = false;

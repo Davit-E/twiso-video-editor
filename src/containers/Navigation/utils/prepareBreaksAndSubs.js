@@ -20,7 +20,7 @@ export const prepareBreaks = (cuts, endTime, setBreaks) => {
   setBreaks(videoBreaks);
 };
 
-export const prepareSubs = (arr, object, subState, setSubs) => {
+export const prepareSubs = (subList, object, subState, setSubs) => {
   let zoom = object.canvas.getZoom();
   let width = object.canvas.getWidth() / zoom;
   let height = object.canvas.getHeight() / zoom;
@@ -47,14 +47,17 @@ export const prepareSubs = (arr, object, subState, setSubs) => {
     fontWeight: subState.fontWeight,
     fontStyle: subState.fontStyle,
   };
-  // console.log(config);
+  console.log(config);
   // let prev = null;
   let deleteStart = 0;
   let deleteEnd = 0;
   let isLastDeleted = false;
-  for (let i = 0; i < arr.length; i++) {
-    let el = arr[i];
-    if (el.active && isLastDeleted) {
+
+
+  let subNode = subList.head;
+  for (let i = 0; i < subList.length; i++) {
+    let sub = subNode.val;
+    if (sub.active && isLastDeleted) {
       let _id = generateUUID();
       isLastDeleted = false;
       captions.push({
@@ -64,39 +67,40 @@ export const prepareSubs = (arr, object, subState, setSubs) => {
         silence: true,
         _id,
       });
-    } else if (!el.active && !isLastDeleted) {
+    } else if (!sub.active && !isLastDeleted) {
       isLastDeleted = true;
-      deleteStart = el.start;
-      deleteEnd = el.end;
-    } else if (!el.active && isLastDeleted) {
-      deleteEnd = el.end;
+      deleteStart = sub.start;
+      deleteEnd = sub.end;
+    } else if (!sub.active && isLastDeleted) {
+      deleteEnd = sub.end;
     }
 
-    if (el.silence && el.active) {
+    if (sub.silence && sub.active) {
       let _id = generateUUID();
       captions.push({
-        start: el.start,
-        end: el.end,
+        start: sub.start,
+        end: sub.end,
         silence: true,
         _id,
         active: true,
       });
-    } else if (el.active) {
+    } else if (sub.active) {
       let _id = generateUUID();
       let text = '';
-      for (let i = 0; i < el.words.length; i++) {
-        let word = el.words[i];
+      for (let i = 0; i < sub.words.length; i++) {
+        let word = sub.words[i];
         text += word.text;
       }
       captions.push({
-        start: el.start,
-        end: el.end,
+        start: sub.start,
+        end: sub.end,
         text,
         silence: false,
         active: true,
         _id,
       });
     }
+    subNode = subNode.next;
   }
 
   if (isLastDeleted) {

@@ -18,8 +18,8 @@ const Navigation = ({
   videoRef,
   videoCuts,
   duration,
-  subArr,
-  currentSub,
+  subList,
+  fabricSub,
   viedoForUpload,
   setPreviewUrl,
   videoUrl
@@ -42,11 +42,11 @@ const Navigation = ({
     return () => (isMounted.current = false);
   }, []);
 
-  useEffect(() => {
-    if (downloadedVideo) {
-      setPreviewUrl(downloadedVideo);
-    }
-  }, [downloadedVideo, setPreviewUrl]);
+  // useEffect(() => {
+  //   if (downloadedVideo) {
+  //     setPreviewUrl(downloadedVideo);
+  //   }
+  // }, [downloadedVideo, setPreviewUrl]);
 
   const closeHandler = (e) => {
     setDownloadedVideo(null);
@@ -84,8 +84,8 @@ const Navigation = ({
     } else if (canvas) {
       videoRef.current.pause();
       prepareBreaks(videoCuts, duration, setBreaks);
-      if (currentSub && subArr) {
-        prepareSubs(subArr, currentSub, editorState.subtitlesState, setSubs);
+      if (fabricSub && subList) {
+        prepareSubs(subList, fabricSub, editorState.subtitlesState, setSubs);
       } else setSubs({ captions: [], config: {} });
       prepareCanvas(
         canvas,
@@ -98,9 +98,9 @@ const Navigation = ({
     }
   };
 
-  // const downloadClickHandler2 = () => {
-  //   setPreviewUrl(videoUrl);
-  // };
+  const downloadClickHandler2 = () => {
+    setPreviewUrl(videoUrl);
+  };
 
   const prepareData = useCallback(
     (backImg, frontImg, videoData, breaksData, subsData) => {

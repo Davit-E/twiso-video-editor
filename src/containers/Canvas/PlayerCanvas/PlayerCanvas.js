@@ -19,7 +19,7 @@ const PlayerCanvas = ({
   canvas,
   setCanvas,
   video,
-  currentSub,
+  fabricSub,
   currentTime,
   speakers,
 }) => {
@@ -55,7 +55,7 @@ const PlayerCanvas = ({
     setClipboard,
     objectIdCount,
     updatetObjectId,
-    currentSub
+    fabricSub
   );
   useClickListener(canvas, editorState);
   useAddVideo(video, canvas, currentTime, true, null, speakers);
@@ -73,7 +73,7 @@ const PlayerCanvas = ({
         updateId={updatetObjectId}
         clipboard={clipboard}
         setClipboard={setClipboard}
-        currentSub={currentSub}
+        fabricSub={fabricSub}
       />
     </div>
   );
