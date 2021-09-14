@@ -1,10 +1,11 @@
 import { fabric } from 'fabric';
 
 export const newSubtitle = (canvas, state) => {
-  let subtitle = new fabric.SubtitleResizable(' ', {
+  let subtitle = new fabric.SubtitleWithResize(' ', {
     paddingX: 20,
     paddingY: 20,
     width: 550,
+    breakWords: true,
     // bgCornerRadius: 5,
     editable: false,
     originX: 'center',

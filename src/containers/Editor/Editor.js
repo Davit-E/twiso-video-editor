@@ -5,7 +5,7 @@ import VideoEditor from '../VideoEditor/VideoEditor';
 import { useRouteMatch, Switch, Redirect } from 'react-router-dom';
 import CustomRoute from '../../components/CustomRoute/CustomRoute';
 import SelectSpeakers from '../SelectSpeakers/SelectSpeakers';
-import UploaderMock from '../UploaderMock/UploaderMock';
+// import UploaderMock from '../UploaderMock/UploaderMock';
 
 const Editor = () => {
   const [viedoForUpload, setVideoForUpload] = useState(null);
@@ -67,7 +67,6 @@ const Editor = () => {
           words={words.current}
           videoRef={videoRef}
           duration={duration}
-          clearState={clearState}
           speakers={speakers}
         />
         <Redirect to={`${match.path}/new`} />

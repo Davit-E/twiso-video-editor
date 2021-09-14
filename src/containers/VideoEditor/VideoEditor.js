@@ -15,7 +15,6 @@ const VideoEditor = ({
   words,
   videoRef,
   duration,
-  clearState,
   speakers,
 }) => {
   const [editorState, editorDispatch] = useEditorState();
@@ -35,9 +34,6 @@ const VideoEditor = ({
   const match = useRouteMatch();
   const history = useHistory();
   const isPreviewRef = useRef(true);
-  // useEffect(() => {
-  //   return () => clearState();
-  // }, [clearState]);
 
   // useEffect(() => {
   //   console.log('currentSub:', currentSub);
