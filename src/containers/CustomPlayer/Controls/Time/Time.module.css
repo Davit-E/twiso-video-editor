@@ -1,0 +1,17 @@
+.Time {
+  margin: 0;
+  line-height: 1.1875rem;
+  color: #ffffff;
+  margin-right: 0.875rem;
+  margin-left: 0.3rem;
+  width: 3rem;
+  user-select: none;
+}
+
+.Timeline {
+  flex: 1;
+  margin-right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

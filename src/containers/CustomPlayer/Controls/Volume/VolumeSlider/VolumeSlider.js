@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import styles from './TimelineSlider.module.css';
-import { handleInputChange } from '../utils/slider';
+import styles from './VolumeSlider.module.css';
+import { handleInputChange } from '../../utils/slider';
 
-const TimelineSlider = ({ min, max, step, value, setValue }) => {
+const VolumeSlider = ({ min, max, step, value, setValue }) => {
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -23,4 +23,4 @@ const TimelineSlider = ({ min, max, step, value, setValue }) => {
   );
 };
 
-export default TimelineSlider;
+export default VolumeSlider;

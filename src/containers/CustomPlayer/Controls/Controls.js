@@ -1,67 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styles from './Controls.module.css';
 import playSvg from '../../../assets/preview/play.svg';
-// import pauseSvg from '../../../assets/preview/pause.svg';
-import volumeSvg from '../../../assets/preview/volume.svg';
+import pauseSvg from '../../../assets/preview/pause.svg';
 import fullScreenSvg from '../../../assets/preview/fullScreen.svg';
-import TimelineSlider from './TimelineSlider/TimelineSlider';
 import { fullScreenHanlder } from './utils/fullScreen';
+import Time from './Time/Time';
+import Volume from './Volume/Volume';
+import { useEffect } from 'react/cjs/react.development';
 
-const Controls = ({ video, container, duration }) => {
-  const [isFullScreen, setIsFullScreen] = useState(false);
+const Controls = ({ video, container, duration, time, setTime, isPlaying }) => {
   const [volume, setVolume] = useState('1');
-  const [time, setTime] = useState('0');
+
+  const playPauseHanlder = () => {
+    if (isPlaying) video.pause();
+    else video.play();
+  };
+
+  const keydownHandler = (e) => {
+    console.log(e);
+    console.log(document.activeElement);
+  };
 
   useEffect(() => {
-    video.volume = volume;
-  }, [video, volume]);
-
-  // const handleScreenChange = useCallback((e) => {
-  //   let data = null;
-  //   if (document.fullscreenElement) data = true;
-  //   else data = false;
-  //   setIsFullScreen(data);
-  // }, []);
-
-  // useEffect(() => {
-  //   container.addEventListener('fullscreenchange', handleScreenChange);
-  //   return () =>
-  //     container.removeEventListener('fullscreenchange', handleScreenChange);
-  // }, [container, handleScreenChange]);
+    window.addEventListener('keydown', keydownHandler);
+    return () => window.removeEventListener('keydown', keydownHandler);
+  }, []);
 
   return (
     <div className={styles.Controls}>
-      <button className={styles.PlayPause}>
-        <img src={playSvg} alt='play' />
+      <button className={styles.PlayPause} onClick={playPauseHanlder}>
+        {isPlaying ? (
+          <img src={pauseSvg} alt='pause' />
+        ) : (
+          <img src={playSvg} alt='play' />
+        )}
       </button>
-      <div className={styles.Time}>00:00</div>
-      <div className={styles.Timeline}>
-        <TimelineSlider
-          min='0'
-          max={duration}
-          step='0.1'
-          value={time}
-          setValue={setTime}
-        />
-      </div>
-      <button className={styles.Volume}>
-        <div className={styles.VolumeButton}>
-          <img src={volumeSvg} alt='volume' />
-        </div>
-        <div className={styles.VolumeBar}>
-          <TimelineSlider
-            min='0'
-            max='1'
-            step='0.1'
-            value={volume}
-            setValue={setVolume}
-          />
-        </div>
-      </button>
-
+      <Time
+        duration={duration}
+        time={time}
+        setTime={setTime}
+        isPlaying={isPlaying}
+        video={video}
+      />
+      <Volume video={video} volume={volume} setVolume={setVolume} />
       <button
         className={styles.FullScreen}
-        onClick={() => fullScreenHanlder(container, setIsFullScreen)}
+        onClick={() => fullScreenHanlder(container)}
       >
         <img src={fullScreenSvg} alt='full screen' />
       </button>

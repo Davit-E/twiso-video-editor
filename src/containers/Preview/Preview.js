@@ -8,7 +8,6 @@ import CustomPlayer from '../CustomPlayer/CustomPlayer';
 
 const Preview = ({ previewUrl, setPreviewUrl, words }) => {
   const article = useMemo(() => generateText(words), [words]);
-  console.log('Rerender');
 
   return (
     <div className={styles.Preview}>

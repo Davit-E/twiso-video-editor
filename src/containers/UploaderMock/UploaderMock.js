@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import styles from './UploaderMock.module.css';
 import Navbar from '../../components/Navbar/Navbar';
-import { words } from './sampleWords/sampleWords2';
+import { words } from './sampleWords/sampleWords';
 
 const UploaderMock = ({
   setIsFinished,

@@ -20,11 +20,8 @@ const closeFullscreen = () => {
   }
 };
 
-export const fullScreenHanlder = (container, setIsFullScreen) => {
-  let data = false;
+export const fullScreenHanlder = (container) => {
   if (!document.fullscreenElement) {
     openFullScreen(container);
-    data = true;
   } else closeFullscreen();
-  setIsFullScreen(data);
 };
