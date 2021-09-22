@@ -16,6 +16,7 @@ import CustomRoute from './components/CustomRoute/CustomRoute';
 import useTrackTime from './hooks/useTrackTime';
 import useRefreshToken from './hooks/useRefreshToken';
 import setAuthToken from './utils/setAuthToken';
+import Preview from './containers/Preview/Preview';
 
 fabricConfig();
 const App = () => {
@@ -57,6 +58,13 @@ const App = () => {
               where='in the App editor route'
               allowed={userState.isAuthenticated}
               component={Editor}
+            />
+            <CustomRoute
+              path='/preview/:id'
+              redirect='/auth'
+              where='in the App preview route'
+              allowed={userState.isAuthenticated}
+              component={Preview}
             />
             <Route path='/'>
               {userState.isAuthenticated ? (

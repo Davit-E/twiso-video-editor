@@ -5,19 +5,15 @@ import VolumeSlider from './VolumeSlider/VolumeSlider';
 
 const Volume = ({ video, volume, setVolume }) => {
   const volumeRef = useRef('1');
-  const volumeLastRef = useRef('1');
 
   useEffect(() => {
-    volumeLastRef.current = video.volume;
     if (+volume !== 0) volumeRef.current = volume;
     video.volume = volume;
   }, [video, volume]);
 
   const volumeClickHandler = () => {
-    if (+volume === 0 && +volumeRef.current > 0) setVolume(volumeRef.current);
-    else if (+volume === 0 && +volumeLastRef.current !== 0) {
-      volumeRef.current = volumeLastRef.current;
-      setVolume(volumeLastRef.current);
+    if (+volume === 0 && +volumeRef.current > 0.1) {
+      setVolume(volumeRef.current);
     } else if (+volume === 0) {
       volumeRef.current = '1';
       setVolume('1');

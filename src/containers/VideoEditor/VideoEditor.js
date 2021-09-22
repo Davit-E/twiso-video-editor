@@ -6,18 +6,13 @@ import Video from '../Video/Video';
 import Navigation from '../Navigation/Navigation';
 import useEditorState from '../../hooks/useEditorState';
 import EditorContext from '../../contexts/EditorContext';
-// import Preview from '../Preview/Preview';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import useGetVideo from '../../hooks/useGetVideo';
+import Spinner from '../../components/Spinner2/Spinner';
 
-const VideoEditor = ({
-  viedoForUpload,
-  videoUrl,
-  words,
-  videoRef,
-  duration,
-  speakers,
-}) => {
+const VideoEditor = ({ viedoForUpload, speakers }) => {
   const [editorState, editorDispatch] = useEditorState();
+  const { getVideo, words, info, getVideoError } = useGetVideo();
   const [currentSelection, setCurrentSelection] = useState(null);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -30,36 +25,21 @@ const VideoEditor = ({
   const [currentSub, setCurrentSub] = useState(null);
   const [subList, setSubList] = useState(null);
   const [videoCuts, setVideoCuts] = useState([]);
-  const [previewUrl, setPreviewUrl] = useState(null);
-  const match = useRouteMatch();
   const history = useHistory();
-  const isPreviewRef = useRef(true);
-
-  // useEffect(() => {
-  //   console.log('currentSub:', currentSub);
-  // }, [currentSub]);
-
-  // useEffect(() => {
-  //   console.log('subList:', subList);
-  // }, [subList]);
-
-  // useEffect(() => {
-  //   console.log(nextCutIndex);
-  // }, [nextCutIndex]);
-
-  // useEffect(() => {
-  //   console.log(currentWordIndex);
-  // }, [currentWordIndex]);
-
-  // useEffect(() => {
-  //   videoCuts.forEach((el) => {
-  //     console.log(el);
-  //   });
-  // }, [videoCuts]);
+  const params = useParams();
+  const videoRef = useRef(null);
 
   useEffect(() => {
-    if (videoUrl) videoRef.current.src = videoUrl;
-  }, [videoUrl, videoRef]);
+    if (params && params.id) getVideo(params.id);
+  }, [params, getVideo]);
+
+  useEffect(() => {
+    if (getVideoError) history.push('/home');
+  }, [getVideoError, history]);
+
+  useEffect(() => {
+    if (info) videoRef.current.src = info.url;
+  }, [info, videoRef]);
 
   const setPlayerTime = (wordIndex) => {
     let endTime = '0';
@@ -80,100 +60,92 @@ const VideoEditor = ({
     setNextCutIndex(cutIndex);
   };
 
-  useEffect(() => {
-    if (isPreviewRef.current && previewUrl) {
-      isPreviewRef.current = false;
-      if (isPlaying && videoRef.current) videoRef.current.pause();
-      // history.push(`${match.path}/preview`);
-    }
-  }, [previewUrl, history, match.path, isPlaying, videoRef]);
+  // useEffect(() => {
+  //   if (previewUrl) {
+  //     if (isPlaying && videoRef.current) videoRef.current.pause();
+  //     // history.push(`${match.path}/preview`);
+  //   }
+  // }, [previewUrl, history, match.path, isPlaying, videoRef]);
 
   return (
     <>
       <EditorContext.Provider value={{ editorState, editorDispatch }}>
-        <Navigation
-          canvas={canvas}
-          videoRef={videoRef}
-          videoCuts={videoCuts}
-          duration={duration}
-          words={words}
-          subList={subList}
-          fabricSub={fabricSub}
-          viedoForUpload={viedoForUpload}
-          setPreviewUrl={setPreviewUrl}
-          previewUrl={previewUrl}
-          videoUrl={videoUrl}
-        />
-        <main className={styles.Main}>
-          <Transcription
-            className={styles.VideoEditor}
-            words={words}
-            currentWordIndex={currentWordIndex}
-            setCurrentWordIndex={setCurrentWordIndex}
-            isPlaying={isPlaying}
-            videoRef={videoRef}
-            setCuts={setVideoCuts}
-            currentSelection={currentSelection}
-            setCurrentSelection={setCurrentSelection}
-            setPlayerTime={setPlayerTime}
-            currentSub={currentSub}
-            setCurrentSub={setCurrentSub}
-            fabricSub={fabricSub}
-            setShouldRerenderSub={setShouldRerenderSub}
-          />
-          <Player
-            videoRef={videoRef}
-            canvas={canvas}
-            setCanvas={setCanvas}
-            isPlaying={isPlaying}
-            words={words}
-            currentTime={currentTime}
-            videoCuts={videoCuts}
-            setNextCutIndex={setNextCutIndex}
-            setCurrentWordIndex={setCurrentWordIndex}
-            nextCutIndex={nextCutIndex}
-            currentWordIndex={currentWordIndex}
-            subList={subList}
-            setSubList={setSubList}
-            fabricSub={fabricSub}
-            setFabricSub={setFabricSub}
-            currentSub={currentSub}
-            setCurrentSub={setCurrentSub}
-            videoSize={videoSize}
-            shouldRerenderSub={shouldRerenderSub}
-            setShouldRerenderSub={setShouldRerenderSub}
-            speakers={speakers}
-          />
-          <Video
-            videoRef={videoRef}
-            setIsPlaying={setIsPlaying}
-            currentSelection={currentSelection}
-            setCurrentSelection={setCurrentSelection}
-            setCurrentTime={setCurrentTime}
-            videoSize={videoSize}
-            videoCuts={videoCuts}
-            words={words}
-            setVideoSize={setVideoSize}
-            setNextCutIndex={setNextCutIndex}
-            setCurrentWordIndex={setCurrentWordIndex}
-            setCurrentSub={setCurrentSub}
-            subList={subList}
-          />
-          {/* <div className={styles.DownloadCanvas}>
-          <canvas id='downloadCanvas' />
-        </div> */}
-        </main>
-        {/* {previewUrl ? (
-          <Preview
-            previewUrl={previewUrl}
-            setPreviewUrl={setPreviewUrl}
-            words={words}
-          />
-        ) : null} */}
-        {/* <Route
-          path={`${match.path}/preview`}
-          component={() => <Preview previewUrl={previewUrl} words={words} />}
-        /> */}
+        {info ? (
+          <>
+            <Navigation
+              canvas={canvas}
+              videoRef={videoRef}
+              videoCuts={videoCuts}
+              duration={info ? info.duration : null}
+              words={words}
+              subList={subList}
+              fabricSub={fabricSub}
+              viedoForUpload={viedoForUpload}
+              videoData={info}
+            />
+            <main className={styles.Main}>
+              <Transcription
+                className={styles.VideoEditor}
+                words={words}
+                currentWordIndex={currentWordIndex}
+                setCurrentWordIndex={setCurrentWordIndex}
+                isPlaying={isPlaying}
+                videoRef={videoRef}
+                setCuts={setVideoCuts}
+                currentSelection={currentSelection}
+                setCurrentSelection={setCurrentSelection}
+                setPlayerTime={setPlayerTime}
+                currentSub={currentSub}
+                setCurrentSub={setCurrentSub}
+                fabricSub={fabricSub}
+                setShouldRerenderSub={setShouldRerenderSub}
+              />
+              <Player
+                videoRef={videoRef}
+                canvas={canvas}
+                setCanvas={setCanvas}
+                isPlaying={isPlaying}
+                words={words}
+                currentTime={currentTime}
+                videoCuts={videoCuts}
+                setNextCutIndex={setNextCutIndex}
+                setCurrentWordIndex={setCurrentWordIndex}
+                nextCutIndex={nextCutIndex}
+                currentWordIndex={currentWordIndex}
+                subList={subList}
+                setSubList={setSubList}
+                fabricSub={fabricSub}
+                setFabricSub={setFabricSub}
+                currentSub={currentSub}
+                setCurrentSub={setCurrentSub}
+                videoSize={videoSize}
+                shouldRerenderSub={shouldRerenderSub}
+                setShouldRerenderSub={setShouldRerenderSub}
+                speakers={speakers}
+              />
+              <Video
+                videoRef={videoRef}
+                setIsPlaying={setIsPlaying}
+                currentSelection={currentSelection}
+                setCurrentSelection={setCurrentSelection}
+                setCurrentTime={setCurrentTime}
+                videoSize={videoSize}
+                videoCuts={videoCuts}
+                words={words}
+                setVideoSize={setVideoSize}
+                setNextCutIndex={setNextCutIndex}
+                setCurrentWordIndex={setCurrentWordIndex}
+                setCurrentSub={setCurrentSub}
+                subList={subList}
+              />
+              {/* <div className={styles.DownloadCanvas}>
+                <canvas id='downloadCanvas' />
+              </div> */}
+            </main>
+          </>
+        ) : (
+          <Spinner style={{ width: '100px', height: '100px' }} />
+        )}
       </EditorContext.Provider>
     </>
   );

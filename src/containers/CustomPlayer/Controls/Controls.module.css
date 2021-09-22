@@ -1,12 +1,32 @@
 .Controls {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  cursor: none;
+  opacity: 0;
+  transition: opacity 0.2s ease-in;
+}
+
+.Visible {
+  opacity: 1 !important;
+  cursor: default;
+}
+
+.Hover:hover {
+  opacity: 1 !important;
+  cursor: default;
+}
+
+.ControlsPanel {
   background: #6f7bd0;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
   width: 100%;
   height: 2.5rem;
-  bottom: 0;
 }
 
 .PlayPause,

@@ -10,9 +10,8 @@ import SpeakersCanvas from '../Canvas/SpeakersCanvas/SpeakersCanvas';
 import SpeakersContext from '../../contexts/SpeakersContext';
 import useSpeakersState from '../../hooks/useSpeakersState';
 
-const SelectSpeakers = ({ videoUrl, duration, setSpeakers }) => {
+const SelectSpeakers = ({ videoData, setSpeakers }) => {
   const [speakersState, speakersDispatch] = useSpeakersState();
-  // console.log(canvasState);
   const history = useHistory();
   const [canvas, setCanvas] = useState(null);
   const [containerSize, setContainerSize] = useState(null);
@@ -54,12 +53,16 @@ const SelectSpeakers = ({ videoUrl, duration, setSpeakers }) => {
       arr.push({ x, y, w, h });
     }
     setSpeakers(arr);
-    history.push('/editor/video-editor');
+    history.push(`/editor/${videoData.id}`);
+  };
+
+  const skipHandler = () => {
+    history.push(`/editor/${videoData.id}`);
   };
 
   return (
     <>
-      <Navbar />
+      <Navbar videoData={videoData} />
       <SpeakersContext.Provider value={{ speakersState, speakersDispatch }}>
         <div className={styles.SelectSpeakers} ref={containerRef}>
           <h1 className={styles.Heading}>Select area with speakers</h1>
@@ -71,10 +74,10 @@ const SelectSpeakers = ({ videoUrl, duration, setSpeakers }) => {
             videoRef={videoRef}
             boxArr={boxArr}
             setBoxArr={setBoxArr}
-            duration={duration}
+            duration={videoData ? videoData.duration : null}
           />
           <video
-            src={videoUrl}
+            src={videoData ? videoData.url : null}
             width={videoSize ? videoSize.width : 0}
             height={videoSize ? videoSize.height : 0}
             id='video'
@@ -111,10 +114,7 @@ const SelectSpeakers = ({ videoUrl, duration, setSpeakers }) => {
             <button className={styles.Confirm} onClick={confirmHandler}>
               Confirm
             </button>
-            <button
-              className={styles.Skip}
-              onClick={() => history.push('/editor/video-editor')}
-            >
+            <button className={styles.Skip} onClick={skipHandler}>
               Skip
             </button>
           </div>

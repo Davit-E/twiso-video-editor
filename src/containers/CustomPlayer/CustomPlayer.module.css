@@ -3,6 +3,7 @@
   height: auto;
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -12,8 +13,7 @@
   height: auto;
 }
 
-/* 
-.Video::-webkit-media-controls {
+/* .Video::-webkit-media-controls {
   display:none !important;
 } */
 

@@ -22,7 +22,7 @@
   align-items: center;
   justify-content: center;
   margin-right: 0.5rem;
-  padding: 0.5rem  0.3rem;
+  padding: 0.5rem 0.3rem;
   border-radius: 3px;
   transition: background 0.1s ease-out;
 }
@@ -43,6 +43,7 @@
   margin: 0;
   font-size: 0.75rem;
   line-height: 0.9rem;
+  white-space: nowrap;
 }
 
 .Creater {
@@ -51,6 +52,22 @@
   font-weight: 500;
   line-height: 0.75rem;
   color: #b5b5b5;
+  white-space: nowrap;
+}
+
+.EditVideo {
+  margin: 0;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 13px;
+  color: #000000;
+  padding: 0.5rem;
+  border-radius: 3px;
+  transition: background 0.1s ease-out;
+}
+
+.EditVideo:hover {
+  background: rgba(111, 122, 208, 0.12);
 }
 
 .UserInfoContainer {
@@ -76,10 +93,3 @@
   line-height: 1.25rem;
   user-select: none;
 }
-
-
-
-
-
-
-

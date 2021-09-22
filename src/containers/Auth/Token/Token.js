@@ -25,7 +25,7 @@ const Token = ({ setToken }) => {
 
   return (
     <div className={styles.Token}>
-      <Spinner size={{ width: '100px', height: '100px' }} />
+      <Spinner style={{ width: '100px', height: '100px' }} />
     </div>
   );
 };

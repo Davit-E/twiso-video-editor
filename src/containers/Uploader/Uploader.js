@@ -9,27 +9,14 @@ const Uploader = ({
   viedoForUpload,
   setVideoForUpload,
   setIsFinished,
-  setVideoUrl,
-  setDuration,
-  wordsRef,
+  setVideoData,
 }) => {
   const [videoDuration, setVideoDuration] = useState(0);
-  const {
-    isUploading,
-    uploadVideo,
-    words,
-    videoUrl,
-    duration,
-    uploadProgress,
-  } = useUploadVideo();
+  const { isUploading, uploadVideo, info, uploadProgress } = useUploadVideo();
 
   useEffect(() => {
-    if (duration && videoUrl && words) {
-      setVideoUrl(videoUrl);
-      setDuration(duration);
-      wordsRef.current = [...words];
-    }
-  }, [words, duration, setVideoUrl, setDuration, wordsRef, videoUrl]);
+    if (info) setVideoData(info);
+  }, [info, setVideoData]);
 
   useEffect(() => {
     if (viedoForUpload) {
@@ -53,7 +40,7 @@ const Uploader = ({
             uploadProgress={uploadProgress}
             isUploading={isUploading}
             videoDuration={videoDuration}
-            videoUrl={videoUrl}
+            info={info}
             setIsFinished={setIsFinished}
           />
         )}

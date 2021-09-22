@@ -9,22 +9,10 @@ const CustomPlayer = ({ url }) => {
   const [time, setTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const setVideoDuration = () => {
-    setDuration(videoRef.current.duration);
-  };
-
-  const handlePause = () => {
-    setIsPlaying(false);
-  };
-  const handlePlay = () => {
-    setIsPlaying(true);
-  };
-
-  const handleEnd = () => {};
-
-  const handleTimeUpdate = () => {
-    setTime(videoRef.current.currentTime);
-  };
+  const setVideoDuration = () => setDuration(videoRef.current.duration);
+  const handleTimeUpdate = () => setTime(videoRef.current.currentTime);
+  const handlePlay = () => setIsPlaying(true);
+  const handlePause = () => setIsPlaying(false);
 
   return (
     <div className={styles.VideoContainer} ref={containerRef}>
@@ -33,12 +21,10 @@ const CustomPlayer = ({ url }) => {
         src={url}
         preload='auto'
         ref={videoRef}
-        controls
         onLoadedMetadata={setVideoDuration}
         onTimeUpdate={handleTimeUpdate}
-        onPause={handlePause}
         onPlay={handlePlay}
-        onEnded={handleEnd}
+        onPause={handlePause}
       />
       {duration ? (
         <Controls

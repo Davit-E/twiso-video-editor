@@ -5,7 +5,7 @@ const UploadProgress = ({
   uploadProgress,
   isUploading,
   videoDuration,
-  videoUrl,
+  info,
   setIsFinished,
 }) => {
   // console.log(videoDuration);
@@ -35,7 +35,7 @@ const UploadProgress = ({
 
   useEffect(() => {
     let interval = null;
-    if (videoUrl) {
+    if (info) {
       clearInterval(intervalId);
       let interval = setInterval(() => {
         setProgress((prevState) => {
@@ -49,18 +49,18 @@ const UploadProgress = ({
     return () => {
       if (interval !== null) clearInterval(interval);
     };
-  }, [videoUrl, intervalId]);
+  }, [info, intervalId]);
 
   useEffect(() => {
     let timeout = null;
-    if (progress === 100 && videoUrl) {
+    if (progress === 100 && info) {
       timeout =  setTimeout(() => setIsFinished(true), 1000);
     }
 
     return () => {
       if (timeout !== null) clearTimeout(timeout);
     };
-  }, [progress, videoUrl, setIsFinished]);
+  }, [progress, info, setIsFinished]);
 
   useEffect(() => {
     if (uploadProgress === 100 && !isUploading) progressHandler();

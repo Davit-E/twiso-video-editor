@@ -1,44 +1,99 @@
 .Project {
   box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.03);
   border-radius: 6px;
-  cursor: pointer;
   text-decoration: none;
   transition: box-shadow 0.1s ease-out;
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
   overflow: hidden;
   width: 100%;
-  padding-top: 56.25%;
   position: relative;
+}
+
+.Video {
+  object-fit: cover;
+  user-select: none;
+  background-size: cover;
+  background-position: 50%;
+  padding-top: 56.25%;
+  width: 100%;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .Project:hover {
   box-shadow: 0 0 0 1px #6f7bd0;
 }
 
+.InfoContainer {
+  position: relative;
+  width: 100%;
+  height: 2.625rem;
+}
+
 .Info {
   background: white;
   width: 100%;
-  height: 2.625rem;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-left: 0.9375rem;
-  padding-right: 1.25rem;
+  padding-right: 0.3rem;
   position: absolute;
 }
 
 .Name {
+  border: none;
+  border-radius: 5px;
+  padding: 0.2rem 0.4rem;
   margin: 0;
-  font-size: 0.625rem;
+  font-size: 0.7rem;
   line-height: 1.125rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-right: 0.4rem;
+  transition: box-shadow 0.2s ease-out;
+  font-family: inherit;
+}
+
+.Name:hover {
+  box-shadow: 0 0 0 1px #c5caec;
+}
+
+.Name:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px #9eabf5;
+  background: rgba(177, 187, 245, 0.15);
+}
+
+.DateAndTrash {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .Date {
   margin: 0;
-  font-size: 0.625rem;
-  line-height: 0.9375rem;
+  font-size: 0.7rem;
+  line-height: 1.125rem;
   color: #787878;
 }
 
+.Trash {
+  margin-left: 0.2rem;
+  width: 1.6rem;
+  height: auto;
+  user-select: none;
+  padding: 0.3rem;
+  border-radius: 3px;
+  transition: all 0.1s ease-in;
+  cursor: pointer;
+}
+
+.Trash:hover {
+  background: rgba(177, 187, 245, 0.4);
+}

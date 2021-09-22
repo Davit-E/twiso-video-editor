@@ -116,7 +116,7 @@ const SignUp = ({ authUrl, isLoading, setIsLoading, checkTokenValidity }) => {
   );
 
   if (isLoading)
-    signUpContent = <Spinner size={{ width: '100px', height: '100px' }} />;
+    signUpContent = <Spinner style={{ width: '100px', height: '100px' }} />;
 
   return !isSent ? signUpContent : <CheckMail />;
 };

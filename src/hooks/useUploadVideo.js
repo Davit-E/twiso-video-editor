@@ -3,8 +3,7 @@ import axios from '../axios-instance';
 
 const useUploadVideo = () => {
   const [isUploading, setIsUploading] = useState(false);
-  const [duration, setDuration] = useState(null);
-  const [videoUrl, setVideoUrl] = useState(null);
+  const [info, setInfo] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const words = useRef(null);
   const isMounted = useRef(false);
@@ -44,8 +43,12 @@ const useUploadVideo = () => {
         console.log(res);
         if (isMounted.current) {
           words.current = res.data.subtitles.captions;
-          setDuration(res.data.duration);
-          setVideoUrl(res.data.original_video_url);
+          setInfo({
+            id: res.data._id,
+            duration: res.data.duration,
+            url: res.data.original_video_url,
+            title: res.data.title
+          })
         }
       } catch (err) {
         console.log('Error Uploading Video', err);
@@ -65,8 +68,7 @@ const useUploadVideo = () => {
     isUploading,
     uploadVideo,
     words: words.current,
-    duration,
-    videoUrl,
+    info,
     uploadProgress,
   };
 };

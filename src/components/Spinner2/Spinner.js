@@ -1,9 +1,9 @@
 import React from 'react';
 import './Spinner.css';
 
-const spinner = ({size}) => {
+const spinner = ({style}) => {
   return (
-    <div className='sk-circle' style={size}>
+    <div className='sk-circle' style={style}>
       <div className='sk-circle1 sk-child'></div>
       <div className='sk-circle2 sk-child'></div>
       <div className='sk-circle3 sk-child'></div>

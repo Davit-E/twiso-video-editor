@@ -12,6 +12,7 @@ import { prepareBreaks, prepareSubs } from './utils/prepareBreaksAndSubs';
 import useDownloadVideo from '../../hooks/useDownloadVideo';
 import DesignControls from './DesignControls/DesignControls';
 import Navbar from '../../components/Navbar/Navbar';
+import { useHistory } from 'react-router-dom';
 
 const Navigation = ({
   canvas,
@@ -22,7 +23,7 @@ const Navigation = ({
   fabricSub,
   viedoForUpload,
   setPreviewUrl,
-  videoUrl
+  videoData,
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const { isDownloading, downloadVideo, downloadedVideo, setDownloadedVideo } =
@@ -35,18 +36,16 @@ const Navigation = ({
   const [subs, setSubs] = useState(null);
   const downloadRef = useRef(null);
   const isMounted = useRef(false);
+  const history = useHistory();
   // const uploadRef = useRef(null);
-
   useEffect(() => {
     isMounted.current = true;
     return () => (isMounted.current = false);
   }, []);
 
-  // useEffect(() => {
-  //   if (downloadedVideo) {
-  //     setPreviewUrl(downloadedVideo);
-  //   }
-  // }, [downloadedVideo, setPreviewUrl]);
+  useEffect(() => {
+    if (downloadedVideo) history.push(`/preview/${videoData.id}`);
+  }, [downloadedVideo, history, videoData]);
 
   const closeHandler = (e) => {
     setDownloadedVideo(null);
@@ -98,15 +97,16 @@ const Navigation = ({
     }
   };
 
-  const downloadClickHandler2 = () => {
-    setPreviewUrl(videoUrl);
-  };
+  // const downloadClickHandler2 = () => {
+  //   setPreviewUrl(videoData.url);
+  // };
 
   const prepareData = useCallback(
-    (backImg, frontImg, videoData, breaksData, subsData) => {
+    (backImg, frontImg, videoData, breaksData, subsData, id) => {
       let elements = [{ ...backImg }];
       if (frontImg) elements.push({ ...frontImg });
       let data = {
+        id,
         video: { ...videoData },
         elements,
         breaks: [...breaksData],
@@ -127,12 +127,12 @@ const Navigation = ({
 
   useEffect(() => {
     if (backImage && frontImage !== null && videoInfo && breaks && subs) {
-      prepareData(backImage, frontImage, videoInfo, breaks, subs);
+      prepareData(backImage, frontImage, videoInfo, breaks, subs, videoData.id);
     }
-  }, [backImage, frontImage, videoInfo, prepareData, breaks, subs]);
+  }, [backImage, frontImage, videoInfo, prepareData, breaks, subs, videoData]);
 
   return (
-    <Navbar>
+    <Navbar videoData={videoData}>
       <div className={styles.Navigation}>
         {canvas ? (
           <>
@@ -147,10 +147,10 @@ const Navigation = ({
           </>
         ) : null}
 
-        <a className={styles.DownloadLink} ref={downloadRef} href='/'>
+        {/* <a className={styles.DownloadLink} ref={downloadRef} href='/'>
           Download
-        </a>
-        {downloadedVideo ? (
+        </a> */}
+        {/* {downloadedVideo ? (
           <div className={styles.DownloadVideoContainer}>
             <h2 className={styles.Close} onClick={closeHandler}>
               Close
@@ -169,7 +169,7 @@ const Navigation = ({
               controls
             />
           </div>
-        ) : null}
+        ) : null} */}
       </div>
     </Navbar>
   );

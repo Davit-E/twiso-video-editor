@@ -3,7 +3,7 @@
   align-items: center;
   background: #ffffff;
   box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
+  border-radius: 30px;
   width: auto;
   height: 2.5rem;
   position: absolute;
@@ -23,6 +23,7 @@
   height: auto;
   user-select: none;
 }
+
 .TemplatesContainer,
 .ResizeContainer,
 .ColorContainer {
@@ -49,10 +50,14 @@
 .TemplatesContainer {
   padding-left: 1rem;
   padding-right: 0.75rem;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
 }
 .ColorContainer {
   padding-right: 1rem;
   padding-left: 0.75rem;
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
 }
 
 .OptionText {

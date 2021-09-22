@@ -8,7 +8,12 @@ const toBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-const getVideoData = async (canvas, setVideoInfo, viedoForUpload, isMounted) => {
+const getVideoData = async (
+  canvas,
+  setVideoInfo,
+  viedoForUpload,
+  isMounted
+) => {
   let objects = canvas.getObjects();
   let video = null;
   let videoIndex = 0;
@@ -21,19 +26,25 @@ const getVideoData = async (canvas, setVideoInfo, viedoForUpload, isMounted) => 
     }
   }
 
-  let base64Video = await toBase64(viedoForUpload);
+  let base64Video = null;
+  if (viedoForUpload) base64Video = await toBase64(viedoForUpload);
   let info = {
     source: base64Video,
-    position: {
-      x: video.left,
-      y: video.top,
-      w: video.width * video.scaleX,
-      h: video.height * video.scaleY,
-      z: 1,
-      degrees: 0,
-    },
+    coordinates: [
+      {
+        type: 'resize',
+        position: {
+          x: video.left,
+          y: video.top,
+          w: video.width * video.scaleX,
+          h: video.height * video.scaleY,
+          z: 1,
+          degrees: 0,
+        },
+      },
+    ],
   };
-  if(isMounted.current) setVideoInfo(info);
+  if (isMounted.current) setVideoInfo(info);
   return videoIndex;
 };
 
@@ -98,7 +109,12 @@ export const prepareCanvas = async (
   viedoForUpload,
   isMounted
 ) => {
-  let videoIndex = await getVideoData(canvas, setVideoInfo, viedoForUpload, isMounted);
+  let videoIndex = await getVideoData(
+    canvas,
+    setVideoInfo,
+    viedoForUpload,
+    isMounted
+  );
   let newCanvas = new fabric.Canvas();
   let jsonCanvas = JSON.stringify(canvas);
   newCanvas.loadFromJSON(jsonCanvas, () => {

@@ -1,15 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styles from './Projects.module.css';
 import { Link } from 'react-router-dom';
 import Project from './Project/Project';
-// import useGetVideos from '../../../hooks/useGetVideos';
-const Projects = () => {
-  // const { downloadVideos } = useGetVideos();
+import Spinner from '../../../components/Spinner2/Spinner';
 
-  // useEffect(() => {
-  //   downloadVideos()
-  // }, [downloadVideos])
-
+const Projects = ({ videos, setShouldFetch, shouldFetch }) => {
   return (
     <div className={styles.Projects}>
       <h2 className={styles.Heading}>My projects</h2>
@@ -24,18 +19,22 @@ const Projects = () => {
             </div>
           </Link>
         </div>
-        <div className={styles.ProjectContainer}>
-          <Project color='#eabd4b' name='Name' date='12.02.2021' />
-        </div>
-        <div className={styles.ProjectContainer}>
-          <Project color='#6F7BD0' name='Name' date='12.02.2021' />
-        </div>
-        <div className={styles.ProjectContainer}>
-          <Project color='#DF7C6E' name='Name' date='12.02.2021' />
-        </div>
-        <div className={styles.ProjectContainer}>
-          <Project color='#eabd4b' name='Name' date='12.02.2021' />
-        </div>
+
+        {videos ? (
+          videos.map((video) => {
+            return (
+              <div className={styles.ProjectContainer} key={video._id}>
+                <Project
+                  video={video}
+                  setShouldFetch={setShouldFetch}
+                  shouldFetch={shouldFetch}
+                />
+              </div>
+            );
+          })
+        ) : (
+          <Spinner style={{ width: '60px', height: '60px' }} />
+        )}
       </div>
     </div>
   );
