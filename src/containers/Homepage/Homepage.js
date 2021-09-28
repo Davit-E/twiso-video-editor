@@ -31,7 +31,6 @@ const Homepage = () => {
           <Route exact path={`${match.path}/projects`}>
             <Projects
               videos={videos}
-              shouldFetch={shouldFetchVideos}
               setShouldFetch={setShouldFetchVideos}
             />
           </Route>

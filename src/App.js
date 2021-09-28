@@ -5,7 +5,8 @@ import Auth from './containers/Auth/Auth';
 import Homepage from './containers/Homepage/Homepage';
 import UserContext from './contexts/UserContext';
 import useUserState from './hooks/useUserState';
-import fabricConfig from './fabricConfig';
+import './fabricConfig/fabricConfig';
+
 import {
   HashRouter as Router,
   Route,
@@ -18,7 +19,6 @@ import useRefreshToken from './hooks/useRefreshToken';
 import setAuthToken from './utils/setAuthToken';
 import Preview from './containers/Preview/Preview';
 
-fabricConfig();
 const App = () => {
   const [userState, userDispatch] = useUserState();
   const { refreshToken, newToken, refreshError } = useRefreshToken();

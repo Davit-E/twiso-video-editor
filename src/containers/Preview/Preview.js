@@ -29,7 +29,7 @@ const Preview = () => {
   }, [words]);
 
   const downloadVideoHandler = () => {
-    // videoDownloadRef.current.click();
+    videoDownloadRef.current.click();
   };
 
   return (
@@ -44,8 +44,7 @@ const Preview = () => {
                 <a
                   ref={videoDownloadRef}
                   style={{ display: 'none' }}
-                  download={`${info.title}.mp4`}
-                  href={info.finalUrl}
+                  href={`${process.env.REACT_APP_API_BASE_URL_TEST}/api/v1/public/videos/download/${info.id}`}
                 >
                   Download Video
                 </a>
@@ -55,7 +54,6 @@ const Preview = () => {
                 <div className={styles.DownloadAndLink}>
                   <button
                     className={styles.Download}
-                    // onClick={() => downloadVideo(info.finalUrl, info.title)}
                     onClick={downloadVideoHandler}
                   >
                     Download

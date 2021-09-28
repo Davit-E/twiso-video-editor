@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { handlePaste } from '../utils/pasteObject';
 
 const deleteHandler = (canvas) => {
@@ -8,7 +8,7 @@ const deleteHandler = (canvas) => {
     !isInput &&
     active &&
     !active.isEditing &&
-    active.type !== 'video' &&
+    // active.type !== 'video' &&
     active.id !== 'subtitle'
   ) {
     canvas.remove(active);
@@ -84,6 +84,7 @@ const useKeyEvents = (
   const [isBringToFront, setIsBringToFront] = useState(false);
   const [isSendToBack, setIsSendToBack] = useState(false);
   const [shouldRun, setShouldRun] = useState(true);
+  
   useEffect(() => {
     if (shouldRun && isPasting && clipboard) {
       setShouldRun(false);
@@ -131,32 +132,36 @@ const useKeyEvents = (
     fabricSub,
   ]);
 
-  useEffect(() => {
-    document.addEventListener('keydown', (e) =>
-      keyDownHandler(
-        e,
-        canvas,
-        setIsPasting,
-        setIsCopying,
-        setIsBringToFront,
-        setIsSendToBack
-      )
+  const onKeyDown = useCallback((e) => {
+    keyDownHandler(
+      e,
+      canvas,
+      setIsPasting,
+      setIsCopying,
+      setIsBringToFront,
+      setIsSendToBack
     );
-    document.addEventListener('keyup', (e) => {
-      keyUpHandler(
-        setIsPasting,
-        setIsCopying,
-        setIsBringToFront,
-        setIsSendToBack,
-        setShouldRun
-      );
-    });
+  }, [canvas]);
+
+  const onKeyUp = useCallback((e) => {
+    keyUpHandler(
+      setIsPasting,
+      setIsCopying,
+      setIsBringToFront,
+      setIsSendToBack,
+      setShouldRun
+    );
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('keyup', onKeyUp);
 
     return () => {
-      document.removeEventListener('keydown', keyDownHandler);
-      document.removeEventListener('keyup', keyUpHandler);
+      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('keyup', onKeyUp);
     };
-  }, [canvas]);
+  }, [onKeyDown, onKeyUp]);
 };
 
 export default useKeyEvents;

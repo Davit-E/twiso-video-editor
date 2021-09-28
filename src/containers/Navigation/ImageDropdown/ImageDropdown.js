@@ -1,33 +1,41 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
 import styles from './ImageDropdown.module.css';
 import EditorContext from '../../../contexts/EditorContext';
+import useUploadAsset from '../../../hooks/useUploadAsset';
+import Spinner from '../../../components/Spinner2/Spinner';
 
-const ImageDropdown = ({ setUserFiles, userFiles }) => {
-  const {  editorDispatch } = useContext(EditorContext);
+const ImageDropdown = ({ assets, setAssets, setShouldFetch, isFirstMount }) => {
+  const { editorDispatch } = useContext(EditorContext);
+  const { isUploadingAsset, uploadAsset, uploadResponse } = useUploadAsset();
   const fileInput = useRef(null);
-  const clickHandler = (e) => {
-    let type = 'setImageToAdd';
-    let imageType = 'image';
-    if (e.target.classList.contains('isSvg')) imageType = 'svg';
-    if (e.target.tagName === 'IMG') {
-      editorDispatch({ type, data: { type: imageType, src: e.target.src } });
-    } else if (e.target.classList.contains(styles.ImageContainer)) {
-      editorDispatch({
-        type,
-        data: { type: imageType, src: e.target.childNodes[0].src },
-      });
+
+  useEffect(() => {
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      setShouldFetch(true);
     }
+  }, [setShouldFetch, isFirstMount]);
+
+  useEffect(() => {
+    if (uploadResponse && uploadResponse !== 'error') {
+      setAssets((prevState) => [...prevState, uploadResponse.image]);
+    }
+  }, [uploadResponse, setAssets]);
+
+  const clickHandler = (e) => {
+    let imageType = 'image';
+    let src = e.currentTarget.src;
+    let splitSrc = src.split('.');
+    if (splitSrc[splitSrc.length - 1] === 'svg') imageType = 'svg';
+    editorDispatch({ type: 'setImageToAdd', data: { type: imageType, src } });
   };
 
   const inputChangeHandler = () => {
     if (fileInput.current.files[0]) {
       let file = fileInput.current.files[0];
-      let type = 'image';
-      if (file.type === 'image/svg+xml') type = 'svg';
-      setUserFiles((prevSate) => [
-        { src: URL.createObjectURL(file), type },
-        ...prevSate,
-      ]);
+      let formData = new FormData();
+      formData.append('image', file);
+      uploadAsset(formData);
     }
   };
 
@@ -35,11 +43,44 @@ const ImageDropdown = ({ setUserFiles, userFiles }) => {
     fileInput.current.click();
   };
 
-  const oddArr = userFiles.filter((_, i) => (i + 1) % 2 !== 0);
-  const evenArr = userFiles.filter((_, i) => (i + 1) % 2 === 0);
+  const oddArr = assets ? assets.filter((_, i) => (i + 1) % 2 !== 0) : null;
+  const evenArr = assets ? assets.filter((_, i) => (i + 1) % 2 === 0) : null;
+
+  let assetsContent = assets ? (
+    <div className={styles.Images}>
+      <div className={styles.Column}>
+        {oddArr.map((el, i) => {
+          return (
+            <div key={el._id} className={styles.ImageContainer}>
+              <img
+                className={styles.Image}
+                src={el.image_url}
+                alt='asset'
+                onClick={clickHandler}
+              />
+            </div>
+          );
+        })}
+      </div>
+      <div className={styles.Column}>
+        {evenArr.map((el, i) => {
+          return (
+            <div key={el._id} className={styles.ImageContainer}>
+              <img
+                className={styles.Image}
+                src={el.image_url}
+                alt='asset'
+                onClick={clickHandler}
+              />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  ) : null;
 
   return (
-    <div className={styles.Dropdown} onClick={clickHandler}>
+    <div className={styles.Dropdown}>
       <div className={styles.UplaodButtonContainer}>
         <button onClick={uploadClickHandler} className={styles.UploadButton}>
           Upload image
@@ -51,54 +92,23 @@ const ImageDropdown = ({ setUserFiles, userFiles }) => {
           type='file'
           onChange={inputChangeHandler}
         />
+        {isUploadingAsset ? (
+          <Spinner
+            style={{
+              width: '25px',
+              height: '25px',
+              margin: '25px auto',
+              position: 'absolute',
+              right: '20px',
+            }}
+          />
+        ) : null}
       </div>
-
-      <div className={styles.Images}>
-        <div className={styles.Column}>
-          {oddArr.map((el, i) => {
-            return (
-              <div
-                key={'odd' + i}
-                className={[
-                  styles.ImageContainer,
-                  el.type === 'svg' ? 'isSvg' : null,
-                ].join(' ')}
-              >
-                <img
-                  className={[
-                    styles.Image,
-                    el.type === 'svg' ? 'isSvg' : null,
-                  ].join(' ')}
-                  src={el.src}
-                  alt='asset'
-                />
-              </div>
-            );
-          })}
-        </div>
-        <div className={styles.Column}>
-          {evenArr.map((el, i) => {
-            return (
-              <div
-                key={'even' + i}
-                className={[
-                  styles.ImageContainer,
-                  el.type === 'svg' ? 'isSvg' : null,
-                ].join(' ')}
-              >
-                <img
-                  className={[
-                    styles.Image,
-                    el.type === 'svg' ? 'isSvg' : null,
-                  ].join(' ')}
-                  src={el.src}
-                  alt='asset'
-                />
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      {!assets ? (
+        <Spinner style={{ width: '50px', height: '50px' }} />
+      ) : (
+        assetsContent
+      )}
     </div>
   );
 };

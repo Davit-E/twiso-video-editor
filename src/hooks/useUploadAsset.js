@@ -1,15 +1,15 @@
 import { useCallback, useState, useEffect, useRef } from 'react';
 import axios from '../axios-instance';
 
-const useUpdateTitle = () => {
-  const [isUpdatingTitle, setIsUpdatingTitle] = useState(false);
+const useUploadAsset = () => {
+  const [isUploadingAsset, setIsUploadingAsset] = useState(false);
   const [uploadResponse, setUploadResponse] = useState(null);
   const isMounted = useRef(false);
 
-  const axiosUpdateTitle = useCallback((data) => {
+  const axiosUploadAsset = useCallback((formData) => {
     return new Promise((resolve, reject) => {
       axios
-        .put('/videos', data)
+        .post('/images', formData)
         .then((res) => {
           resolve(res);
         })
@@ -19,23 +19,23 @@ const useUpdateTitle = () => {
     });
   }, []);
 
-  const updateTitle = useCallback(
-    async (data) => {
+  const uploadAsset = useCallback(
+    async (formData) => {
       setUploadResponse(null);
-      setIsUpdatingTitle(true);
+      setIsUploadingAsset(true);
       try {
-        const res = await axiosUpdateTitle(data);
+        const res = await axiosUploadAsset(formData);
         if (isMounted.current) setUploadResponse(res.data);
         console.log(res);
       } catch (uploadError) {
-        console.log('Error Downloading Videos', uploadError);
+        console.log('Error Uploading Asset', uploadError);
         if (isMounted.current) setUploadResponse('error');
       } finally {
-        if (isMounted.current) setIsUpdatingTitle(false);
+        if (isMounted.current) setIsUploadingAsset(false);
         return;
       }
     },
-    [axiosUpdateTitle]
+    [axiosUploadAsset]
   );
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const useUpdateTitle = () => {
     return () => (isMounted.current = false);
   }, []);
 
-  return { isUpdatingTitle, updateTitle, uploadResponse };
+  return { isUploadingAsset, uploadAsset, uploadResponse };
 };
 
-export default useUpdateTitle;
+export default useUploadAsset;

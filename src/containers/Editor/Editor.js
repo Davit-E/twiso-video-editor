@@ -1,11 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import styles from './Editor.module.css';
 import Uploader from '../Uploader/Uploader';
 import VideoEditor from '../VideoEditor/VideoEditor';
 import { useRouteMatch, Switch, Redirect } from 'react-router-dom';
 import CustomRoute from '../../components/CustomRoute/CustomRoute';
 import SelectSpeakers from '../SelectSpeakers/SelectSpeakers';
-import UploaderMock from '../UploaderMock/UploaderMock';
+// import UploaderMock from '../UploaderMock/UploaderMock';
 
 const Editor = () => {
   const [viedoForUpload, setVideoForUpload] = useState(null);
@@ -13,6 +13,7 @@ const Editor = () => {
   const [videoData, setVideoData] = useState(null);
   const [speakers, setSpeakers] = useState([]);
   const match = useRouteMatch();
+  const words = useRef(null);
 
   const clearState = useCallback(() => {
     setIsFinishedTranscribing(false);
@@ -38,6 +39,7 @@ const Editor = () => {
           setIsFinished={setIsFinishedTranscribing}
           setVideoData={setVideoData}
           clearState={clearState}
+          wordsRef={words}
         />
         <CustomRoute
           path={`${match.path}/speakers`}
@@ -54,9 +56,18 @@ const Editor = () => {
           where='in the Editor project id route'
           allowed={true}
           component={VideoEditor}
-          viedoForUpload={viedoForUpload}
           speakers={speakers}
         />
+        {/* <CustomRoute
+          path={`${match.path}/video-editor`}
+          redirect={`${match.path}/new`}
+          where='in the Editor video-editor route'
+          allowed={isFinishedTranscribing}
+          component={VideoEditor}
+          words={words.current}
+          info={videoData}
+          speakers={speakers}
+        /> */}
         <Redirect to={`${match.path}/new`} />
       </Switch>
     </div>

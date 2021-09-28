@@ -20,14 +20,39 @@ const Transcription = ({
   setCuts,
   currentSelection,
   setCurrentSelection,
-  setPlayerTime,
   currentSub,
   fabricSub,
   setShouldRerenderSub,
+  setCurrentTime,
+  setNextCutIndex,
+  videoCuts,
+  triggerWordsUpdate,
 }) => {
   const [searchInput, setSearchInput] = useState('');
   const [inputIndex, setInputIndex] = useState(null);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
+
+  const setPlayerTime = useCallback(
+    (wordIndex) => {
+      let endTime = '0';
+      if (wordIndex !== null) {
+        let word = words[wordIndex];
+        endTime = word.end;
+        videoRef.current.currentTime = +word.start;
+        setCurrentTime(+word.start);
+        // console.log('seting player time: ', +word.start);
+      }
+      let cutIndex = 0;
+      for (let i = 0; i < videoCuts.length; i++) {
+        let cut = videoCuts[i];
+        if (+endTime > +cut.end) {
+          cutIndex++;
+        }
+      }
+      setNextCutIndex(cutIndex);
+    },
+    [setCurrentTime, setNextCutIndex, videoCuts, videoRef, words]
+  );
 
   useEffect(() => {
     if (isFirstLoad) {
@@ -203,6 +228,7 @@ const Transcription = ({
             fabricSub={fabricSub}
             currentSub={currentSub}
             setShouldRerenderSub={setShouldRerenderSub}
+            triggerWordsUpdate={triggerWordsUpdate}
           />
         ) : null}
       </div>

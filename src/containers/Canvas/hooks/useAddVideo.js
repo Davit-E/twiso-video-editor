@@ -18,7 +18,8 @@ const useAddVideo = (
     // console.log('canceling', frameRef.current);
     fabric.util.cancelAnimFrame(frameRef.current);
     frameRef.current = null;
-  }, []);
+    if (canvas) canvas.requestRenderAll();
+  }, [canvas]);
 
   const animate = useCallback(() => {
     const render = () => {
@@ -33,7 +34,7 @@ const useAddVideo = (
     let fabricVideo = new fabric.Video(video, {
       top: 0,
       left: 0,
-      excludeFromExport: true,
+      // excludeFromExport: true,
       lockScalingFlip: true,
     });
     if (speaker) {

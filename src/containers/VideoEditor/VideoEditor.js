@@ -9,10 +9,13 @@ import EditorContext from '../../contexts/EditorContext';
 import { useHistory, useParams } from 'react-router-dom';
 import useGetVideo from '../../hooks/useGetVideo';
 import Spinner from '../../components/Spinner2/Spinner';
+import { useCallback } from 'react/cjs/react.development';
+import useUpdateProject from '../../hooks/useUpdateProject';
 
-const VideoEditor = ({ viedoForUpload, speakers }) => {
+const VideoEditor = ({ speakers }) => {
   const [editorState, editorDispatch] = useEditorState();
   const { getVideo, words, info, getVideoError } = useGetVideo();
+  const { isUpdatingProject, updateProject } = useUpdateProject();
   const [currentSelection, setCurrentSelection] = useState(null);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -28,6 +31,14 @@ const VideoEditor = ({ viedoForUpload, speakers }) => {
   const history = useHistory();
   const params = useParams();
   const videoRef = useRef(null);
+  const updateTimerRef = useRef(null);
+  const isFirstLoad = useRef(true);
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => (isMounted.current = false);
+  }, []);
 
   useEffect(() => {
     if (params && params.id) getVideo(params.id);
@@ -37,35 +48,26 @@ const VideoEditor = ({ viedoForUpload, speakers }) => {
     if (getVideoError) history.push('/home');
   }, [getVideoError, history]);
 
-  useEffect(() => {
-    if (info) videoRef.current.src = info.url;
-  }, [info, videoRef]);
-
-  const setPlayerTime = (wordIndex) => {
-    let endTime = '0';
-    if (wordIndex !== null) {
-      let word = words[wordIndex];
-      endTime = word.end;
-      videoRef.current.currentTime = +word.start;
-      setCurrentTime(+word.start);
-      // console.log('seting player time: ', +word.start);
-    }
-    let cutIndex = 0;
-    for (let i = 0; i < videoCuts.length; i++) {
-      let cut = videoCuts[i];
-      if (+endTime > +cut.end) {
-        cutIndex++;
+  const triggerWordsUpdate = useCallback(() => {
+    if (updateTimerRef.current) clearTimeout(updateTimerRef.current);
+    let timeout = setTimeout(() => {
+      if (isMounted.current) {
+        updateProject({
+          id: info.id,
+          transcription: [...words],
+        });
       }
-    }
-    setNextCutIndex(cutIndex);
-  };
+    }, 2000);
+    updateTimerRef.current = timeout;
+  }, [updateProject, info, words]);
 
-  // useEffect(() => {
-  //   if (previewUrl) {
-  //     if (isPlaying && videoRef.current) videoRef.current.pause();
-  //     // history.push(`${match.path}/preview`);
-  //   }
-  // }, [previewUrl, history, match.path, isPlaying, videoRef]);
+  useEffect(() => {
+    if (isFirstLoad.current) {
+      setTimeout(() => {
+        if (isMounted.current) isFirstLoad.current = false;
+      }, 1000);
+    } else triggerWordsUpdate();
+  }, [videoCuts, triggerWordsUpdate]);
 
   return (
     <>
@@ -80,8 +82,8 @@ const VideoEditor = ({ viedoForUpload, speakers }) => {
               words={words}
               subList={subList}
               fabricSub={fabricSub}
-              viedoForUpload={viedoForUpload}
               videoData={info}
+              isUpdatingProject={isUpdatingProject}
             />
             <main className={styles.Main}>
               <Transcription
@@ -94,11 +96,14 @@ const VideoEditor = ({ viedoForUpload, speakers }) => {
                 setCuts={setVideoCuts}
                 currentSelection={currentSelection}
                 setCurrentSelection={setCurrentSelection}
-                setPlayerTime={setPlayerTime}
                 currentSub={currentSub}
                 setCurrentSub={setCurrentSub}
                 fabricSub={fabricSub}
                 setShouldRerenderSub={setShouldRerenderSub}
+                setCurrentTime={setCurrentTime}
+                setNextCutIndex={setNextCutIndex}
+                videoCuts={videoCuts}
+                triggerWordsUpdate={triggerWordsUpdate}
               />
               <Player
                 videoRef={videoRef}
@@ -137,6 +142,7 @@ const VideoEditor = ({ viedoForUpload, speakers }) => {
                 setCurrentWordIndex={setCurrentWordIndex}
                 setCurrentSub={setCurrentSub}
                 subList={subList}
+                info={info}
               />
               {/* <div className={styles.DownloadCanvas}>
                 <canvas id='downloadCanvas' />

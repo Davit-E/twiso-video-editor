@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Project.module.css';
-import useUpdateTitle from '../../../../hooks/useUpdateTitle';
+import useUpdateProject from '../../../../hooks/useUpdateProject';
 import Spinner from '../../../../components/Spinner2/Spinner';
 import { Link } from 'react-router-dom';
 import trash from '../../../../assets/preview/trash.svg';
@@ -8,7 +8,7 @@ import useDeleteVideo from '../../../../hooks/useDeleteVideo';
 
 const Project = ({ video, setShouldFetch }) => {
   const [input, setInput] = useState(video.title || '');
-  const { isUpdatingTitle, updateTitle, uploadResponse } = useUpdateTitle();
+  const { isUpdatingProject, updateProject, updateResponse } = useUpdateProject();
   const { isDeletingVideo, deleteVideoResponse, deleteVideo } =
     useDeleteVideo();
 
@@ -26,7 +26,7 @@ const Project = ({ video, setShouldFetch }) => {
   const blurHandler = (e) => {
     let value = e.target.value.trim();
     if (value.length > 0 && value !== video.title) {
-      updateTitle({
+      updateProject({
         id: video._id,
         title: value,
       });
@@ -39,10 +39,10 @@ const Project = ({ video, setShouldFetch }) => {
   };
 
   useEffect(() => {
-    if (uploadResponse && typeof uploadResponse !== 'string') {
-      video.title = uploadResponse.title;
-    } else if (uploadResponse === 'error') setInput(video.title);
-  }, [uploadResponse, video]);
+    if (updateResponse && typeof updateResponse !== 'string') {
+      video.title = updateResponse.title;
+    } else if (updateResponse === 'error') setInput(video.title);
+  }, [updateResponse, video]);
 
   useEffect(() => {
     if (deleteVideoResponse === 'success') {
@@ -60,7 +60,7 @@ const Project = ({ video, setShouldFetch }) => {
 
       <div className={styles.InfoContainer}>
         <div className={styles.Info}>
-          {isUpdatingTitle ? (
+          {isUpdatingProject ? (
             <Spinner
               style={{ width: '20px', height: '20px', margin: 'auto 0' }}
             />

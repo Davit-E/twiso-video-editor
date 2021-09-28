@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './Words.module.css';
 import restoreText from '../../../assets/editor/restoreText.svg';
+
 const Words = ({
   wordsArr,
   currentWordIndex,
@@ -12,6 +13,7 @@ const Words = ({
   fabricSub,
   currentSub,
   setShouldRerenderSub,
+  triggerWordsUpdate,
 }) => {
   const [input, setInput] = useState('');
   const inputRef = useRef(null);
@@ -100,6 +102,7 @@ const Words = ({
     }
     setInput('');
     setInputIndex(null);
+    triggerWordsUpdate();
   };
 
   let isLastDeleted = false;
@@ -119,8 +122,7 @@ const Words = ({
   return wordsArr.map((word, i) => {
     if (isLastDeleted && !word.active) shouldShow = false;
     else shouldShow = true;
-    let isCurrent =
-      i === currentWordIndex && !currentSelection && word.active;
+    let isCurrent = i === currentWordIndex && !currentSelection && word.active;
     let isHighlight =
       !word.silence &&
       word.active &&

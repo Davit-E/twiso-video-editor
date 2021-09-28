@@ -87,7 +87,7 @@
 .ImageDropdown {
   position: absolute;
   width: 28.75rem;
-  height: 25.3rem;
+  height: auto;
   top: 3.3rem;
   right: -10.4rem;
   display: flex;

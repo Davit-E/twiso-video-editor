@@ -11,7 +11,9 @@ const addCanvas = (state, id) => {
     stopContextMenu: true,
     selection: false,
   });
-
+  // let storageCanvas = localStorage.getItem('canvas');
+  // if(storageCanvas) canvas.loadFromJSON(storageCanvas);
+  // console.log(storageCanvas);
   let ratio = Math.min(
     state.width / state.initialWidth,
     state.height / state.initialHeight

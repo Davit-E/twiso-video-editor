@@ -13,6 +13,7 @@ import useDownloadVideo from '../../hooks/useDownloadVideo';
 import DesignControls from './DesignControls/DesignControls';
 import Navbar from '../../components/Navbar/Navbar';
 import { useHistory } from 'react-router-dom';
+import Spinner from '../../components/Spinner2/Spinner';
 
 const Navigation = ({
   canvas,
@@ -21,27 +22,21 @@ const Navigation = ({
   duration,
   subList,
   fabricSub,
-  viedoForUpload,
   setPreviewUrl,
   videoData,
+  isUpdatingProject,
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const { isDownloading, downloadVideo, downloadedVideo, setDownloadedVideo } =
     useDownloadVideo();
   const [downloadData, setDownloadData] = useState(null);
-  const [backImage, setBackImage] = useState(null);
-  const [frontImage, setFrontImage] = useState(null);
+  const [elements, setElements] = useState(null);
   const [videoInfo, setVideoInfo] = useState(null);
   const [breaks, setBreaks] = useState(null);
   const [subs, setSubs] = useState(null);
   const downloadRef = useRef(null);
-  const isMounted = useRef(false);
   const history = useHistory();
   // const uploadRef = useRef(null);
-  useEffect(() => {
-    isMounted.current = true;
-    return () => (isMounted.current = false);
-  }, []);
 
   useEffect(() => {
     if (downloadedVideo) history.push(`/preview/${videoData.id}`);
@@ -58,42 +53,30 @@ const Navigation = ({
     }
   }, [downloadData, downloadVideo]);
 
-  // const imageDownloadHandler = useCallback((back, front) => {
-  //   downloadRef.current.href = back;
-  //   downloadRef.current.download = 'design.png';
-  //   downloadRef.current.click();
-  //   if (front) {
-  //     downloadRef.current.href = front;
-  //     downloadRef.current.download = 'design2.png';
+  // const imageDownloadHandler = useCallback((elArr) => {
+  //   for (let i = 0; i < elArr.length; i++) {
+  //     let el = elArr[i];
+  //     downloadRef.current.href = el.image;
+  //     downloadRef.current.download = `design${i + 1}.png`;
   //     downloadRef.current.click();
-  //     setBackImage(null);
-  //     setFrontImage(null);
   //   }
+  //   setElements(null);
   // }, []);
 
   // useEffect(() => {
-  //   if (backImage && frontImage !== null) {
-  //     imageDownloadHandler(backImage, frontImage);
-  //   }
-  // }, [backImage, frontImage, imageDownloadHandler]);
+  //   if (elements) imageDownloadHandler(elements);
+  // }, [elements, imageDownloadHandler]);
 
   const downloadClickHandler = () => {
     if (editorState.isCropMode) {
       editorDispatch({ type: 'setIsCropMode', data: false });
-    } else if (canvas) {
+    } else if (canvas && !isDownloading && !isUpdatingProject) {
       videoRef.current.pause();
       prepareBreaks(videoCuts, duration, setBreaks);
       if (fabricSub && subList) {
         prepareSubs(subList, fabricSub, editorState.subtitlesState, setSubs);
       } else setSubs({ captions: [], config: {} });
-      prepareCanvas(
-        canvas,
-        setBackImage,
-        setFrontImage,
-        setVideoInfo,
-        viedoForUpload,
-        isMounted
-      );
+      prepareCanvas(canvas, setElements, setVideoInfo);
     }
   };
 
@@ -102,9 +85,8 @@ const Navigation = ({
   // };
 
   const prepareData = useCallback(
-    (backImg, frontImg, videoData, breaksData, subsData, id) => {
-      let elements = [{ ...backImg }];
-      if (frontImg) elements.push({ ...frontImg });
+    (elementsArr, videoData, breaksData, subsData, id) => {
+      let elements = [...elementsArr];
       let data = {
         id,
         video: { ...videoData },
@@ -114,10 +96,8 @@ const Navigation = ({
       };
       console.log(data);
       let jsonData = JSON.stringify(data);
-      console.log(jsonData);
       setDownloadData(jsonData);
-      setBackImage(null);
-      setFrontImage(null);
+      setElements(null);
       setBreaks(null);
       setVideoInfo(null);
       setSubs(null);
@@ -126,10 +106,10 @@ const Navigation = ({
   );
 
   useEffect(() => {
-    if (backImage && frontImage !== null && videoInfo && breaks && subs) {
-      prepareData(backImage, frontImage, videoInfo, breaks, subs, videoData.id);
+    if (elements && videoInfo && breaks && subs) {
+      prepareData(elements, videoInfo, breaks, subs, videoData.id);
     }
-  }, [backImage, frontImage, videoInfo, prepareData, breaks, subs, videoData]);
+  }, [elements, videoInfo, prepareData, breaks, subs, videoData]);
 
   return (
     <Navbar videoData={videoData}>
@@ -137,6 +117,17 @@ const Navigation = ({
         {canvas ? (
           <>
             <DesignControls canvas={canvas} />
+            {isUpdatingProject ? (
+              <Spinner
+                style={{
+                  width: '1.25rem',
+                  height: '1.25rem',
+                  marginRight: '10px',
+                  position: 'absolute',
+                  right: '7rem',
+                }}
+              />
+            ) : null}
             <button
               id='downloadDesign'
               className={styles.DownloadButton}

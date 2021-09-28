@@ -17,6 +17,7 @@ const Video = ({
   setCurrentWordIndex,
   setCurrentSub,
   subList,
+  info,
 }) => {
   const [intervalId, setIntervalId] = useState(null);
   // const seeking = (e) => {
@@ -38,6 +39,7 @@ const Video = ({
   return (
     <video
       // style={{ display: viedoForUpload ? 'block' : 'none' }}
+      src={info ? info.url : null}
       width={videoSize ? videoSize.width : 0}
       height={videoSize ? videoSize.height : 0}
       id='video'

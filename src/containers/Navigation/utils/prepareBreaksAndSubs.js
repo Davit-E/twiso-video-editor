@@ -20,14 +20,14 @@ export const prepareBreaks = (cuts, endTime, setBreaks) => {
   setBreaks(videoBreaks);
 };
 
-export const prepareSubs = (subList, object, subState, setSubs) => {
+
+const getSubConfig = (object, subState) => {
   let zoom = object.canvas.getZoom();
   let width = object.canvas.getWidth() / zoom;
   let height = object.canvas.getHeight() / zoom;
   let x = (object.left * 100) / width;
   let y = (object.top * 100) / height;
-  let captions = [];
-  let config = {
+  return {
     x,
     y,
     width,
@@ -47,12 +47,16 @@ export const prepareSubs = (subList, object, subState, setSubs) => {
     fontWeight: subState.fontWeight,
     fontStyle: subState.fontStyle,
   };
+}
+
+export const prepareSubs = (subList, object, subState, setSubs) => {
+  let config = getSubConfig(object, subState);
   console.log(config);
   // let prev = null;
   let deleteStart = 0;
   let deleteEnd = 0;
   let isLastDeleted = false;
-
+  let captions = [];
 
   let subNode = subList.head;
   for (let i = 0; i < subList.length; i++) {

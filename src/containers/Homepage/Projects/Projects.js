@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Project from './Project/Project';
 import Spinner from '../../../components/Spinner2/Spinner';
 
-const Projects = ({ videos, setShouldFetch, shouldFetch }) => {
+const Projects = ({ videos, setShouldFetch }) => {
   return (
     <div className={styles.Projects}>
       <h2 className={styles.Heading}>My projects</h2>
@@ -24,11 +24,7 @@ const Projects = ({ videos, setShouldFetch, shouldFetch }) => {
           videos.map((video) => {
             return (
               <div className={styles.ProjectContainer} key={video._id}>
-                <Project
-                  video={video}
-                  setShouldFetch={setShouldFetch}
-                  shouldFetch={shouldFetch}
-                />
+                <Project video={video} setShouldFetch={setShouldFetch} />
               </div>
             );
           })

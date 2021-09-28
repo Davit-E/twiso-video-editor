@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import styles from './DesignControls.module.css';
 import EditorContext from '../../../contexts/EditorContext';
 import Backdrop from '../../../components/Backdrop/Backdrop';
@@ -10,15 +10,13 @@ import addText from '../../../assets/editor/addText.svg';
 import addImage from '../../../assets/editor/addImage.svg';
 import addShape from '../../../assets/editor/addShape.svg';
 import subtitles from '../../../assets/editor/subtitles.svg';
-import photo from '../../../assets/editor/photo.jpg';
-import photo2 from '../../../assets/editor/photo2.jpg';
+import useGetAssets from '../../../hooks/useGetAssets';
 
 const DesignControls = ({ canvas }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
-  const [userFiles, setUserFiles] = useState([
-    { src: photo, type: 'image' },
-    { src: photo2, type: 'image' },
-  ]);
+  const { getAssets, assets, setAssets } = useGetAssets();
+  const [shouldFetchAssets, setShouldFetchAssets] = useState(false);
+  const isFirstMount = useRef(true);
 
   const clickHandler = (e) => {
     if (canvas && !editorState.shouldCropImage) {
@@ -34,6 +32,13 @@ const DesignControls = ({ canvas }) => {
       }
     }
   };
+
+  useEffect(() => {
+    if (shouldFetchAssets) {
+      setShouldFetchAssets(false);
+      getAssets();
+    }
+  }, [shouldFetchAssets, getAssets]);
 
   return (
     <div className={styles.ControlsContainer}>
@@ -67,8 +72,10 @@ const DesignControls = ({ canvas }) => {
             <Backdrop />
             <div className={styles.ImageDropdown}>
               <ImageDropdown
-                userFiles={userFiles}
-                setUserFiles={setUserFiles}
+                assets={assets}
+                setShouldFetch={setShouldFetchAssets}
+                isFirstMount={isFirstMount}
+                setAssets={setAssets}
               />
             </div>
           </>

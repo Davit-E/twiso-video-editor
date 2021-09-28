@@ -54,10 +54,12 @@ const SelectSpeakers = ({ videoData, setSpeakers }) => {
     }
     setSpeakers(arr);
     history.push(`/editor/${videoData.id}`);
+    // history.push('/editor/video-editor');
   };
 
   const skipHandler = () => {
     history.push(`/editor/${videoData.id}`);
+    // history.push('/editor/video-editor');
   };
 
   return (

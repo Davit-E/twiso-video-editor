@@ -1,6 +1,7 @@
 .Dropdown {
   width: 28.75rem;
-  height: 25.3rem;
+  height: auto;
+  min-height: 10rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,7 +14,7 @@
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid #E5E5E5;
-  margin-bottom: 0.6rem;
+  position: relative;
 }
 
 .UploadButton {
@@ -41,11 +42,19 @@
   justify-content: flex-start;
   flex-wrap: wrap;
   padding: 0.5rem;
-  overflow: scroll;
+  overflow-y: scroll;
+  height: 21.77rem;
 }
 
 .Images::-webkit-scrollbar {
-  display: none;
+  width: 6px;
+}
+.Images::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #d9d9d9;
+}
+.Images::-webkit-scrollbar-track {
+  background: rgba(217, 217, 217, 0.3);
 }
 
 .Images {
@@ -64,7 +73,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   padding: 0.25rem;
 }
 
@@ -72,4 +80,5 @@
   width: 100%;
   height: auto;
   border-radius: 4px;
+  cursor: pointer;
 }
