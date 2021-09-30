@@ -8,7 +8,7 @@ const deleteHandler = (canvas) => {
     !isInput &&
     active &&
     !active.isEditing &&
-    // active.type !== 'video' &&
+    active.type !== 'video' &&
     active.id !== 'subtitle'
   ) {
     canvas.remove(active);
@@ -77,14 +77,15 @@ const useKeyEvents = (
   setClipboard,
   objId,
   updateId,
-  fabricSub
+  fabricSub,
+  dispatch
 ) => {
   const [isPasting, setIsPasting] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
   const [isBringToFront, setIsBringToFront] = useState(false);
   const [isSendToBack, setIsSendToBack] = useState(false);
   const [shouldRun, setShouldRun] = useState(true);
-  
+
   useEffect(() => {
     if (shouldRun && isPasting && clipboard) {
       setShouldRun(false);
@@ -112,11 +113,15 @@ const useKeyEvents = (
       if (active && active.id !== 'subtitle') {
         canvas.bringToFront(active);
         if (fabricSub) canvas.bringToFront(fabricSub);
+        dispatch({ type: 'setShouldTriggerUpdate', data: true });
       }
     } else if (shouldRun && isSendToBack) {
       setShouldRun(false);
       let active = canvas.getActiveObject();
-      if (active && active.id !== 'subtitle') canvas.sendToBack(active);
+      if (active && active.id !== 'subtitle'){
+        canvas.sendToBack(active);
+        dispatch({ type: 'setShouldTriggerUpdate', data: true });
+      } 
     }
   }, [
     canvas,
@@ -130,18 +135,22 @@ const useKeyEvents = (
     updateId,
     shouldRun,
     fabricSub,
+    dispatch,
   ]);
 
-  const onKeyDown = useCallback((e) => {
-    keyDownHandler(
-      e,
-      canvas,
-      setIsPasting,
-      setIsCopying,
-      setIsBringToFront,
-      setIsSendToBack
-    );
-  }, [canvas]);
+  const onKeyDown = useCallback(
+    (e) => {
+      keyDownHandler(
+        e,
+        canvas,
+        setIsPasting,
+        setIsCopying,
+        setIsBringToFront,
+        setIsSendToBack
+      );
+    },
+    [canvas]
+  );
 
   const onKeyUp = useCallback((e) => {
     keyUpHandler(

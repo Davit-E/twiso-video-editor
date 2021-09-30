@@ -3,6 +3,7 @@ import { fabric } from 'fabric';
 fabric.ImageWithCrop = fabric.util.createClass(fabric.Image, {
   type: 'image',
   cropRect: null,
+  cornerRadius: 0,
 
   initialize: function (video, options) {
     options = options || {};
@@ -24,6 +25,15 @@ fabric.ImageWithCrop = fabric.util.createClass(fabric.Image, {
     }
   },
 
+  toObject: function (options) {
+    return fabric.util.object.extend(this.callSuper('toObject'), {
+      type: this.get('type'),
+      cropRect: this.get('cropRect'),
+      id: this.get('id'),
+      cornerRadius: this.get('cornerRadius'),
+    });
+  },
+
   _render: function (ctx) {
     this._draw(this.getElement(), ctx);
   },
@@ -40,3 +50,14 @@ fabric.ImageWithCrop.fromURL = function (url, callback, imgOptions) {
   );
 };
 
+fabric.ImageWithCrop.fromObject = function (object, callback) {
+  return fabric.Object._fromObject(
+    'Image',
+    object,
+    callback,
+    'type',
+    'cropRect',
+    'cornerRadius',
+    'id'
+  );
+};

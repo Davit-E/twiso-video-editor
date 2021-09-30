@@ -25,10 +25,12 @@ const Navigation = ({
   setPreviewUrl,
   videoData,
   isUpdatingProject,
+  isDownloading,
+  downloadVideo,
+  downloadedVideo,
+  setDownloadedVideo,
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
-  const { isDownloading, downloadVideo, downloadedVideo, setDownloadedVideo } =
-    useDownloadVideo();
   const [downloadData, setDownloadData] = useState(null);
   const [elements, setElements] = useState(null);
   const [videoInfo, setVideoInfo] = useState(null);

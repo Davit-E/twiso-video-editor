@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import styles from './SpeakersCanvas.module.css';
-import useAddCanvas from '../hooks/useAddCanvas';
-import useAddVideo from '../hooks/useAddVideo';
+import useAddCanvas from './hooks/useAddCanvas';
+import useAddVideo from './hooks/useAddVideo';
 import useUpdateCanvas from '../hooks/useUpdateCanvas';
 import useGuideLines from '../hooks/useGuideLines';
 import useCropVideo from '../hooks/useCropVideo';
@@ -14,7 +14,7 @@ const SpeakersCanvas = ({
   videoRef,
   setBoxArr,
   duration,
-  boxArr
+  boxArr,
 }) => {
   const [isCanvasSet, setIsCanvasSet] = useState(null);
   const [video, setVideo] = useState(null);
@@ -24,8 +24,16 @@ const SpeakersCanvas = ({
   useGuideLines(canvasState, isCanvasSet, canvas, null, null);
   useUpdateCanvas(canvasState, canvasDispatch, canvas);
   useAddCanvas(canvasState, setCanvas, setIsCanvasSet, 'speakerCanvas');
-  useAddVideo(videoRef.current, canvas, duration / 10, false, setVideo);
-  useCropVideo(canvas, isCanvasSet, video, boxArr, setBoxArr, boxId, updateBoxId);
+  useAddVideo(videoRef.current, canvas, duration / 10, setVideo);
+  useCropVideo(
+    canvas,
+    isCanvasSet,
+    video,
+    boxArr,
+    setBoxArr,
+    boxId,
+    updateBoxId
+  );
 
   return (
     <div className={styles.Canvas}>

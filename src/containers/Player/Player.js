@@ -32,6 +32,7 @@ const Player = ({
   shouldRerenderSub,
   setShouldRerenderSub,
   speakers,
+  info,
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const [eventState, eventDispatch] = useEventState();
@@ -99,6 +100,7 @@ const Player = ({
             fabricSub={fabricSub}
             currentTime={currentTime}
             speakers={speakers}
+            info={info}
           />
           {canvas ? (
             <>

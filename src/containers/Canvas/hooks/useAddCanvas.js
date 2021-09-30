@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { fabric } from 'fabric';
+import { loadAndUse } from '../utils/updateObject';
 
-const addCanvas = (state, id) => {
+const addCanvas = (state, id, info, shouldLoad) => {
   let canvas = new fabric.Canvas(id, {
     width: state.initialWidth,
     height: state.initialHeight,
@@ -11,9 +12,21 @@ const addCanvas = (state, id) => {
     stopContextMenu: true,
     selection: false,
   });
-  // let storageCanvas = localStorage.getItem('canvas');
-  // if(storageCanvas) canvas.loadFromJSON(storageCanvas);
-  // console.log(storageCanvas);
+
+  if (shouldLoad && info.canvas) {
+    canvas.clear();
+    canvas.loadFromJSON(info.canvas, () => {
+      let objects = canvas.getObjects();
+      let textObjects = objects.filter((obj) => {
+        return obj.type === 'textbox';
+      });
+      for (let i = 0; i < textObjects.length; i++) {
+        let text = textObjects[i];
+        loadAndUse(canvas, text, text.fontFamily);
+      }
+    });
+  }
+
   let ratio = Math.min(
     state.width / state.initialWidth,
     state.height / state.initialHeight
@@ -26,17 +39,36 @@ const addCanvas = (state, id) => {
   return canvas;
 };
 
-const useAddCanvas = (state, setCanvas, setIsCanvasSet, id) => {
+const useAddCanvas = (
+  state,
+  setCanvas,
+  setIsCanvasSet,
+  id,
+  info,
+  setIsCanvasData,
+  speakers
+) => {
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   useEffect(() => {
     if (isFirstLoad && state.initialWidth > 0) {
-      let canvas = addCanvas(state, id);
-      setCanvas(canvas);
+      let shouldLoad = speakers.length === 0 && info && info.canvas;
+      if (shouldLoad) setIsCanvasData(true);
+      let canvas = addCanvas(state, id, info, shouldLoad);
+      setCanvas(canvas, info);
       setIsCanvasSet(true);
       setIsFirstLoad(false);
     }
-  }, [setCanvas, setIsCanvasSet, state, isFirstLoad, id]);
+  }, [
+    speakers,
+    setCanvas,
+    setIsCanvasSet,
+    state,
+    isFirstLoad,
+    id,
+    info,
+    setIsCanvasData,
+  ]);
 };
 
 export default useAddCanvas;

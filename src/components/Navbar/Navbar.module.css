@@ -93,3 +93,23 @@
   line-height: 1.25rem;
   user-select: none;
 }
+
+.LogInLink {
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  color: #6f7bd0;
+  margin-right: 1.25rem;
+}
+
+.SignUpLink {
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.75rem;
+  background: #6f7bd0;
+  text-align: center;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+}

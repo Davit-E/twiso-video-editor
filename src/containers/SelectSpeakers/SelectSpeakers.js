@@ -58,6 +58,7 @@ const SelectSpeakers = ({ videoData, setSpeakers }) => {
   };
 
   const skipHandler = () => {
+    setSpeakers([{ x: 0, y: 0, w: videoSize.width, h: videoSize.height }]);
     history.push(`/editor/${videoData.id}`);
     // history.push('/editor/video-editor');
   };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import styles from './VideoEditor.module.css';
 import Transcription from '../Transcription/Transcription';
 import Player from '../Player/Player';
@@ -9,13 +9,28 @@ import EditorContext from '../../contexts/EditorContext';
 import { useHistory, useParams } from 'react-router-dom';
 import useGetVideo from '../../hooks/useGetVideo';
 import Spinner from '../../components/Spinner2/Spinner';
-import { useCallback } from 'react/cjs/react.development';
 import useUpdateProject from '../../hooks/useUpdateProject';
+import useDownloadVideo from '../../hooks/useDownloadVideo';
+
+const getCanvasObject = (canvas) => {
+  return canvas.toJSON([
+    'id',
+    'cornerRadius',
+    'isSvg',
+    'padding',
+    'cursorWidth',
+    'rx',
+    'ry',
+    'noScaleCache',
+  ]);
+};
 
 const VideoEditor = ({ speakers }) => {
   const [editorState, editorDispatch] = useEditorState();
   const { getVideo, words, info, getVideoError } = useGetVideo();
   const { isUpdatingProject, updateProject } = useUpdateProject();
+  const { isDownloading, downloadVideo, downloadedVideo, setDownloadedVideo } =
+    useDownloadVideo();
   const [currentSelection, setCurrentSelection] = useState(null);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -31,9 +46,16 @@ const VideoEditor = ({ speakers }) => {
   const history = useHistory();
   const params = useParams();
   const videoRef = useRef(null);
-  const updateTimerRef = useRef(null);
+  const wordsUpdateTimerRef = useRef(null);
+  const canvasUpdateTimerRef = useRef(null);
   const isFirstLoad = useRef(true);
   const isMounted = useRef(false);
+
+  // useEffect(() => {
+  //   console.log(editorState.currentObject.object);
+  //   if (editorState.currentObject.object)
+  //     console.log(editorState.currentObject.object.id);
+  // }, [editorState]);
 
   useEffect(() => {
     isMounted.current = true;
@@ -49,25 +71,53 @@ const VideoEditor = ({ speakers }) => {
   }, [getVideoError, history]);
 
   const triggerWordsUpdate = useCallback(() => {
-    if (updateTimerRef.current) clearTimeout(updateTimerRef.current);
+    if (wordsUpdateTimerRef.current) clearTimeout(wordsUpdateTimerRef.current);
     let timeout = setTimeout(() => {
       if (isMounted.current) {
+        wordsUpdateTimerRef.current = null;
         updateProject({
           id: info.id,
           transcription: [...words],
         });
       }
-    }, 2000);
-    updateTimerRef.current = timeout;
+    }, 1000);
+    wordsUpdateTimerRef.current = timeout;
   }, [updateProject, info, words]);
+
+  const triggerCanvasUpdate = useCallback(() => {
+    if (canvasUpdateTimerRef.current) {
+      clearTimeout(canvasUpdateTimerRef.current);
+    }
+    let timeout = setTimeout(() => {
+      if (isMounted.current) {
+        canvasUpdateTimerRef.current = null;
+        let jsonCanvas = getCanvasObject(canvas);
+        updateProject({
+          id: info.id,
+          canvas: { ...jsonCanvas },
+        });
+      }
+    }, 1000);
+    canvasUpdateTimerRef.current = timeout;
+  }, [updateProject, info, canvas]);
 
   useEffect(() => {
     if (isFirstLoad.current) {
-      setTimeout(() => {
-        if (isMounted.current) isFirstLoad.current = false;
-      }, 1000);
-    } else triggerWordsUpdate();
-  }, [videoCuts, triggerWordsUpdate]);
+      isFirstLoad.current = false;
+    } else if (!isDownloading) triggerWordsUpdate();
+  }, [videoCuts, triggerWordsUpdate, isDownloading]);
+
+  useEffect(() => {
+    if (editorState.shouldTriggerUpdate && !isDownloading) {
+      editorDispatch({ type: 'setShouldTriggerUpdate', data: false });
+      triggerCanvasUpdate();
+    }
+  }, [
+    triggerCanvasUpdate,
+    editorState.shouldTriggerUpdate,
+    editorDispatch,
+    isDownloading,
+  ]);
 
   return (
     <>
@@ -84,6 +134,10 @@ const VideoEditor = ({ speakers }) => {
               fabricSub={fabricSub}
               videoData={info}
               isUpdatingProject={isUpdatingProject}
+              isDownloading={isDownloading}
+              downloadVideo={downloadVideo}
+              downloadedVideo={downloadedVideo}
+              setDownloadedVideo={setDownloadedVideo}
             />
             <main className={styles.Main}>
               <Transcription
@@ -127,6 +181,7 @@ const VideoEditor = ({ speakers }) => {
                 shouldRerenderSub={shouldRerenderSub}
                 setShouldRerenderSub={setShouldRerenderSub}
                 speakers={speakers}
+                info={info}
               />
               <Video
                 videoRef={videoRef}

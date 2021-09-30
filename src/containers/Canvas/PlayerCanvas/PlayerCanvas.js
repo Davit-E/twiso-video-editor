@@ -22,12 +22,14 @@ const PlayerCanvas = ({
   fabricSub,
   currentTime,
   speakers,
+  info,
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const { eventState, eventDispatch } = useContext(EventContext);
   const [objectIdCount, setObjectIdCount] = useState(1);
   const [isCanvasSet, setIsCanvasSet] = useState(false);
   const [clipboard, setClipboard] = useState(null);
+  const [isCanvasData, setIsCanvasData] = useState(false);
   const updatetObjectId = useCallback(() => setObjectIdCount((i) => i + 1), []);
 
   useGuideLines(editorState, isCanvasSet, canvas, eventState, eventDispatch);
@@ -48,17 +50,34 @@ const PlayerCanvas = ({
     objectIdCount,
     updatetObjectId
   );
-  useAddCanvas(editorState.canvasState, setCanvas, setIsCanvasSet, 'canvas');
+  useAddCanvas(
+    editorState.canvasState,
+    setCanvas,
+    setIsCanvasSet,
+    'canvas',
+    info,
+    setIsCanvasData,
+    speakers
+  );
   useKeyEvents(
     canvas,
     clipboard,
     setClipboard,
     objectIdCount,
     updatetObjectId,
-    fabricSub
+    fabricSub,
+    editorDispatch
   );
   useClickListener(canvas, editorState);
-  useAddVideo(video, canvas, currentTime, true, null, speakers);
+  useAddVideo(
+    video,
+    canvas,
+    currentTime,
+    speakers,
+    objectIdCount,
+    updatetObjectId,
+    isCanvasData
+  );
 
   return (
     <div className={styles.CanvasComponent} id='canvasComponent'>
@@ -74,6 +93,7 @@ const PlayerCanvas = ({
         clipboard={clipboard}
         setClipboard={setClipboard}
         fabricSub={fabricSub}
+        dispatch={editorDispatch}
       />
     </div>
   );

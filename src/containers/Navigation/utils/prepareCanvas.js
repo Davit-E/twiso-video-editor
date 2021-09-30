@@ -74,8 +74,6 @@ const handleLayers = (exportCanvas, canvas, setElements, setVideoInfo) => {
 };
 
 export const prepareCanvas = async (canvas, setElements, setVideoInfo) => {
-  // let jsonCanvas = JSON.stringify(canvas)
-  // localStorage.setItem('canvas', jsonCanvas);
   let exportCanvas = new fabric.Canvas();
   exportCanvas.setDimensions({
     width: canvas.getWidth() / canvas.getZoom(),

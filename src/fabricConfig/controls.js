@@ -9,6 +9,7 @@ fabric.Object.prototype.borderColor = '#6F7BD0';
 fabric.Object.prototype.cornerStrokeColor = '#6F7BD0';
 fabric.Object.prototype.cornerStyle = 'circle';
 fabric.Object.prototype.objectCaching = false;
+fabric.Line.prototype.borderColor = 'transparent';
 
 const ctrlStretchImage = new Image();
 ctrlStretchImage.src = ctrlStretch;
@@ -185,6 +186,11 @@ if (fabric.Textbox) {
     offsetY: 3,
     render: renderStretchIconX(ctrlStretchImage),
   });
+  fabric.Textbox.prototype.setControlsVisibility({
+    ml: true,
+    mr: true,
+    mtr: false
+  });
 }
 
 let line = (fabric.Line.prototype.controls = {});
@@ -200,7 +206,6 @@ line.ml = new fabric.Control({
   offsetX: 0,
   render: renderScaleIcon(ctrlScaleImage),
 });
-
 line.mr = new fabric.Control({
   x: 0.5,
   y: 0,
@@ -213,23 +218,61 @@ line.mr = new fabric.Control({
   render: renderScaleIcon(ctrlScaleImage),
 });
 
+fabric.Rect.prototype.setControlsVisibility({
+  tl: true,
+  mt: true,
+  tr: true,
+  ml: true,
+  mr: true,
+  bl: true,
+  mb: true,
+  br: true,
+  mtr: true,
+});
+fabric.Circle.prototype.setControlsVisibility({
+  tl: true,
+  mt: true,
+  tr: true,
+  ml: true,
+  mr: true,
+  bl: true,
+  mb: true,
+  br: true,
+  mtr: true,
+});
+fabric.Triangle.prototype.setControlsVisibility({
+  tl: true,
+  mt: true,
+  tr: true,
+  ml: true,
+  mr: true,
+  bl: true,
+  mb: true,
+  br: true,
+  mtr: true,
+});
+fabric.Line.prototype.setControlsVisibility({
+  ml: true,
+  mr: true,
+  mtr: true,
+});
+
 let image = (fabric.Image.prototype.controls = {});
 image.mtr = objectControls.mtr;
 image.tr = objectControls.tr;
 image.br = objectControls.br;
 image.tl = objectControls.tl;
 image.bl = objectControls.bl;
-
+fabric.Image.prototype.setControlsVisibility({
+  tl: true,
+  tr: true,
+  bl: true,
+  br: true,
+  mtr: true,
+});
 let activeSelection = (fabric.ActiveSelection.prototype.controls = {});
 activeSelection.mtr = objectControls.mtr;
 activeSelection.tr = objectControls.tr;
 activeSelection.br = objectControls.br;
 activeSelection.tl = objectControls.tl;
 activeSelection.bl = objectControls.bl;
-
-// let group = (fabric.Group.prototype.controls = {});
-// group.mtr = objectControls.mtr;
-// group.tr = objectControls.tr;
-// group.br = objectControls.br;
-// group.tl = objectControls.tl;
-// group.bl = objectControls.bl;

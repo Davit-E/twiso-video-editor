@@ -34,7 +34,9 @@ const useGetVideo = () => {
             duration: res.data.duration,
             url: res.data.original_video_url,
             finalUrl: res.data.final_video_url || null,
+            canvas: res.data.canvas || null,
             title: res.data.title,
+            finalText: res.data.final_full_text || null,
           });
         }
         console.log(res);

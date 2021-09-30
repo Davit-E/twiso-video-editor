@@ -6,7 +6,7 @@ import {
   deleteWord,
   restoreDeleted,
   deleteSelection,
-  handleDeleted,
+  findAndSetCurrentWord
 } from './utils/updateTextAndCuts';
 import Words from './Words/Words';
 import { findWordIndexWithId } from '../../utils/findIndex';
@@ -57,16 +57,15 @@ const Transcription = ({
   useEffect(() => {
     if (isFirstLoad) {
       setIsFirstLoad(null);
-      handleDeleted(words, setCuts, null, null);
+      findAndSetCurrentWord(
+        0,
+        words,
+        setCurrentWordIndex,
+        setCuts,
+        setPlayerTime
+      );
     }
-  }, [
-    isFirstLoad,
-    words,
-    setCuts,
-    setPlayerTime,
-    currentWordIndex,
-    setCurrentWordIndex,
-  ]);
+  }, [isFirstLoad, words, setCuts, setPlayerTime, setCurrentWordIndex]);
 
   const wordClickHandler = (e, isDeleted) => {
     let id = e.currentTarget.id;

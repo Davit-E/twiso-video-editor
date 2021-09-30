@@ -1,6 +1,7 @@
 import { useReducer } from 'react';
 
 const initialState = {
+  shouldTriggerUpdate: false,
   canvasState: {
     initialWidth: 0,
     initialHeight: 0,
@@ -65,6 +66,8 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case 'setShouldTriggerUpdate':
+      return { ...state, shouldTriggerUpdate: action.data };
     case 'setCanvasState':
       return { ...state, canvasState: action.data };
     case 'setIsDownloadDropdown':

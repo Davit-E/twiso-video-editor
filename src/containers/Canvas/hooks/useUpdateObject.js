@@ -3,7 +3,7 @@ import {
   updateImageStyle,
   updateTextStyle,
   updateShapeStyle,
-  updateSubtitlesStyle
+  updateSubtitlesStyle,
 } from '../utils/updateObject';
 
 const shapeArr = ['rect', 'circle', 'triangle', 'line'];
@@ -11,9 +11,9 @@ const shapeArr = ['rect', 'circle', 'triangle', 'line'];
 const useUpdateObject = (state, dispatch, canvas) => {
   useEffect(() => {
     if (state.shouldUpdateSubtitles) {
-      updateSubtitlesStyle(state, canvas, dispatch)
+      updateSubtitlesStyle(state, canvas, dispatch);
     }
-    if (state.shouldUpdateText && state.currentObject.type === 'text') {
+    if (state.shouldUpdateText) {
       updateTextStyle(state, canvas, dispatch);
     }
     if (

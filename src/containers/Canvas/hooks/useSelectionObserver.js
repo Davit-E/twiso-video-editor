@@ -7,6 +7,8 @@ import {
   onUpdated,
   onTextEnter,
   onTextExit,
+  onAdded,
+  onRemoved,
 } from '../utils/onCanvasEvents';
 import { fabric } from 'fabric';
 
@@ -15,6 +17,8 @@ const removeListeners = (c) => {
   c.off('selection:updated');
   c.off('selection:cleared');
   c.off('object:modified');
+  c.off('object:added');
+  c.off('object:removed');
   c.off('object:rotating');
   c.off('object:rotated');
   c.off('object:scaling');
@@ -68,6 +72,8 @@ const useSelectionObserver = (isCanvasSet, canvas, state, dispatch) => {
       );
       c.on('selection:updated', (e) => onUpdated(e, dispatch));
       c.on('object:modified', (e) => onModified(e, dispatch));
+      c.on('object:added', (e) => onAdded(e, dispatch));
+      c.on('object:removed', (e) => onRemoved(e, dispatch));
       c.on('selection:cleared', (e) => onCleared(e, dispatch, currentId));
       c.on('object:rotating', () => setIsRotating(true));
       c.on('object:rotated', () => setIsRotating(false));

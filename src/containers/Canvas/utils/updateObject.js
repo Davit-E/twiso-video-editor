@@ -27,9 +27,10 @@ export const updateImageStyle = (state, canvas, dispatch) => {
     canvas.requestRenderAll();
   }
   dispatch({ type: 'setShouldUpdateImage', data: false });
+  dispatch({ type: 'setShouldTriggerUpdate', data: true });
 };
 
-export const loadAndUse = (canvas, text, font) => {
+export const loadAndUse = (canvas, text, font, dispatch) => {
   WebFont.load({
     google: {
       families: [font],
@@ -38,6 +39,7 @@ export const loadAndUse = (canvas, text, font) => {
     fontactive: (familyName, fvd) => {
       text.set({ fontFamily: familyName });
       canvas.requestRenderAll();
+      if (dispatch) dispatch({ type: 'setShouldTriggerUpdate', data: true });
     },
   });
 };
@@ -55,6 +57,7 @@ export const updateTextStyle = (state, canvas, dispatch) => {
         canvas,
         state.currentObject.object,
         state.textState.fontFamily,
+        dispatch
       );
       loaded.push(state.textState.fontFamily);
     } else {
@@ -62,6 +65,7 @@ export const updateTextStyle = (state, canvas, dispatch) => {
         fontFamily: state.textState.fontFamily,
       });
       canvas.requestRenderAll();
+      dispatch({ type: 'setShouldTriggerUpdate', data: true });
     }
 
     if (!state.showToolbar) dispatch({ type: 'setShowToolbar', data: true });
@@ -71,7 +75,7 @@ export const updateTextStyle = (state, canvas, dispatch) => {
 
 export const updateSubtitlesStyle = (state, canvas, dispatch) => {
   if (state.subtitlesState) {
-    let text = state.currentObject.object
+    let text = state.currentObject.object;
     text._clearCache();
     for (const [key, value] of Object.entries(state.subtitlesState)) {
       if (key !== 'fontFamily') {
@@ -79,11 +83,7 @@ export const updateSubtitlesStyle = (state, canvas, dispatch) => {
       }
     }
     if (!loaded.includes(state.subtitlesState.fontFamily)) {
-      loadAndUse(
-        canvas,
-        text,
-        state.subtitlesState.fontFamily,
-      );
+      loadAndUse(canvas, text, state.subtitlesState.fontFamily);
       loaded.push(state.subtitlesState.fontFamily);
     } else {
       text.set({
@@ -107,4 +107,5 @@ export const updateShapeStyle = (state, canvas, dispatch) => {
     canvas.requestRenderAll();
   }
   dispatch({ type: 'setShouldUpdateShape', data: false });
+  dispatch({ type: 'setShouldTriggerUpdate', data: true });
 };

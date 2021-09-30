@@ -76,6 +76,17 @@ export const onCleared = (e, dispatch, currentId) => {
 
 export const onModified = (e, dispatch) => {
   handleSelected(e, dispatch);
+  if (e.target.id !== 'subtitle') {
+    dispatch({ type: 'setShouldTriggerUpdate', data: true });
+  }
+};
+
+export const onAdded = (e, dispatch) => {
+  dispatch({ type: 'setShouldTriggerUpdate', data: true });
+};
+
+export const onRemoved = (e, dispatch) => {
+  dispatch({ type: 'setShouldTriggerUpdate', data: true });
 };
 
 export const onUpdated = (e, dispatch) => {

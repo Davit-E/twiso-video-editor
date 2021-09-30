@@ -48,6 +48,14 @@ fabric.Video = fabric.util.createClass(fabric.Image, {
   },
 });
 
+fabric.Video.prototype.setControlsVisibility({
+  tl: true,
+  tr: true, 
+  bl: true, 
+  br: true, 
+  mtr: false
+});
+
 fabric.Video.fromObject = function (object, callback) {
   return fabric.Object._fromObject(
     'Video',

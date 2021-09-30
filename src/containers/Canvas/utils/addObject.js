@@ -1,49 +1,84 @@
 import { fabric } from 'fabric';
 
-const ShowControls = {
-  tl: true,
-  tr: true,
-  bl: true,
-  br: true,
-  ml: true,
-  mt: false,
-  mr: true,
-  mb: false,
-  mtr: true,
-};
-
 export const addNewImage = (state, canvas, dispatch, id, updateId) => {
   let image = state.imageToAdd.src;
   if (state.shouldReplaceImage) {
     let active = canvas.getActiveObject();
-    fabric.Image.fromURL(image, (img) => {
-      img.top = active.top;
-      img.left = active.left;
-      img.scaleToWidth(active.width * active.scaleX);
-      img.angle = active.angle;
-      img.setControlsVisibility(ShowControls);
-      img.id = active.id;
-      img.cornerRadius = active.cornerRadius;
-      img.isSvg = state.imageToAdd.type === 'svg'
-      canvas.remove(active);
-      canvas.add(img).setActiveObject(img);
-      canvas.requestRenderAll();
-      dispatch({ type: 'setShouldUpdateImage', data: true });
-      dispatch({ type: 'setShouldReplaceImage', data: false });
-    });
+    fabric.Image.fromURL(
+      image,
+      (img) => {
+        img.top = active.top;
+        img.left = active.left;
+        img.scaleToWidth(active.width * active.scaleX);
+        img.angle = active.angle;
+        img.id = active.id;
+        img.cornerRadius = active.cornerRadius;
+        img.isSvg = state.imageToAdd.type === 'svg';
+        canvas.remove(active);
+        canvas.add(img).setActiveObject(img);
+        canvas.requestRenderAll();
+        dispatch({ type: 'setShouldUpdateImage', data: true });
+        dispatch({ type: 'setShouldReplaceImage', data: false });
+      },
+      { crossOrigin: 'Anonymous' }
+    );
   } else {
-    fabric.Image.fromURL(image, (img) => {
-      img.scaleToWidth(256);
-      img.left = 100;
-      img.top = 100;
-      img.setControlsVisibility(ShowControls);
-      img.id = id;
-      img.cornerRadius = 0;
-      img.isSvg = state.imageToAdd.type === 'svg'
-      canvas.add(img).setActiveObject(img);
-      canvas.requestRenderAll();
-      updateId();
-    });
+    fabric.Image.fromURL(
+      image,
+      (img) => {
+        img.scaleToWidth(256);
+        img.left = 100;
+        img.top = 100;
+        img.id = id;
+        img.cornerRadius = 0;
+        img.isSvg = state.imageToAdd.type === 'svg';
+        canvas.add(img).setActiveObject(img);
+        canvas.requestRenderAll();
+        updateId();
+      },
+      { crossOrigin: 'Anonymous' }
+    );
+  }
+  dispatch({ type: 'setImageToAdd', data: null });
+};
+
+export const addNewImage2 = (state, canvas, dispatch, id, updateId) => {
+  let image = state.imageToAdd.src;
+  if (state.shouldReplaceImage) {
+    let active = canvas.getActiveObject();
+    fabric.ImageWithCrop.fromURL(
+      image,
+      (img) => {
+        img.top = active.top;
+        img.left = active.left;
+        img.scaleToWidth(active.width * active.scaleX);
+        img.angle = active.angle;
+        img.id = active.id;
+        img.cornerRadius = active.cornerRadius;
+        img.isSvg = state.imageToAdd.type === 'svg';
+        canvas.remove(active);
+        canvas.add(img).setActiveObject(img);
+        canvas.requestRenderAll();
+        dispatch({ type: 'setShouldUpdateImage', data: true });
+        dispatch({ type: 'setShouldReplaceImage', data: false });
+      },
+      { crossOrigin: 'Anonymous' }
+    );
+  } else {
+    fabric.ImageWithCrop.fromURL(
+      image,
+      (img) => {
+        img.left = 0;
+        img.top = 0;
+        img.id = id;
+        img.cornerRadius = 0;
+        img.isSvg = state.imageToAdd.type === 'svg';
+        canvas.add(img).setActiveObject(img);
+        canvas.requestRenderAll();
+        updateId();
+      },
+      { crossOrigin: 'Anonymous' }
+    );
   }
   dispatch({ type: 'setImageToAdd', data: null });
 };
@@ -122,7 +157,6 @@ const newLine = () => {
     top: 100,
     stroke: 'rgba(196,196,196,1)',
     strokeWidth: 2,
-    borderColor: 'transparent',
     noScaleCache: false,
     rx: 0,
     ry: 0,

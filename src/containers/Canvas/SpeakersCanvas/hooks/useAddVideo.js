@@ -1,19 +1,18 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { fabric } from 'fabric';
 
-const useAddVideo = (
-  video,
-  canvas,
-  currentTime,
-  speakers,
-  idCount,
-  updateId,
-  isCanvasData
-) => {
+const useAddVideo = (video, canvas, currentTime, setVideo) => {
   const [isFirtLoad, setIsFirtLoad] = useState(true);
   const isMounted = useRef(true);
   const frameRef = useRef(null);
   useEffect(() => () => (isMounted.current = false), []);
+
+  const cancelAnimation = useCallback(() => {
+    // console.log('canceling', frameRef.current);
+    fabric.util.cancelAnimFrame(frameRef.current);
+    frameRef.current = null;
+    if (canvas) canvas.requestRenderAll();
+  }, [canvas]);
 
   const animate = useCallback(() => {
     const render = () => {
@@ -24,23 +23,23 @@ const useAddVideo = (
     fabric.util.requestAnimFrame(render);
   }, [canvas]);
 
-  const newVideo = useCallback((video, speaker, id) => {
+  const newVideo = useCallback((video) => {
     let fabricVideo = new fabric.Video(video, {
       top: 0,
       left: 0,
-      id,
+      // excludeFromExport: true,
       lockScalingFlip: true,
     });
-    if (speaker) {
-      fabricVideo.left = speaker.x;
-      fabricVideo.top = speaker.y;
-      fabricVideo.width = speaker.w;
-      fabricVideo.height = speaker.h;
-      fabricVideo.cropRect = { ...speaker };
-    }
-    fabricVideo.controls.mtr.visible = false;
     return fabricVideo;
   }, []);
+
+  useEffect(() => {
+    if (isFirtLoad) {
+      setTimeout(() => {
+        if (isMounted.current) cancelAnimation();
+      }, 1000);
+    }
+  }, [cancelAnimation, isFirtLoad]);
 
   useEffect(() => {
     return () => {
@@ -53,31 +52,22 @@ const useAddVideo = (
   useEffect(() => {
     if (isFirtLoad && video && canvas) {
       setIsFirtLoad(false);
-      if (!isCanvasData) {
-        console.log(speakers);
-        video.currentTime = currentTime > 0 ? currentTime : 0.001;
-        if (speakers.length > 0) {
-          for (let i = 0; i < speakers.length; i++) {
-            const speaker = speakers[i];
-            let speakerVideo = newVideo(video, speaker, i + 1);
-            canvas.add(speakerVideo);
-            updateId();
-          }
-        }
-      }
+      video.currentTime = currentTime > 0 ? currentTime : 0.001;
+      let fabricVideo = newVideo(video);
+      canvas.add(fabricVideo);
+      fabricVideo.evented = false;
+      fabricVideo.selectable = false;
+      setVideo(fabricVideo);
       animate();
     }
   }, [
-    isCanvasData,
-    idCount,
-    updateId,
     video,
     canvas,
     isFirtLoad,
     currentTime,
     animate,
+    setVideo,
     newVideo,
-    speakers,
   ]);
 };
 

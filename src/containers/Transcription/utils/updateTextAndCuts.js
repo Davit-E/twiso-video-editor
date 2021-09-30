@@ -59,7 +59,7 @@ const handleVideoCuts = (
     handleRestore(setCuts, setPlayerTime, wordIndex, restoreStart);
 };
 
-const findAndSetCurrentWord = (
+export const findAndSetCurrentWord = (
   deletedIndex,
   wordsArr,
   setWordIndex,

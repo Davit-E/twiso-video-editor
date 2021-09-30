@@ -63,7 +63,7 @@ const App = () => {
               path='/preview/:id'
               redirect='/auth'
               where='in the App preview route'
-              allowed={userState.isAuthenticated}
+              allowed={true}
               component={Preview}
             />
             <Route path='/'>
