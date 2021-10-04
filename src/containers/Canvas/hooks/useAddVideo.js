@@ -38,7 +38,6 @@ const useAddVideo = (
       fabricVideo.height = speaker.h;
       fabricVideo.cropRect = { ...speaker };
     }
-    fabricVideo.controls.mtr.visible = false;
     return fabricVideo;
   }, []);
 

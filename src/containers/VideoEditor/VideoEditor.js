@@ -51,11 +51,11 @@ const VideoEditor = ({ speakers }) => {
   const isFirstLoad = useRef(true);
   const isMounted = useRef(false);
 
-  // useEffect(() => {
-  //   console.log(editorState.currentObject.object);
-  //   if (editorState.currentObject.object)
-  //     console.log(editorState.currentObject.object.id);
-  // }, [editorState]);
+  useEffect(() => {
+    console.log(editorState.currentObject);
+    // if (editorState.currentObject.object)
+    //   console.log(editorState.currentObject.object.id);
+  }, [editorState]);
 
   useEffect(() => {
     isMounted.current = true;

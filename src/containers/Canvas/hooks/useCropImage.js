@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useState } from 'react';
 import { restrictBox, prepareForImageCrop, cropImage } from '../utils/crop';
 
-const useCropImage = (state, dispatch, canvas, idCount, updatetId) => {
+const useCropImage = (state, dispatch, canvas) => {
   const [isCropping, setIsCropping] = useState(false);
   const [activeInfo, setActiveInfo] = useState(null);
   const [activeEl, setAcitveEl] = useState(null);
@@ -31,37 +31,26 @@ const useCropImage = (state, dispatch, canvas, idCount, updatetId) => {
   // If Cropped Image
   useEffect(() => {
     if (croppedImage && state.shouldCropImage) {
-      croppedImage.controls.mtr.visible = true;
       canvas.getObjects().forEach((el) => {
         if (el.type === 'cropbox') canvas.remove(el);
-        else if (el.id !== 'background') el.selectable = true;
+        el.selectable = true;
       });
       for (let [key, value] of Object.entries(activeInfo)) {
         croppedImage[key] = value;
       }
-      croppedImage.id = idCount;
-      updatetId();
-      canvas.remove(activeEl);
+      canvas.setActiveObject(croppedImage);
       dispatch({
         type: 'setCurrentObject',
-        data: { type: 'image', data: croppedImage },
+        data: { type: 'customImage', object: croppedImage },
       });
       dispatch({
         type: 'setImageCornerRadius',
         data: activeInfo.cornerRadius,
       });
-      canvas.add(croppedImage).setActiveObject(croppedImage);
-      dispatch({
-        type: 'setCurrentCoords',
-        data: croppedImage.lineCoords,
-      });
       dispatch({ type: 'setIsCropMode', data: false });
       cropFinishHandler(canvas, cropbox, dispatch);
     }
   }, [
-    idCount,
-    updatetId,
-    activeEl,
     cropbox,
     activeInfo,
     croppedImage,
@@ -76,7 +65,6 @@ const useCropImage = (state, dispatch, canvas, idCount, updatetId) => {
     if (state.isCropMode) {
       let active = canvas.getActiveObject();
       setActiveInfo({
-        id: active.id,
         cornerRadius: active.cornerRadius,
         top: active.top,
         left: active.left,
@@ -98,7 +86,7 @@ const useCropImage = (state, dispatch, canvas, idCount, updatetId) => {
   useEffect(() => {
     if (cropbox && state.isCropMode) {
       canvas.on('mouse:down', (e) => {
-        if (e.target && e.target.id === activeInfo.id) {
+        if (e.target && e.target.id === activeEl.id) {
           canvas.setActiveObject(cropbox);
         } else if (!e.target || e.target.type !== 'cropbox') {
           dispatch({ type: 'setShouldCropImage', data: true });
@@ -106,7 +94,7 @@ const useCropImage = (state, dispatch, canvas, idCount, updatetId) => {
         }
       });
     }
-  }, [cropbox, state, dispatch, canvas, activeInfo]);
+  }, [cropbox, state, dispatch, canvas, activeEl]);
 
   // Dispose of Crop
   useEffect(() => {

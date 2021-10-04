@@ -20,7 +20,7 @@ const roundedCorners = (img, radius) => {
 
 export const updateImageStyle = (state, canvas, dispatch) => {
   let image = canvas.getActiveObject();
-  if (image && image.type === 'image') {
+  if (image && image.type === 'customImage') {
     let radius = state.imageState.cornerRadius;
     image.set('clipPath', roundedCorners(image, radius));
     image.cornerRadius = radius;

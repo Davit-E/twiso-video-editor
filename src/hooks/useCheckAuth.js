@@ -2,7 +2,7 @@ import { useEffect, useCallback, useRef, useState } from 'react';
 import setAuthToken from '../utils/setAuthToken';
 import axios from '../axios-instance';
 
-const useCheckAuth = () => {
+const useCheckAuth = (dispatch) => {
   const [newToken, setNewToken] = useState(null);
   const [isAuth, setIsAuth] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
@@ -53,11 +53,12 @@ const useCheckAuth = () => {
       localStorage.setItem('token', newToken);
       setAuthToken(newToken);
       setIsAuth(true);
+      dispatch({ type: 'setIsAuthenticated', data: true });
     } else if (refreshError) {
       localStorage.removeItem('token');
     }
     setIsChecking(false);
-  }, [newToken, refreshError]);
+  }, [newToken, refreshError, dispatch]);
 
   useEffect(() => {
     let token = localStorage.getItem('token');

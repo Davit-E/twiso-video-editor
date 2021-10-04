@@ -14,7 +14,7 @@ export const handlePaste = (
     cloned.id = objId;
     cloned.top = top;
     cloned.left = left;
-    if (type === 'image') {
+    if (type === 'customImage') {
       cloned.isSvg = clipboard.object.isSvg;
       cloned.cornerRadius = clipboard.object.cornerRadius;
     } else if (type === 'textbox') {

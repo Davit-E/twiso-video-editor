@@ -22,7 +22,7 @@ const useUpdateObject = (state, dispatch, canvas) => {
     ) {
       updateShapeStyle(state, canvas, dispatch);
     }
-    if (state.shouldUpdateImage && state.currentObject.type === 'image') {
+    if (state.shouldUpdateImage && state.currentObject.type === 'customImage') {
       updateImageStyle(state, canvas, dispatch);
     }
   }, [state, dispatch, canvas]);

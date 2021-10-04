@@ -1,11 +1,11 @@
 import { fabric } from 'fabric';
 
 export const addNewImage = (state, canvas, dispatch, id, updateId) => {
-  let image = state.imageToAdd.src;
+  let imageSrc = state.imageToAdd.src;
   if (state.shouldReplaceImage) {
     let active = canvas.getActiveObject();
-    fabric.Image.fromURL(
-      image,
+    fabric.CustomImage.fromURL(
+      imageSrc,
       (img) => {
         img.top = active.top;
         img.left = active.left;
@@ -23,53 +23,12 @@ export const addNewImage = (state, canvas, dispatch, id, updateId) => {
       { crossOrigin: 'Anonymous' }
     );
   } else {
-    fabric.Image.fromURL(
-      image,
+    fabric.CustomImage.fromURL(
+      imageSrc,
       (img) => {
         img.scaleToWidth(256);
         img.left = 100;
         img.top = 100;
-        img.id = id;
-        img.cornerRadius = 0;
-        img.isSvg = state.imageToAdd.type === 'svg';
-        canvas.add(img).setActiveObject(img);
-        canvas.requestRenderAll();
-        updateId();
-      },
-      { crossOrigin: 'Anonymous' }
-    );
-  }
-  dispatch({ type: 'setImageToAdd', data: null });
-};
-
-export const addNewImage2 = (state, canvas, dispatch, id, updateId) => {
-  let image = state.imageToAdd.src;
-  if (state.shouldReplaceImage) {
-    let active = canvas.getActiveObject();
-    fabric.ImageWithCrop.fromURL(
-      image,
-      (img) => {
-        img.top = active.top;
-        img.left = active.left;
-        img.scaleToWidth(active.width * active.scaleX);
-        img.angle = active.angle;
-        img.id = active.id;
-        img.cornerRadius = active.cornerRadius;
-        img.isSvg = state.imageToAdd.type === 'svg';
-        canvas.remove(active);
-        canvas.add(img).setActiveObject(img);
-        canvas.requestRenderAll();
-        dispatch({ type: 'setShouldUpdateImage', data: true });
-        dispatch({ type: 'setShouldReplaceImage', data: false });
-      },
-      { crossOrigin: 'Anonymous' }
-    );
-  } else {
-    fabric.ImageWithCrop.fromURL(
-      image,
-      (img) => {
-        img.left = 0;
-        img.top = 0;
         img.id = id;
         img.cornerRadius = 0;
         img.isSvg = state.imageToAdd.type === 'svg';

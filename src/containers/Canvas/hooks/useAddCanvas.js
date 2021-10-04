@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { fabric } from 'fabric';
 import { loadAndUse } from '../utils/updateObject';
 
-const addCanvas = (state, id, info, shouldLoad) => {
+const addCanvas = (state, id, info, shouldLoad, setObjectIdCount) => {
   let canvas = new fabric.Canvas(id, {
     width: state.initialWidth,
     height: state.initialHeight,
@@ -15,9 +15,12 @@ const addCanvas = (state, id, info, shouldLoad) => {
 
   if (shouldLoad && info.canvas) {
     canvas.clear();
+    let lastId = 1;
     canvas.loadFromJSON(info.canvas, () => {
       let objects = canvas.getObjects();
       let textObjects = objects.filter((obj) => {
+        obj.id = lastId;
+        lastId++;
         return obj.type === 'textbox';
       });
       for (let i = 0; i < textObjects.length; i++) {
@@ -25,6 +28,7 @@ const addCanvas = (state, id, info, shouldLoad) => {
         loadAndUse(canvas, text, text.fontFamily);
       }
     });
+    setObjectIdCount(lastId);
   }
 
   let ratio = Math.min(
@@ -46,7 +50,8 @@ const useAddCanvas = (
   id,
   info,
   setIsCanvasData,
-  speakers
+  speakers,
+  setObjectIdCount
 ) => {
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
@@ -54,7 +59,7 @@ const useAddCanvas = (
     if (isFirstLoad && state.initialWidth > 0) {
       let shouldLoad = speakers.length === 0 && info && info.canvas;
       if (shouldLoad) setIsCanvasData(true);
-      let canvas = addCanvas(state, id, info, shouldLoad);
+      let canvas = addCanvas(state, id, info, shouldLoad, setObjectIdCount);
       setCanvas(canvas, info);
       setIsCanvasSet(true);
       setIsFirstLoad(false);
@@ -68,6 +73,7 @@ const useAddCanvas = (
     id,
     info,
     setIsCanvasData,
+    setObjectIdCount,
   ]);
 };
 

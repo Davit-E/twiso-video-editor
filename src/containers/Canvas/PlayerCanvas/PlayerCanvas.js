@@ -57,7 +57,8 @@ const PlayerCanvas = ({
     'canvas',
     info,
     setIsCanvasData,
-    speakers
+    speakers,
+    setObjectIdCount
   );
   useKeyEvents(
     canvas,

@@ -112,6 +112,7 @@ const getImageCropBox = (topBound, leftBound, activeEl) => {
     selectable: true,
     lockScalingFlip: true,
     type: 'cropbox',
+    excludeFromExport: true,
   });
   return box;
 };
@@ -152,111 +153,26 @@ export const prepareForImageCrop = (
 };
 
 export const cropImage = (active, box, setCropped) => {
-  let ratioX = box.scaleX / active.scaleX;
-  let ratioY = box.scaleY / active.scaleY;
-  let newTop = (box.top - active.top) / active.scaleY;
-  let newLeft = (box.left - active.left) / active.scaleX;
-
-  let rect = new fabric.Rect({
-    fill: 'rgba(0,0,0,0)',
-    top: newTop,
-    left: newLeft,
-    width: box.width,
-    height: box.height,
-    scaleX: ratioX,
-    scaleY: ratioY,
-    absolutePositioned: true,
-  });
-
-  let newCanvas = new fabric.Canvas();
-  newCanvas.setDimensions({
-    width: active.width,
-    height: active.height,
-  });
-  fabric.Image.fromURL(
-    active._element.currentSrc,
-    (image) => {
-      newCanvas.add(image);
-      newCanvas.add(rect);
-      newCanvas.requestRenderAll();
-      let src = newCanvas.toDataURL({
-        left: rect.left,
-        top: rect.top,
-        width: rect.width * rect.scaleX,
-        height: rect.height * rect.scaleY,
-      });
-      fabric.Image.fromURL(
-        src,
-        (img) => {
-          img.scaleToWidth(box.width * box.scaleX);
-          img.id = active.id;
-          setCropped(img);
-        },
-        { crossOrigin: 'Anonymous' }
-      );
-    },
-    { crossOrigin: 'Anonymous' }
-  );
-};
-
-export const cropImage2 = (active, box, setCropped) => {
-  console.log('active: ', active);
-  console.log(active.width);
-  console.log(active.height);
   let prevCrop = active.cropRect;
-  console.log(prevCrop);
-  console.log('boxTop: ' + box.top, 'activeTop: ' + active.top);
-
   let ratioX = box.scaleX / active.scaleX;
   let ratioY = box.scaleY / active.scaleY;
   let newTop = (box.top - active.top) / active.scaleY;
   let newLeft = (box.left - active.left) / active.scaleX;
-
-  let newWidthRatio = 1;
-  let newHeightRatio = 1;
   if (prevCrop) {
-    newWidthRatio = prevCrop.w / active.width;
-    newHeightRatio = prevCrop.h / active.height;
-    // ratioX *= newWidthRatio;
-    // ratioY *= newHeightRatio;
+    ratioX *= prevCrop.w / active.width;
+    ratioY *= prevCrop.h / active.height;
     newTop += prevCrop.y;
     newLeft += prevCrop.x;
-    console.log('newLeft, newTop', newLeft, newTop);
-    // console.log(newWidthRatio, newHeightRatio);
-    console.log(box.width, ratioX);
-    console.log(box.height, ratioY);
   }
-  active.width = box.width;
-  active.height = box.height;
-  active.scaleX = box.scaleX;
-  active.scaleY = box.scaleY;
+
+  active.width = box.width * ratioX;
+  active.height = box.height * ratioY;
   active.cropRect = {
-    x: newTop,
-    y: newLeft,
+    x: newLeft,
+    y: newTop,
     w: box.width * ratioX,
     h: box.height * ratioY,
   };
-  // let w = box.width * box.scaleX;
-  // let h = box.height * box.scaleY;
-  // let x = box.lineCoords.tl.x / canvas.getZoom();
-  // let y = box.lineCoords.tr.y / canvas.getZoom();
-  setCropped(active);
 
-  // fabric.ImageWithCrop.fromURL(active._element.currentSrc, (image) => {
-  //   image.id = active.id;
-  //   image.width = box.width * ratioX;
-  //   image.height = box.height * ratioY;
-  //   // image.scaleToWidth(box.width * box.scaleX);
-  //   // image.scaleX = ratioX;
-  //   // image.scaleY = ratioY;
-  //   image.cropRect = {
-  //     x: newLeft,
-  //     y: newTop,
-  //     w: box.width * ratioX,
-  //     h: box.height * ratioY,
-  //   };
-  //   console.log(image.cropRect);
-  //   console.log(image);
-  //   setCropped(image);
-  // });
+  setCropped(active);
 };

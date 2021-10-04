@@ -35,14 +35,14 @@ const handleImage = (e, dispatch) => {
     newImageState[property] = e.target[property];
   });
   dispatch({ type: 'setImageState', data: newImageState });
-  return 'image';
+  return 'customImage';
 };
 
 const handleSelected = (e, dispatch) => {
   let obj = { type: '', object: null };
   dispatch({ type: 'setCurrentCoords', data: e.target.lineCoords });
   if (e.target.type === 'textbox') obj.type = handleText(e, dispatch);
-  else if (e.target.type === 'image' && e.target.type !== 'video')
+  else if (e.target.type === 'customImage' && e.target.type !== 'video')
     obj.type = handleImage(e, dispatch);
   else if (e.target.id === 'subtitle') obj.type = 'subtitle';
   else if (e.target.type !== 'video') obj.type = handleShape(e, dispatch);

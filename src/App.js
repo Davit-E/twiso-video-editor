@@ -5,8 +5,6 @@ import Auth from './containers/Auth/Auth';
 import Homepage from './containers/Homepage/Homepage';
 import UserContext from './contexts/UserContext';
 import useUserState from './hooks/useUserState';
-import './fabricConfig/fabricConfig';
-
 import {
   HashRouter as Router,
   Route,
@@ -18,6 +16,7 @@ import useTrackTime from './hooks/useTrackTime';
 import useRefreshToken from './hooks/useRefreshToken';
 import setAuthToken from './utils/setAuthToken';
 import Preview from './containers/Preview/Preview';
+import './fabricConfig/fabricConfig';
 
 const App = () => {
   const [userState, userDispatch] = useUserState();
@@ -67,11 +66,7 @@ const App = () => {
               component={Preview}
             />
             <Route path='/'>
-              {userState.isAuthenticated ? (
-                <Redirect to='/home' />
-              ) : (
-                <Redirect to='/auth' />
-              )}
+              <Redirect to='/home' />
             </Route>
           </Switch>
         </Router>

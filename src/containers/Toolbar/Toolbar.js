@@ -56,7 +56,7 @@ const Toolbar = ({ canvas }) => {
       {shapeArr.includes(editorState.currentObject.type) ? (
         <ShapeToolbar coords={coords} />
       ) : null}
-      {editorState.currentObject.type === 'image' ? <ImageToolbar /> : null}
+      {editorState.currentObject.type === 'customImage' ? <ImageToolbar /> : null}
     </div>
   );
 };

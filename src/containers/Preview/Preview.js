@@ -14,7 +14,7 @@ import useCheckAuth from '../../hooks/useCheckAuth';
 
 const Preview = () => {
   const { userDispatch } = useContext(UserContext);
-  const { isChecking, isAuth } = useCheckAuth();
+  const { isChecking, isAuth } = useCheckAuth(userDispatch);
   const { getVideo, info, getVideoError } = useGetVideo();
   const { getPublicVideo, publicInfo, getPublicVideoError } =
     useGetPublicVideo();
@@ -50,7 +50,7 @@ const Preview = () => {
     let isId = params && params.id;
     if (!isChecking && !isAuth && isId) getPublicVideo(params.id);
     else if (!isChecking && isAuth && isId) getVideo(params.id);
-  }, [isChecking, isAuth, params, getPublicVideo, getVideo, userDispatch]);
+  }, [isChecking, isAuth, params, getPublicVideo, getVideo]);
 
   const downloadVideoHandler = () => {
     videoDownloadRef.current.click();

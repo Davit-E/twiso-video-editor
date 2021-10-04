@@ -41,9 +41,7 @@ const Player = ({
   const containerRef = useRef(null);
   const playClickHandler = () => {
     if (isPlaying) videoRef.current.pause();
-    else if (!editorState.isCropMode && !editorState.shouldCropImage) {
-      videoRef.current.play();
-    }
+    else videoRef.current.play();
   };
 
   useContainerSize(

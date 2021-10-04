@@ -23,7 +23,7 @@ const ImageDropdown = ({ assets, setAssets, setShouldFetch, isFirstMount }) => {
   }, [uploadResponse, setAssets]);
 
   const clickHandler = (e) => {
-    let imageType = 'image';
+    let imageType = 'customImage';
     let src = e.currentTarget.src;
     let splitSrc = src.split('.');
     if (splitSrc[splitSrc.length - 1] === 'svg') imageType = 'svg';
