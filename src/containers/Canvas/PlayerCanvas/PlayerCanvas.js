@@ -32,7 +32,14 @@ const PlayerCanvas = ({
   const [isCanvasData, setIsCanvasData] = useState(false);
   const updatetObjectId = useCallback(() => setObjectIdCount((i) => i + 1), []);
 
-  useGuideLines(editorState, isCanvasSet, canvas, eventState, eventDispatch);
+  useGuideLines(
+    editorState.canvasState,
+    isCanvasSet,
+    canvas,
+    eventState,
+    eventDispatch,
+    editorState.isCropMode
+  );
   useAddObject(
     editorState,
     editorDispatch,

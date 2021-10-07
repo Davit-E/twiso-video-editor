@@ -2,24 +2,22 @@ import React, { useState, useRef, useEffect } from 'react';
 import styles from './SelectSpeakers.module.css';
 import Navbar from '../../components/Navbar/Navbar';
 import { useHistory } from 'react-router-dom';
-import useContainerSize from '../../hooks/useContainerSize';
-import { getVideoSize } from '../../utils/getSize';
+import { getVideoSize } from './utils/getSize';
 import addSpeaker from '../../assets/editor/addSpeaker.svg';
 import removeSpeaker from '../../assets/editor/removeSpeaker.svg';
 import SpeakersCanvas from '../Canvas/SpeakersCanvas/SpeakersCanvas';
 import SpeakersContext from '../../contexts/SpeakersContext';
 import useSpeakersState from '../../hooks/useSpeakersState';
+import useContainerSize from './hooks/useContainerSize';
 
 const SelectSpeakers = ({ videoData, setSpeakers }) => {
   const [speakersState, speakersDispatch] = useSpeakersState();
   const history = useHistory();
   const [canvas, setCanvas] = useState(null);
-  const [containerSize, setContainerSize] = useState(null);
   const containerRef = useRef(null);
   const videoRef = useRef(null);
   const [videoSize, setVideoSize] = useState(null);
   const [boxArr, setBoxArr] = useState([]);
-  const containerPadding = 200;
 
   useEffect(() => {
     setSpeakers([]);
@@ -27,11 +25,8 @@ const SelectSpeakers = ({ videoData, setSpeakers }) => {
 
   useContainerSize(
     videoSize,
-    containerSize,
     speakersDispatch,
     containerRef,
-    setContainerSize,
-    containerPadding
   );
 
   const addSpeakerHandler = () => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import styles from './UploadProgress.module.css';
 
 const UploadProgress = ({
@@ -12,6 +12,7 @@ const UploadProgress = ({
   const [progress, setProgress] = useState(0);
   const [intervalId, setIntervalId] = useState(null);
   const uploadMaxPercentage = 40;
+  const isMounted = useRef(false);
 
   useEffect(() => {
     return () => {
@@ -23,12 +24,14 @@ const UploadProgress = ({
     let intervalTime = (videoDuration * 1000) / (100 - uploadMaxPercentage) / 2;
     // console.log(intervalTime);
     let interval = setInterval(() => {
-      setProgress((prevState) => {
-        if (prevState >= 99) {
-          clearInterval(interval);
-          return 99;
-        } else return prevState + 0.5;
-      });
+      if (isMounted.current) {
+        setProgress((prevState) => {
+          if (prevState >= 99) {
+            clearInterval(interval);
+            return 99;
+          } else return prevState + 0.5;
+        });
+      }
     }, intervalTime);
     setIntervalId(interval);
   }, [videoDuration]);
@@ -38,12 +41,14 @@ const UploadProgress = ({
     if (info) {
       clearInterval(intervalId);
       let interval = setInterval(() => {
-        setProgress((prevState) => {
-          if (prevState >= 100) {
-            clearInterval(interval);
-            return 100;
-          } else return prevState + 1;
-        });
+        if (isMounted.current) {
+          setProgress((prevState) => {
+            if (prevState >= 100) {
+              clearInterval(interval);
+              return 100;
+            } else return prevState + 1;
+          });
+        }
       }, 100);
     }
     return () => {
@@ -54,7 +59,9 @@ const UploadProgress = ({
   useEffect(() => {
     let timeout = null;
     if (progress === 100 && info) {
-      timeout =  setTimeout(() => setIsFinished(true), 1000);
+      timeout = setTimeout(() => {
+        if (isMounted.current) setIsFinished(true);
+      }, 1000);
     }
 
     return () => {
@@ -72,6 +79,11 @@ const UploadProgress = ({
       setProgress(Math.round(uploadProgress * (uploadMaxPercentage / 100)));
     }
   }, [isUploading, uploadProgress]);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => (isMounted.current = false);
+  }, []);
 
   return (
     <div className={styles.UploadProgress}>

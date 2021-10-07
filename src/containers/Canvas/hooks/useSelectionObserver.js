@@ -56,6 +56,7 @@ const useSelectionObserver = (isCanvasSet, canvas, state, dispatch) => {
         } else {
           e.target.top = 0;
           e.target.left = 0;
+          e.target.angle = 0;
         }
         e.target.setCoords();
       }

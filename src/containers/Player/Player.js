@@ -1,12 +1,13 @@
-import React, { useRef, useContext, useState } from 'react';
+import React, { useRef, useContext } from 'react';
 import styles from './Player.module.css';
 import PlayerCanvas from '../Canvas/PlayerCanvas/PlayerCanvas';
 import EventContext from '../../contexts/EventContext';
 import useEventState from '../../hooks/useEventsState';
 import EditorContext from '../../contexts/EditorContext';
 import CanvasToolbar from '../CanvasToolbar/CanvasToolbar';
-import play from '../../assets/editor/play.svg';
-import useContainerSize from '../../hooks/useContainerSize';
+import playSvg from '../../assets/editor/play.svg';
+import pauseSvg from '../../assets/editor/pause.svg';
+import useContainerSize from './hooks/useContainerSize';
 import usePlayerTime from './hooks/usePlayerTime';
 import useSubtitles from './hooks/useSubtitles';
 
@@ -17,7 +18,6 @@ const Player = ({
   isPlaying,
   words,
   currentTime,
-  videoSize,
   videoCuts,
   setNextCutIndex,
   setCurrentWordIndex,
@@ -36,22 +36,12 @@ const Player = ({
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const [eventState, eventDispatch] = useEventState();
-  const [containerSize, setContainerSize] = useState(null);
-  const containerPadding = 32;
   const containerRef = useRef(null);
   const playClickHandler = () => {
     if (isPlaying) videoRef.current.pause();
     else videoRef.current.play();
   };
-
-  useContainerSize(
-    videoSize,
-    containerSize,
-    editorDispatch,
-    containerRef,
-    setContainerSize,
-    containerPadding
-  );
+  useContainerSize(editorState.canvasState, editorDispatch, containerRef);
 
   usePlayerTime(
     videoRef,
@@ -89,7 +79,6 @@ const Player = ({
   return (
     <div className={styles.Player} ref={containerRef}>
       <EventContext.Provider value={{ eventState, eventDispatch }}>
-        {/* <p className={styles.Sub}>Adina Jackson family,</p> */}
         <div className={styles.PlayerContent}>
           <PlayerCanvas
             canvas={canvas}
@@ -104,7 +93,11 @@ const Player = ({
             <>
               <div className={styles.PlayerControls}>
                 <div className={styles.PlayButton} onClick={playClickHandler}>
-                  <img src={play} alt='play' />
+                  {isPlaying ? (
+                    <img src={pauseSvg} alt='pause' />
+                  ) : (
+                    <img src={playSvg} alt='play' />
+                  )}
                 </div>
               </div>
               <CanvasToolbar />

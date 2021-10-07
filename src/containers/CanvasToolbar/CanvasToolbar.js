@@ -5,6 +5,7 @@ import EditorContext from '../../contexts/EditorContext';
 import Backdrop from '../../components/Backdrop/Backdrop';
 import { ReactComponent as Templates } from '../../assets/editor/templates.svg';
 import { ReactComponent as Resize } from '../../assets/editor/resize.svg';
+import { ReactComponent as Crop } from '../../assets/editor/cropImage.svg';
 import { SketchPicker } from 'react-color';
 
 const CanvasToolbar = () => {
@@ -22,7 +23,7 @@ const CanvasToolbar = () => {
       }
       let id = e.currentTarget.id;
       if (id === 'resize') {
-        // editorDispatch({ type: 'setIsResizeDropdown', data: true });
+        editorDispatch({ type: 'setIsResizeDropdown', data: true });
       } else if (id === 'bgColor') {
         editorDispatch({ type: 'setIsCanvasBgColorDropdown', data: true });
       }
@@ -61,6 +62,11 @@ const CanvasToolbar = () => {
         <p className={styles.OptionText}>Resize</p>
       </div>
       <div className={styles.BorderDiv}></div>
+      <div className={styles.CropContainer} id='crop' onClick={clickHandler}>
+        <Crop />
+        <p className={styles.OptionText}>Crop</p>
+      </div>
+      <div className={styles.BorderDiv}></div>
       <div
         className={styles.ColorContainer}
         id='bgColor'
@@ -75,10 +81,7 @@ const CanvasToolbar = () => {
         <>
           <Backdrop></Backdrop>
           <div className={styles.ResizeDropdown} ref={resizeDropdownRef}>
-            <ResizeDropdown
-              state={editorState.canvasState}
-              dispatch={editorDispatch}
-            />
+            <ResizeDropdown />
           </div>
         </>
       ) : null}

@@ -6,7 +6,7 @@ import {
   deleteWord,
   restoreDeleted,
   deleteSelection,
-  findAndSetCurrentWord
+  findAndSetCurrentWord,
 } from './utils/updateTextAndCuts';
 import Words from './Words/Words';
 import { findWordIndexWithId } from '../../utils/findIndex';
@@ -55,7 +55,7 @@ const Transcription = ({
   );
 
   useEffect(() => {
-    if (isFirstLoad) {
+    if (isFirstLoad && words && words.length > 0) {
       setIsFirstLoad(null);
       findAndSetCurrentWord(
         0,
@@ -173,8 +173,9 @@ const Transcription = ({
   }, [mouseUpHandler]);
 
   const cutClickHandler = () => {
+    let isWordsArr = words && words.length > 0;
     if (isPlaying) videoRef.current.pause();
-    if (!currentSelection && currentWordIndex !== null) {
+    if (!currentSelection && currentWordIndex !== null && isWordsArr) {
       deleteWord(
         words,
         currentWordIndex,
@@ -182,7 +183,7 @@ const Transcription = ({
         setCuts,
         setPlayerTime
       );
-    } else if (currentSelection) {
+    } else if (currentSelection && isWordsArr) {
       deleteSelection(
         words,
         setCurrentWordIndex,

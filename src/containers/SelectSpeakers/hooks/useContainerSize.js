@@ -1,15 +1,10 @@
 import { useEffect, useCallback, useState } from 'react';
 import { getContainerSize } from '../utils/getSize';
 
-const useContainerSize = (
-  videoSize,
-  containerSize,
-  dispatch,
-  containerRef,
-  setContainerSize,
-  containerPadding
-) => {
+const useContainerSize = (videoSize, dispatch, containerRef) => {
   const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const [containerSize, setContainerSize] = useState(null);
+  const containerPadding = 200;
 
   const handleSize = useCallback(() => {
     getContainerSize(containerRef, setContainerSize, containerPadding);
@@ -28,7 +23,6 @@ const useContainerSize = (
     if (videoSize && containerSize) {
       let width = containerSize.width;
       let height = (videoSize.height * width) / videoSize.width;
-      // console.log(width, height);
       let isInRange = width > 100;
       if (isFirstLoad && isInRange) {
         setIsFirstLoad(false);

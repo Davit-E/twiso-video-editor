@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import styles from './SpeakersCanvas.module.css';
 import useAddCanvas from './hooks/useAddCanvas';
 import useAddVideo from './hooks/useAddVideo';
-import useUpdateCanvas from '../hooks/useUpdateCanvas';
+import useUpdateCanvas from './hooks/useUpdateCanvas';
 import useGuideLines from '../hooks/useGuideLines';
 import useCropVideo from '../hooks/useCropVideo';
 

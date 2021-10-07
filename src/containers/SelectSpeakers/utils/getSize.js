@@ -11,7 +11,6 @@ export const getContainerSize = (
     width = 800;
   }
   setContainerSize({ width, height });
-  // setContainerSize({ width: 640, height: 360 });
 };
 
 export const getVideoSize = (videoRef, setVideoSize) => {

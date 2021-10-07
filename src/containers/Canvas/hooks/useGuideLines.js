@@ -15,7 +15,8 @@ const useGuideLines = (
   isCanvasSet,
   canvas,
   eventState,
-  eventDispatch
+  eventDispatch,
+  isCropMode
 ) => {
   const [ctx, setCtx] = useState(null);
   const [viewportTransform, setViewportTransform] = useState(null);
@@ -183,7 +184,7 @@ const useGuideLines = (
   }, [state.shouldUpdateCanvasSize, isCanvasSet, initGuideLines]);
 
   useEffect(() => {
-    if (isCanvasSet && ctx && !state.isCropMode) {
+    if (isCanvasSet && ctx && !isCropMode) {
       canvas.on('mouse:down', handleMouseDown);
       canvas.on('object:moving', (e) => {
         if (eventDispatch && !eventState.isMoving) {
@@ -200,7 +201,7 @@ const useGuideLines = (
         }
         handleMouseUp(e);
       });
-    } else if (state.isCropMode) removelistneres(canvas);
+    } else if (isCropMode) removelistneres(canvas);
     return () => {
       if (isCanvasSet && ctx) removelistneres(canvas);
     };
@@ -208,7 +209,7 @@ const useGuideLines = (
     eventState,
     eventDispatch,
     state.shouldUpdateCanvasSize,
-    state.isCropMode,
+    isCropMode,
     removelistneres,
     isCanvasSet,
     ctx,

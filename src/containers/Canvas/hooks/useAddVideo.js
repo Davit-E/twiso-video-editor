@@ -25,20 +25,15 @@ const useAddVideo = (
   }, [canvas]);
 
   const newVideo = useCallback((video, speaker, id) => {
-    let fabricVideo = new fabric.Video(video, {
-      top: 0,
-      left: 0,
+    return new fabric.Video(video, {
       id,
       lockScalingFlip: true,
+      left: speaker.x,
+      top: speaker.y,
+      width: speaker.w,
+      height: speaker.h,
+      cropRect: { ...speaker },
     });
-    if (speaker) {
-      fabricVideo.left = speaker.x;
-      fabricVideo.top = speaker.y;
-      fabricVideo.width = speaker.w;
-      fabricVideo.height = speaker.h;
-      fabricVideo.cropRect = { ...speaker };
-    }
-    return fabricVideo;
   }, []);
 
   useEffect(() => {
@@ -62,13 +57,21 @@ const useAddVideo = (
             canvas.add(speakerVideo);
             updateId();
           }
+        } else {
+          let speakerVideo = newVideo(
+            video,
+            { w: video.videoWidth, h: video.videoHeight, x: 0, y: 0 },
+            1
+          );
+          console.log(speakerVideo);
+          canvas.add(speakerVideo);
+          updateId();
         }
       }
       animate();
     }
   }, [
     isCanvasData,
-    idCount,
     updateId,
     video,
     canvas,

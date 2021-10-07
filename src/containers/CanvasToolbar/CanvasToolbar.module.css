@@ -26,6 +26,7 @@
 
 .TemplatesContainer,
 .ResizeContainer,
+.CropContainer,
 .ColorContainer {
   display: flex;
   align-items: center;
@@ -35,16 +36,19 @@
 }
 .TemplatesContainer:hover,
 .ResizeContainer:hover,
+.CropContainer:hover,
 .ColorContainer:hover {
   background: rgba(88, 110, 224, 0.06);
 }
 .TemplatesContainer:active,
 .ResizeContainer:active,
+.CropContainer:active,
 .ColorContainer:active {
   background: rgba(88, 110, 224, 0.12);
 }
 
-.ResizeContainer {
+.ResizeContainer,
+.CropContainer {
   padding: 0 1rem;
 }
 .TemplatesContainer {
@@ -72,7 +76,7 @@
   height: auto;
   position: absolute;
   z-index: 200;
-  right: 5.5rem;
+  right: -0.5rem;
   bottom: 3rem;
 }
 

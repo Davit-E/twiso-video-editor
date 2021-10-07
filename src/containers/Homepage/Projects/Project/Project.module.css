@@ -15,7 +15,8 @@
   object-fit: cover;
   user-select: none;
   background-size: cover;
-  background-position: 50% 90%;
+  background-repeat: no-repeat;
+  background-position: 0 -1.312rem;
   padding-top: 56.25%;
   width: 100%;
   text-decoration: none;

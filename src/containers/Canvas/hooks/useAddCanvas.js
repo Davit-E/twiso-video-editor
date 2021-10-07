@@ -4,8 +4,9 @@ import { loadAndUse } from '../utils/updateObject';
 
 const addCanvas = (state, id, info, shouldLoad, setObjectIdCount) => {
   let canvas = new fabric.Canvas(id, {
-    width: state.initialWidth,
-    height: state.initialHeight,
+    width: state.videoWidth,
+    height: state.videoHeight,
+    resize: state.resize,
     backgroundColor: 'rgba(255,255,255,1)',
     preserveObjectStacking: true,
     fireRightClick: true,
@@ -32,8 +33,8 @@ const addCanvas = (state, id, info, shouldLoad, setObjectIdCount) => {
   }
 
   let ratio = Math.min(
-    state.width / state.initialWidth,
-    state.height / state.initialHeight
+    state.width / state.videoWidth,
+    state.height / state.videoHeight
   );
   canvas.setZoom(ratio);
   canvas.setDimensions({
@@ -56,8 +57,12 @@ const useAddCanvas = (
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   useEffect(() => {
-    if (isFirstLoad && state.initialWidth > 0) {
-      let shouldLoad = speakers.length === 0 && info && info.canvas;
+    if (isFirstLoad && state.width > 0) {
+      let shouldLoad =
+        speakers.length === 0 &&
+        info &&
+        info.canvas &&
+        info.canvas.objects.length > 0;
       if (shouldLoad) setIsCanvasData(true);
       let canvas = addCanvas(state, id, info, shouldLoad, setObjectIdCount);
       setCanvas(canvas, info);

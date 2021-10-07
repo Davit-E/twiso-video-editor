@@ -5,11 +5,17 @@ const initialState = {
   canvasState: {
     initialWidth: 0,
     initialHeight: 0,
+    videoHeight: 0,
+    videoWidth: 0,
+    containerWidth: 0,
+    containerHeight: 0,
+    resize: 'original',
     width: 0,
     height: 0,
     backgroundColor: 'rgba(255,255,255,1)',
     shouldUpdateCanvas: false,
     shouldUpdateCanvasSize: false,
+    shouldСalculateCanvasSize: false,
   },
   shapeToAdd: null,
   imageToAdd: null,
@@ -136,6 +142,14 @@ const reducer = (state, action) => {
           shouldUpdateCanvasSize: action.data,
         },
       };
+    case 'setShouldСalculateCanvasSize':
+      return {
+        ...state,
+        canvasState: {
+          ...state.canvasState,
+          shouldСalculateCanvasSize: action.data,
+        },
+      };
     case 'setCanvasBackgroundColor':
       return {
         ...state,
@@ -155,6 +169,27 @@ const reducer = (state, action) => {
           height: action.data.height,
         },
       };
+    case 'setVideoSize':
+      return {
+        ...state,
+        canvasState: {
+          ...state.canvasState,
+          shouldСalculateCanvasSize: true,
+          videoWidth: action.data.width,
+          videoHeight: action.data.height,
+          resize: action.data.resize,
+        },
+      };
+    case 'setContainerSize':
+      return {
+        ...state,
+        canvasState: {
+          ...state.canvasState,
+          shouldСalculateCanvasSize: true,
+          containerWidth: action.data.width,
+          containerHeight: action.data.height,
+        },
+      };
     case 'setCanvasInitialSize':
       return {
         ...state,
@@ -162,8 +197,6 @@ const reducer = (state, action) => {
           ...state.canvasState,
           initialWidth: action.data.initialWidth,
           initialHeight: action.data.initialHeight,
-          width: action.data.width,
-          height: action.data.height,
         },
       };
     case 'setImageCornerRadius':

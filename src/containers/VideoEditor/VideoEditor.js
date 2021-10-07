@@ -13,7 +13,7 @@ import useUpdateProject from '../../hooks/useUpdateProject';
 import useDownloadVideo from '../../hooks/useDownloadVideo';
 
 const getCanvasObject = (canvas) => {
-  return canvas.toJSON([
+  let jsonCanvas = canvas.toJSON([
     'id',
     'cornerRadius',
     'isSvg',
@@ -23,6 +23,15 @@ const getCanvasObject = (canvas) => {
     'ry',
     'noScaleCache',
   ]);
+  let zoom = canvas.getZoom();
+  let width = canvas.getWidth() / zoom;
+  let height = canvas.getHeight() / zoom;
+  // jsonCanvas.width = 1280;
+  // jsonCanvas.height = 720;
+  jsonCanvas.width = width;
+  jsonCanvas.height = height;
+  jsonCanvas.resize = canvas.resize;
+  return jsonCanvas;
 };
 
 const VideoEditor = ({ speakers }) => {
@@ -36,7 +45,6 @@ const VideoEditor = ({ speakers }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(null);
   const [nextCutIndex, setNextCutIndex] = useState(null);
-  const [videoSize, setVideoSize] = useState(null);
   const [shouldRerenderSub, setShouldRerenderSub] = useState(false);
   const [canvas, setCanvas] = useState(null);
   const [fabricSub, setFabricSub] = useState(null);
@@ -51,11 +59,9 @@ const VideoEditor = ({ speakers }) => {
   const isFirstLoad = useRef(true);
   const isMounted = useRef(false);
 
-  useEffect(() => {
-    console.log(editorState.currentObject);
-    // if (editorState.currentObject.object)
-    //   console.log(editorState.currentObject.object.id);
-  }, [editorState]);
+  // useEffect(() => {
+  //   console.log(editorState.canvasState);
+  // }, [editorState]);
 
   useEffect(() => {
     isMounted.current = true;
@@ -104,8 +110,8 @@ const VideoEditor = ({ speakers }) => {
   useEffect(() => {
     if (isFirstLoad.current) {
       isFirstLoad.current = false;
-    } else if (!isDownloading) triggerWordsUpdate();
-  }, [videoCuts, triggerWordsUpdate, isDownloading]);
+    } else if (!isDownloading && words) triggerWordsUpdate();
+  }, [videoCuts, triggerWordsUpdate, isDownloading, words]);
 
   useEffect(() => {
     if (editorState.shouldTriggerUpdate && !isDownloading) {
@@ -177,7 +183,6 @@ const VideoEditor = ({ speakers }) => {
                 setFabricSub={setFabricSub}
                 currentSub={currentSub}
                 setCurrentSub={setCurrentSub}
-                videoSize={videoSize}
                 shouldRerenderSub={shouldRerenderSub}
                 setShouldRerenderSub={setShouldRerenderSub}
                 speakers={speakers}
@@ -189,10 +194,8 @@ const VideoEditor = ({ speakers }) => {
                 currentSelection={currentSelection}
                 setCurrentSelection={setCurrentSelection}
                 setCurrentTime={setCurrentTime}
-                videoSize={videoSize}
                 videoCuts={videoCuts}
                 words={words}
-                setVideoSize={setVideoSize}
                 setNextCutIndex={setNextCutIndex}
                 setCurrentWordIndex={setCurrentWordIndex}
                 setCurrentSub={setCurrentSub}

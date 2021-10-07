@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styles from './Video.module.css';
-import { getVideoSize } from '../../utils/getSize';
 import { handlePlay, handleEnd, handlePause } from './utils/videoEvents';
+import EditorContext from '../../contexts/EditorContext';
 
 const Video = ({
   videoRef,
@@ -9,26 +9,16 @@ const Video = ({
   currentSelection,
   setCurrentSelection,
   setCurrentTime,
-  videoSize,
   videoCuts,
   words,
-  setVideoSize,
   setNextCutIndex,
   setCurrentWordIndex,
   setCurrentSub,
   subList,
   info,
 }) => {
+  const { editorDispatch } = useContext(EditorContext);
   const [intervalId, setIntervalId] = useState(null);
-  // const seeking = (e) => {
-  //   console.log(e);
-  //   console.log(videoRef.current.seekable);
-  // };
-
-  // const seeked = (e) => {
-  //   console.log(e);
-  //   console.log(videoRef.current.seekable);
-  // };
 
   useEffect(() => {
     return () => {
@@ -36,12 +26,33 @@ const Video = ({
     };
   }, [intervalId]);
 
+  const getVideoSize = () => {
+    let initialWidth = videoRef.current.videoWidth;
+    let initialHeight = videoRef.current.videoHeight;
+    editorDispatch({
+      type: 'setCanvasInitialSize',
+      data: { initialWidth, initialHeight },
+    });
+    let data = {};
+    if (info.canvas && info.canvas.width) {
+      data = {
+        width: +info.canvas.width,
+        height: +info.canvas.height,
+        resize: info.canvas.resize,
+      };
+    } else {
+      data = {
+        width: initialWidth,
+        height: initialHeight,
+        resize: 'original',
+      };
+    }
+    editorDispatch({ type: 'setVideoSize', data });
+  };
+
   return (
     <video
-      // style={{ display: viedoForUpload ? 'block' : 'none' }}
       src={info ? info.url : null}
-      width={videoSize ? videoSize.width : 0}
-      height={videoSize ? videoSize.height : 0}
       id='video'
       preload='auto'
       className={styles.Video}
@@ -69,9 +80,7 @@ const Video = ({
           subList
         )
       }
-      onLoadedMetadata={() => getVideoSize(videoRef, setVideoSize)}
-      // onSeeking={seeking}
-      // onSeeked={seeked}
+      onLoadedMetadata={getVideoSize}
     />
   );
 };
