@@ -1,11 +1,20 @@
 import { useEffect, useCallback } from 'react';
 import { getContainerSize } from '../utils/getSize';
 
-const getCanvasSize = (videoWidth, videHeight, containerWidth) => {
+const getCanvasSize = (state) => {
   let maxWidth = 800;
   let maxHeight = 560;
-  let width = containerWidth;
-  let height = (videHeight * width) / videoWidth;
+  if (state.resize === 'square') maxHeight = 500;
+  // if (state.containerHeight < maxHeight){
+  //   console.log(true);
+  //   maxHeight = 100;
+  // } 
+  let width = state.containerWidth;
+  let height = (state.videoHeight * width) / state.videoWidth;
+
+
+  
+  // console.log(state.containerHeight);
   if (width > height) {
     if (width > maxWidth) {
       height = (height * maxWidth) / width;
@@ -23,11 +32,7 @@ const getCanvasSize = (videoWidth, videHeight, containerWidth) => {
 const useContainerSize = (state, dispatch, containerRef) => {
   const containerPadding = 88;
   const getSizeInfo = useCallback(() => {
-    let { width, height } = getCanvasSize(
-      state.videoWidth,
-      state.videoHeight,
-      state.containerWidth
-    );
+    let { width, height } = getCanvasSize(state);
     if (width > height) containerRef.current.style.marginTop = '5rem';
     else containerRef.current.style.marginTop = '1rem';
     let isInRange = width > 100;

@@ -11,7 +11,8 @@ const getResizeValues = (initialWidth, initialHeight, id) => {
     height = (width * 9) / 16;
     resize = id;
   } else if (id === 'square') {
-    width = height;
+    if(height > width) width = height;
+    else  height = width;
     resize = id;
   } else if (id === 'vertical') {
     width = (height * 9) / 16;
@@ -21,11 +22,6 @@ const getResizeValues = (initialWidth, initialHeight, id) => {
 };
 
 const options = [
-  {
-    name: 'original',
-    text: 'Original size',
-    boxStyle: { width: '6.375rem' },
-  },
   {
     name: 'landscape',
     text: 'Landscape 16:9',
