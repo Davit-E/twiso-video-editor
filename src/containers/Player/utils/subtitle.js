@@ -1,10 +1,14 @@
 import { fabric } from 'fabric';
 
 export const newSubtitle = (canvas, state) => {
+  let zoom = canvas.getZoom();
+  let canvasWidth = canvas.getWidth() / zoom;
+  let canvasHeight = canvas.getHeight() / zoom;
+  let width = 550 < canvasWidth / 2 ? 550 : canvasWidth / 2;
   let subtitle = new fabric.SubtitleWithResize(' ', {
+    width,
     paddingX: 20,
     paddingY: 20,
-    width: 550,
     breakWords: true,
     // bgCornerRadius: 5,
     editable: false,
@@ -18,13 +22,10 @@ export const newSubtitle = (canvas, state) => {
     prevLeft: null,
     visible: false,
   });
-  let x = canvas.getWidth() / (canvas.getZoom() * 2);
-  let y =
-    canvas.getHeight() / canvas.getZoom() - subtitle.height - subtitle.paddingY;
-  subtitle.setPositionByOrigin(new fabric.Point(x, y), 'center', 'center');
+  subtitle.left = canvasWidth / 2;
+  subtitle.top = canvasHeight - subtitle.height - subtitle.paddingY;
   return subtitle;
 };
-
 
 export const displaySub = (fabricSub, currentSub) => {
   if (currentSub.val.silence) fabricSub.visible = false;

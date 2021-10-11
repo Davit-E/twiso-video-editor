@@ -11,8 +11,6 @@ const getCanvasSize = (state) => {
   // } 
   let width = state.containerWidth;
   let height = (state.videoHeight * width) / state.videoWidth;
-
-
   
   // console.log(state.containerHeight);
   if (width > height) {

@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { fabric } from 'fabric';
 import { loadAndUse } from '../utils/updateObject';
+import { setSize } from '../utils/updateCanvas';
 
 const addCanvas = (state, id, info, shouldLoad, setObjectIdCount) => {
   let canvas = new fabric.Canvas(id, {
     width: state.videoWidth,
     height: state.videoHeight,
-    resize: state.resize,
     backgroundColor: 'rgba(255,255,255,1)',
     preserveObjectStacking: true,
     fireRightClick: true,
@@ -28,19 +28,10 @@ const addCanvas = (state, id, info, shouldLoad, setObjectIdCount) => {
         let text = textObjects[i];
         loadAndUse(canvas, text, text.fontFamily);
       }
+      setSize(state, canvas);
+      setObjectIdCount(lastId);
     });
-    setObjectIdCount(lastId);
-  }
-
-  let ratio = Math.min(
-    state.width / state.videoWidth,
-    state.height / state.videoHeight
-  );
-  canvas.setZoom(ratio);
-  canvas.setDimensions({
-    width: state.width,
-    height: state.height,
-  });
+  } else setSize(state, canvas);
   return canvas;
 };
 

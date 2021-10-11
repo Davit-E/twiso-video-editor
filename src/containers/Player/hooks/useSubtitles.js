@@ -44,7 +44,6 @@ const useSubtitles = (
     if (canvas && !fabricSub && state.isSubtitles) {
       if (isPlaying) videoRef.current.pause();
       let sub = newSubtitle(canvas, state);
-      // console.log('added: ', sub);
       canvas.add(sub);
       canvas.requestRenderAll();
       setFabricSub(sub);

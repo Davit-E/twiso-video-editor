@@ -5,77 +5,83 @@ export const updateCanvasStyle = (state, canvas, dispatch) => {
   dispatch({ type: 'setShouldTriggerUpdate', data: true });
 };
 
+export const setSize = (state, canvas) => {
+  let ratio = Math.min(
+    state.width / state.videoWidth,
+    state.height / state.videoHeight
+  );
+  canvas.setZoom(ratio);
+  canvas.setDimensions({
+    width: state.width,
+    height: state.height,
+  });
+  canvas.renderAll();
+};
+
 const checkOffScreen = (object, canvas, resize, dispatch) => {
   let zoom = canvas.getZoom();
   let canvasWidth = canvas.getWidth() / zoom;
   let canvasHeight = canvas.getHeight() / zoom;
-  // console.log(canvasWidth, canvasHeight, resize);
   let objHeight = object.height * object.scaleY;
   let objWidth = object.width * object.scaleX;
-
-  let isTextObject = object.type === 'textbox' || object.type === 'subtitle';
+  let isSub = object.type === 'subtitle';
+  let isTextObject = object.type === 'textbox' || isSub;
+  let isVertical = resize === 'vertical';
   let shouldResize =
-    resize === 'vertical' &&
-    (objWidth > canvasWidth || objHeight > canvasHeight);
+    isVertical &&
+    (objWidth > (canvasWidth * 2) / 3 || objHeight > (canvasHeight * 2) / 3);
 
   if (shouldResize && isTextObject) {
     object.width = canvasWidth / 2;
     objWidth = canvasWidth / 2;
   } else if (shouldResize) {
-    // if (objWidth / 2 > canvasWidth || objHeight / 2 > canvasHeight) {
-    //   object.scaleX = canvasWidth;
-
-    // } else {
-     
-    // }
-    object.scaleX = object.scaleX / 2;
-    object.scaleY = object.scaleY / 2;
+    let desiredSize =
+      objWidth / 2 > canvasWidth ? (canvasWidth * 2) / 3 : objWidth / 2;
+    let scale = desiredSize / object.width;
+    object.scaleX = scale;
+    object.scaleY = scale;
     objWidth = object.width * object.scaleX;
     objHeight = object.height * object.scaleY;
   }
 
-  // if (isTextObject && resize === 'vertical' && +object.fontSize > 36) {
-  //   let isSub = object.type === 'subtitle';
-  //   let obj = { type: isSub ? 'subtitle' : 'textbox', object };
-  //   dispatch({ type: 'setCurrentObject', data: obj });
-  //   dispatch({
-  //     type: isSub ? 'setSubtitlesFontSize' : 'setFontSize',
-  //     data: 36,
-  //   });
-  // }
-
-  if (!object.isOnScreen()) {
-    // console.log(object);
-    if (object.top > canvasHeight) object.top = canvasHeight - objHeight;
-    if (object.left > canvasWidth) object.left = canvasWidth - objWidth;
-    object.setCoords();
+  if (isTextObject && isVertical && +object.fontSize > 30) {
+    object.fontSize = 30;
+    dispatch({
+      type: isSub ? 'setSubtitlesFontSize' : 'setFontSize',
+      data: 30,
+    });
   }
+  if (!object.isOnScreen() && !isSub) {
+    if (object.top > canvasHeight || object.top < 0) {
+      object.top = canvasHeight - objHeight;
+    }
+    if (object.left > canvasWidth || object.left < 0) {
+      object.left = canvasWidth - objWidth;
+    }
+  } else if (isSub) {
+    object.left = canvasWidth / 2;
+    let top = canvasHeight - object.height - object.paddingY;
+    object.top = top > 0 ? top : object.height / 2;
+    object.width = 550 < canvasWidth / 2 ? 550 : canvasWidth / 2;
+  }
+  object.setCoords();
 };
 
 export const updateCanvasSize = (state, canvas, dispatch) => {
   dispatch({ type: 'setShouldUpdateCanvasSize', data: false });
   if (canvas) {
     canvas.discardActiveObject();
-    let ratio = Math.min(
-      state.width / state.videoWidth,
-      state.height / state.videoHeight
-    );
     let isResize = canvas.resize !== state.resize;
     canvas.resize = state.resize;
-    canvas.setZoom(ratio);
-    canvas.setDimensions({
-      width: state.width,
-      height: state.height,
-    });
+    setSize(state, canvas);
     if (isResize) {
-      canvas.renderAll();
       let objects = canvas.getObjects();
       for (let i = 0; i < objects.length; i++) {
         let object = objects[i];
         checkOffScreen(object, canvas, state.resize, dispatch);
       }
+      dispatch({ type: 'setShouldTriggerUpdate', data: true });
     }
     canvas.renderAll();
-    dispatch({ type: 'setShouldTriggerUpdate', data: true });
   }
 };

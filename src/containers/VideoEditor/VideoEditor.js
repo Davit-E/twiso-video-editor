@@ -24,12 +24,8 @@ const getCanvasObject = (canvas) => {
     'noScaleCache',
   ]);
   let zoom = canvas.getZoom();
-  let width = canvas.getWidth() / zoom;
-  let height = canvas.getHeight() / zoom;
-  // jsonCanvas.width = 1280;
-  // jsonCanvas.height = 720;
-  jsonCanvas.width = width;
-  jsonCanvas.height = height;
+  jsonCanvas.width = canvas.getWidth() / zoom;
+  jsonCanvas.height = canvas.getHeight() / zoom;
   jsonCanvas.resize = canvas.resize;
   return jsonCanvas;
 };

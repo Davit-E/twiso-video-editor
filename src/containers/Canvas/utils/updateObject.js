@@ -45,24 +45,21 @@ export const loadAndUse = (canvas, text, font, dispatch) => {
 };
 
 export const updateTextStyle = (state, canvas, dispatch) => {
-  if (state.textState) {
-    state.currentObject.object._clearCache();
-    for (const [key, value] of Object.entries(state.textState)) {
+  let text = state.currentObject.object;
+  let textState = state.textState;
+  if (textState && text) {
+    text._clearCache();
+    for (const [key, value] of Object.entries(textState)) {
       if (key !== 'fontFamily') {
-        state.currentObject.object.set(key, value);
+        text.set(key, value);
       }
     }
-    if (!loaded.includes(state.textState.fontFamily)) {
-      loadAndUse(
-        canvas,
-        state.currentObject.object,
-        state.textState.fontFamily,
-        dispatch
-      );
-      loaded.push(state.textState.fontFamily);
+    if (!loaded.includes(textState.fontFamily)) {
+      loadAndUse(canvas, text, textState.fontFamily, dispatch);
+      loaded.push(textState.fontFamily);
     } else {
-      state.currentObject.object.set({
-        fontFamily: state.textState.fontFamily,
+      text.set({
+        fontFamily: textState.fontFamily,
       });
       canvas.requestRenderAll();
       dispatch({ type: 'setShouldTriggerUpdate', data: true });
@@ -74,20 +71,21 @@ export const updateTextStyle = (state, canvas, dispatch) => {
 };
 
 export const updateSubtitlesStyle = (state, canvas, dispatch) => {
-  if (state.subtitlesState) {
-    let text = state.currentObject.object;
+  let text = state.currentObject.object;
+  if (text) {
+    let textState = state.subtitlesState;
     text._clearCache();
-    for (const [key, value] of Object.entries(state.subtitlesState)) {
+    for (const [key, value] of Object.entries(textState)) {
       if (key !== 'fontFamily') {
         text.set(key, value);
       }
     }
-    if (!loaded.includes(state.subtitlesState.fontFamily)) {
-      loadAndUse(canvas, text, state.subtitlesState.fontFamily);
-      loaded.push(state.subtitlesState.fontFamily);
+    if (!loaded.includes(textState.fontFamily)) {
+      loadAndUse(canvas, text, textState.fontFamily);
+      loaded.push(textState.fontFamily);
     } else {
       text.set({
-        fontFamily: state.subtitlesState.fontFamily,
+        fontFamily: textState.fontFamily,
       });
       canvas.requestRenderAll();
     }
@@ -98,10 +96,11 @@ export const updateSubtitlesStyle = (state, canvas, dispatch) => {
 };
 
 export const updateShapeStyle = (state, canvas, dispatch) => {
-  if (state.shapeState) {
+  let shape = state.currentObject.object;
+  if (shape) {
     // state.currentObject.object._clearCache();
     for (const [key, value] of Object.entries(state.shapeState)) {
-      state.currentObject.object.set(key, value);
+      shape.set(key, value);
     }
     if (!state.showToolbar) dispatch({ type: 'setShowToolbar', data: true });
     canvas.requestRenderAll();

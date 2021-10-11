@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import FontsDropdown from './FontsDropdown/FontsDropdown';
 import FontSizeDropdown from './FontSizeDropdown/FontSizeDropdown';
 import TextAlignDropdown from './TextAlignDropdown/TextAlignDropdown';
@@ -24,21 +24,12 @@ const TextDropdowns = ({
   isBgColorDropdown,
   setBgColor,
   bgColor,
-  bgColorPickerRef
+  bgColorPickerRef,
 }) => {
   const [dropDownStyle, setDropdownStyle] = useState({ top: 41 });
   const maxDropdownHeight = 301;
   const DropdownOffset = 41;
   const DropdownPadding = 20;
-  const fontSizeDropdownRef = useRef(null);
-
-  useEffect(() => {
-    if (isFontSizeDropdown && isSub) {
-      fontSizeDropdownRef.current.style.right = '223px';
-    } else if (isFontSizeDropdown) {
-      fontSizeDropdownRef.current.style.right =  '151px';
-    }
-  }, [isSub, isFontSizeDropdown]);
 
   useEffect(() => {
     if (
@@ -64,8 +55,7 @@ const TextDropdowns = ({
       {isFontSizeDropdown ? (
         <div
           className={styles.FontSizeDropdown}
-          style={dropDownStyle}
-          ref={fontSizeDropdownRef}
+          style={{ ...dropDownStyle, right: isSub ? '223px' : '151px' }}
         >
           <FontSizeDropdown
             setIsDropDown={setIsFontSizeDropdown}

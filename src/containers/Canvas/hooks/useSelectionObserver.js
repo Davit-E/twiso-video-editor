@@ -10,7 +10,6 @@ import {
   onAdded,
   onRemoved,
 } from '../utils/onCanvasEvents';
-import { fabric } from 'fabric';
 
 const removeListeners = (c) => {
   c.off('selection:created');
@@ -41,24 +40,18 @@ const useSelectionObserver = (isCanvasSet, canvas, state, dispatch) => {
 
   const checkOffScreen = useCallback(
     (e) => {
-      if (!e.target.isOnScreen()) {
-        if (e.target.id === 'subtitle') {
-          let x = canvas.getWidth() / (canvas.getZoom() * 2);
-          let y =
-            canvas.getHeight() / canvas.getZoom() -
-            e.target.height -
-            e.target.paddingY;
-          e.target.setPositionByOrigin(
-            new fabric.Point(x, y),
-            'center',
-            'center'
-          );
+      let obj = e.target;
+      if (!obj.isOnScreen()) {
+        if (obj.id === 'subtitle') {
+          obj.left = canvas.getWidth() / canvas.getZoom() / 2;
+          obj.top =
+            canvas.getHeight() / canvas.getZoom() - obj.height - obj.paddingY;
         } else {
-          e.target.top = 0;
-          e.target.left = 0;
-          e.target.angle = 0;
+          obj.top = 0;
+          obj.left = 0;
+          obj.angle = 0;
         }
-        e.target.setCoords();
+        obj.setCoords();
       }
     },
     [canvas]

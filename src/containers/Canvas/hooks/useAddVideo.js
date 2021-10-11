@@ -48,7 +48,7 @@ const useAddVideo = (
     if (isFirtLoad && video && canvas) {
       setIsFirtLoad(false);
       if (!isCanvasData) {
-        console.log(speakers);
+        // console.log(speakers);
         video.currentTime = currentTime > 0 ? currentTime : 0.001;
         if (speakers.length > 0) {
           for (let i = 0; i < speakers.length; i++) {
@@ -63,7 +63,7 @@ const useAddVideo = (
             { w: video.videoWidth, h: video.videoHeight, x: 0, y: 0 },
             1
           );
-          console.log(speakerVideo);
+          // console.log(speakerVideo);
           canvas.add(speakerVideo);
           updateId();
         }
