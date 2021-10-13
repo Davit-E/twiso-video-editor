@@ -10,9 +10,9 @@ const useUploadVideo = () => {
 
   const onUploadProgress = (e) => {
     const currentProgress = Math.round((e.loaded * 100) / e.total);
-    if (isMounted.current) setUploadProgress(currentProgress);
-    if (currentProgress === 100 && isMounted.current) setIsUploading(false);
-    // console.log(`%cuploading ${currentProgress}%`, 'color: #3153fb');
+    if (isMounted.current && currentProgress !== 100) {
+      setUploadProgress(currentProgress);
+    }
   };
 
   const axiosUploadVideo = useCallback((formData) => {
@@ -42,17 +42,19 @@ const useUploadVideo = () => {
         const res = await axiosUploadVideo(formData);
         console.log(res);
         if (isMounted.current) {
+          setUploadProgress(100);
           words.current = res.data.subtitles.captions;
           setInfo({
             id: res.data._id,
             duration: res.data.duration,
             url: res.data.original_video_url,
-            title: res.data.title
-          })
+            title: res.data.title,
+          });
         }
       } catch (err) {
         console.log('Error Uploading Video', err);
       } finally {
+        if (isMounted.current) setIsUploading(false);
         return;
       }
     },

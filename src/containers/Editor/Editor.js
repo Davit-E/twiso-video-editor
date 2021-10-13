@@ -9,14 +9,12 @@ import SelectSpeakers from '../SelectSpeakers/SelectSpeakers';
 
 const Editor = () => {
   const [viedoForUpload, setVideoForUpload] = useState(null);
-  const [isFinishedTranscribing, setIsFinishedTranscribing] = useState(false);
   const [videoData, setVideoData] = useState(null);
   const [speakers, setSpeakers] = useState([]);
   const match = useRouteMatch();
   const words = useRef(null);
 
   const clearState = useCallback(() => {
-    setIsFinishedTranscribing(false);
     setVideoForUpload(null);
     setSpeakers([]);
     setVideoData(null);
@@ -31,12 +29,11 @@ const Editor = () => {
           /////////////////////////////////////////
           // redirect={`${match.path}/video-editor`}
           where='in the Editor new route'
-          allowed={!isFinishedTranscribing}
+          allowed={!videoData}
           component={Uploader}
           // component={UploaderMock}
           viedoForUpload={viedoForUpload}
           setVideoForUpload={setVideoForUpload}
-          setIsFinished={setIsFinishedTranscribing}
           setVideoData={setVideoData}
           clearState={clearState}
           wordsRef={words}
@@ -45,7 +42,7 @@ const Editor = () => {
           path={`${match.path}/speakers`}
           redirect={`/home`}
           where='in the Editor speakers route'
-          allowed={isFinishedTranscribing}
+          allowed={!!videoData}
           component={SelectSpeakers}
           videoData={videoData}
           setSpeakers={setSpeakers}
@@ -62,7 +59,7 @@ const Editor = () => {
           path={`${match.path}/video-editor`}
           redirect={`${match.path}/new`}
           where='in the Editor video-editor route'
-          allowed={isFinishedTranscribing}
+          allowed={isUploaded}
           component={VideoEditor}
           words={words.current}
           info={videoData}

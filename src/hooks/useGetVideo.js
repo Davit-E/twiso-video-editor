@@ -4,6 +4,7 @@ import axios from '../axios-instance';
 const useGetVideo = () => {
   const [isGettingVideo, setIsGettingVideo] = useState(false);
   const [info, setInfo] = useState(null);
+  const [transcriptonStatus, setTranscriptionStatus] = useState(null);
   const [getVideoError, setGetVideoError] = useState(null);
   const words = useRef(null);
   const isMounted = useRef(false);
@@ -28,15 +29,33 @@ const useGetVideo = () => {
       try {
         const res = await axiosGetVideo(id);
         if (isMounted.current) {
-          words.current = res.data.transcription;
-          setInfo({
-            id: res.data._id,
-            duration: res.data.duration,
-            url: res.data.original_video_url,
-            finalUrl: res.data.final_video_url || null,
-            canvas: res.data.canvas || null,
-            title: res.data.title,
-            finalText: res.data.final_full_text || null,
+          let transcription = res.data.transcription;
+          if (transcription && transcription.length > 0) {
+            words.current = [...transcription];
+            setTranscriptionStatus({
+              timeLeft: res.data.transcriptionTime,
+              startDate: res.data.transcription_start,
+              isFinished: true,
+            });
+          } else {
+            setTranscriptionStatus({
+              timeLeft: res.data.transcriptionTime,
+              startDate: res.data.transcription_start,
+              isFinished: false,
+            });
+          }
+          setInfo((prevState) => {
+            return prevState
+              ? prevState
+              : {
+                  id: res.data._id,
+                  duration: res.data.duration,
+                  url: res.data.original_video_url,
+                  finalUrl: res.data.final_video_url || null,
+                  canvas: res.data.canvas || null,
+                  title: res.data.title,
+                  finalText: res.data.final_full_text || null,
+                };
           });
         }
         console.log(res);
@@ -62,6 +81,7 @@ const useGetVideo = () => {
     words: words.current,
     info,
     getVideoError,
+    transcriptonStatus,
   };
 };
 

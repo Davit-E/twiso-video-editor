@@ -10,6 +10,7 @@ import {
 } from './utils/updateTextAndCuts';
 import Words from './Words/Words';
 import { findWordIndexWithId } from '../../utils/findIndex';
+import TranscriptionProgress from './TranscriptionProgress/TranscriptionProgress';
 
 const Transcription = ({
   words,
@@ -27,10 +28,12 @@ const Transcription = ({
   setNextCutIndex,
   videoCuts,
   triggerWordsUpdate,
+  status,
 }) => {
   const [searchInput, setSearchInput] = useState('');
   const [inputIndex, setInputIndex] = useState(null);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const [isFinished, setIsFinished] = useState(false);
 
   const setPlayerTime = useCallback(
     (wordIndex) => {
@@ -55,7 +58,7 @@ const Transcription = ({
   );
 
   useEffect(() => {
-    if (isFirstLoad && words && words.length > 0) {
+    if (isFirstLoad && words) {
       setIsFirstLoad(null);
       findAndSetCurrentWord(
         0,
@@ -173,9 +176,8 @@ const Transcription = ({
   }, [mouseUpHandler]);
 
   const cutClickHandler = () => {
-    let isWordsArr = words && words.length > 0;
     if (isPlaying) videoRef.current.pause();
-    if (!currentSelection && currentWordIndex !== null && isWordsArr) {
+    if (!currentSelection && currentWordIndex !== null && words) {
       deleteWord(
         words,
         currentWordIndex,
@@ -183,7 +185,7 @@ const Transcription = ({
         setCuts,
         setPlayerTime
       );
-    } else if (currentSelection && isWordsArr) {
+    } else if (currentSelection && words) {
       deleteSelection(
         words,
         setCurrentWordIndex,
@@ -216,7 +218,7 @@ const Transcription = ({
         </div>
       </div>
       <div id='textbox' className={styles.Text}>
-        {words ? (
+        {isFinished ? (
           <Words
             wordsArr={words}
             currentWordIndex={currentWordIndex}
@@ -230,7 +232,13 @@ const Transcription = ({
             setShouldRerenderSub={setShouldRerenderSub}
             triggerWordsUpdate={triggerWordsUpdate}
           />
-        ) : null}
+        ) : (
+          <TranscriptionProgress
+            status={status}
+            words={words}
+            setIsFinished={setIsFinished}
+          />
+        )}
       </div>
     </div>
   );

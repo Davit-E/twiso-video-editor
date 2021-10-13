@@ -1,0 +1,76 @@
+.TranscriptionProgress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.Heading {
+  font-size: 0.75rem;
+  text-align: center;
+  margin: 0;
+  margin-bottom: 0.625rem;
+  padding: 0 1rem;
+}
+
+.Percentage {
+  text-align: center;
+  margin: 0;
+  margin-bottom: 1rem;
+}
+
+.Box {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.Line {
+  margin-bottom: 0.5rem;
+  height: 0.75rem;
+  width: 100%;
+  background: #ededed;
+  background-image: linear-gradient(
+    to right,
+    #ededed 0%,
+    #e4e4e4 20%,
+    #ededed 40%,
+    #ededed 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 800px 104px;
+  -webkit-animation-duration: 1.5s;
+  -webkit-animation-fill-mode: forwards;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-name: placeholderShimmer;
+  animation-duration: 1.5s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-name: placeholderShimmer;
+}
+
+@keyframes placeholderShimmer {
+  0% {
+    background-position: -468px 0;
+  }
+
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+@-webkit-keyframes placeholderShimmer {
+  0% {
+    background-position: -468px 0;
+  }
+
+  100% {
+    background-position: 468px 0;
+  }
+}

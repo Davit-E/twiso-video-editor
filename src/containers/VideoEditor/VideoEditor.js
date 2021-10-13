@@ -11,28 +11,19 @@ import useGetVideo from '../../hooks/useGetVideo';
 import Spinner from '../../components/Spinner2/Spinner';
 import useUpdateProject from '../../hooks/useUpdateProject';
 import useDownloadVideo from '../../hooks/useDownloadVideo';
-
-const getCanvasObject = (canvas) => {
-  let jsonCanvas = canvas.toJSON([
-    'id',
-    'cornerRadius',
-    'isSvg',
-    'padding',
-    'cursorWidth',
-    'rx',
-    'ry',
-    'noScaleCache',
-  ]);
-  let zoom = canvas.getZoom();
-  jsonCanvas.width = canvas.getWidth() / zoom;
-  jsonCanvas.height = canvas.getHeight() / zoom;
-  jsonCanvas.resize = canvas.resize;
-  return jsonCanvas;
-};
+import useCanvasUpdate from './hooks/useCanvasUpdate';
+import useCheckTranscription from './hooks/useCheckTranscription';
 
 const VideoEditor = ({ speakers }) => {
   const [editorState, editorDispatch] = useEditorState();
-  const { getVideo, words, info, getVideoError } = useGetVideo();
+  const {
+    isGettingVideo,
+    getVideo,
+    words,
+    info,
+    transcriptonStatus,
+    getVideoError,
+  } = useGetVideo();
   const { isUpdatingProject, updateProject } = useUpdateProject();
   const { isDownloading, downloadVideo, downloadedVideo, setDownloadedVideo } =
     useDownloadVideo();
@@ -51,18 +42,27 @@ const VideoEditor = ({ speakers }) => {
   const params = useParams();
   const videoRef = useRef(null);
   const wordsUpdateTimerRef = useRef(null);
-  const canvasUpdateTimerRef = useRef(null);
   const isFirstLoad = useRef(true);
   const isMounted = useRef(false);
-
+  useCanvasUpdate(
+    isMounted,
+    updateProject,
+    canvas,
+    info,
+    editorState.shouldTriggerUpdate,
+    editorDispatch,
+    isDownloading
+  );
+  useCheckTranscription(
+    isGettingVideo,
+    getVideo,
+    transcriptonStatus,
+    isMounted,
+    params
+  );
   // useEffect(() => {
   //   console.log(editorState.canvasState);
   // }, [editorState]);
-
-  useEffect(() => {
-    isMounted.current = true;
-    return () => (isMounted.current = false);
-  }, []);
 
   useEffect(() => {
     if (params && params.id) getVideo(params.id);
@@ -86,23 +86,6 @@ const VideoEditor = ({ speakers }) => {
     wordsUpdateTimerRef.current = timeout;
   }, [updateProject, info, words]);
 
-  const triggerCanvasUpdate = useCallback(() => {
-    if (canvasUpdateTimerRef.current) {
-      clearTimeout(canvasUpdateTimerRef.current);
-    }
-    let timeout = setTimeout(() => {
-      if (isMounted.current) {
-        canvasUpdateTimerRef.current = null;
-        let jsonCanvas = getCanvasObject(canvas);
-        updateProject({
-          id: info.id,
-          canvas: { ...jsonCanvas },
-        });
-      }
-    }, 1000);
-    canvasUpdateTimerRef.current = timeout;
-  }, [updateProject, info, canvas]);
-
   useEffect(() => {
     if (isFirstLoad.current) {
       isFirstLoad.current = false;
@@ -110,16 +93,9 @@ const VideoEditor = ({ speakers }) => {
   }, [videoCuts, triggerWordsUpdate, isDownloading, words]);
 
   useEffect(() => {
-    if (editorState.shouldTriggerUpdate && !isDownloading) {
-      editorDispatch({ type: 'setShouldTriggerUpdate', data: false });
-      triggerCanvasUpdate();
-    }
-  }, [
-    triggerCanvasUpdate,
-    editorState.shouldTriggerUpdate,
-    editorDispatch,
-    isDownloading,
-  ]);
+    isMounted.current = true;
+    return () => (isMounted.current = false);
+  }, []);
 
   return (
     <>
@@ -160,6 +136,7 @@ const VideoEditor = ({ speakers }) => {
                 setNextCutIndex={setNextCutIndex}
                 videoCuts={videoCuts}
                 triggerWordsUpdate={triggerWordsUpdate}
+                status={transcriptonStatus}
               />
               <Player
                 videoRef={videoRef}

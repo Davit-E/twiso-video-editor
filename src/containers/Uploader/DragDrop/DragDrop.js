@@ -2,12 +2,9 @@ import React, { useEffect, useRef, useCallback } from 'react';
 import styles from './DragDrop.module.css';
 import upload from '../../../assets/editor/upload.svg';
 
-const DragDrop = ({ setVideoForUpload, setVideoDuration }) => {
+const DragDrop = ({ setVideoForUpload }) => {
   const uploadRef = useRef(null);
   const dropAreaRef = useRef(null);
-  // const uploadHandler = () => {
-  //   setVideoForUpload(uploadRef.current.files[0]);
-  // };
 
   const handleDragOver = useCallback((e) => {
     e.preventDefault();
@@ -35,7 +32,6 @@ const DragDrop = ({ setVideoForUpload, setVideoDuration }) => {
         video.preload = 'metadata';
         video.onloadedmetadata = () => {
           if (video.duration > 1) {
-            setVideoDuration(video.duration);
             setVideoForUpload(file);
           }
           return;
@@ -43,7 +39,7 @@ const DragDrop = ({ setVideoForUpload, setVideoDuration }) => {
         video.src = URL.createObjectURL(file);
       }
     },
-    [setVideoDuration, setVideoForUpload]
+    [setVideoForUpload]
   );
 
   const handleDrop = useCallback(
