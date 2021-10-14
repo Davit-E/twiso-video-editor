@@ -9,7 +9,6 @@ import styles from './Navigation.module.css';
 import EditorContext from '../../contexts/EditorContext';
 import { prepareCanvas } from './utils/prepareCanvas';
 import { prepareBreaks, prepareSubs } from './utils/prepareBreaksAndSubs';
-import useDownloadVideo from '../../hooks/useDownloadVideo';
 import DesignControls from './DesignControls/DesignControls';
 import Navbar from '../../components/Navbar/Navbar';
 import { useHistory } from 'react-router-dom';
@@ -29,6 +28,7 @@ const Navigation = ({
   downloadVideo,
   downloadedVideo,
   setDownloadedVideo,
+  words
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const [downloadData, setDownloadData] = useState(null);
@@ -72,7 +72,7 @@ const Navigation = ({
   const downloadClickHandler = () => {
     if (editorState.isCropMode) {
       editorDispatch({ type: 'setIsCropMode', data: false });
-    } else if (canvas && !isDownloading && !isUpdatingProject) {
+    } else if (canvas && !isDownloading && !isUpdatingProject && words) {
       videoRef.current.pause();
       prepareBreaks(videoCuts, duration, setBreaks);
       if (fabricSub && subList) {
@@ -118,7 +118,7 @@ const Navigation = ({
       <div className={styles.Navigation}>
         {canvas ? (
           <>
-            <DesignControls canvas={canvas} />
+            <DesignControls canvas={canvas} words={words}/>
             {isUpdatingProject ? (
               <Spinner
                 style={{

@@ -58,7 +58,7 @@ const Video = ({
       className={styles.Video}
       ref={videoRef}
       controls
-      onPause={() => handlePause(setIsPlaying, intervalId)}
+      onPause={() => handlePause(setIsPlaying, intervalId, words)}
       onPlay={() =>
         handlePlay(
           currentSelection,
@@ -66,7 +66,8 @@ const Video = ({
           setIsPlaying,
           setCurrentTime,
           videoRef,
-          setIntervalId
+          setIntervalId,
+          words
         )
       }
       onEnded={() =>

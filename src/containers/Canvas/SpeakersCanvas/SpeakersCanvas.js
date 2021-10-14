@@ -4,7 +4,7 @@ import useAddCanvas from './hooks/useAddCanvas';
 import useAddVideo from './hooks/useAddVideo';
 import useUpdateCanvas from './hooks/useUpdateCanvas';
 import useGuideLines from '../hooks/useGuideLines';
-import useCropVideo from '../hooks/useCropVideo';
+import useCropSpeakers from '../hooks/useCropSpeakers';
 
 const SpeakersCanvas = ({
   canvas,
@@ -25,9 +25,8 @@ const SpeakersCanvas = ({
   useUpdateCanvas(canvasState, canvasDispatch, canvas);
   useAddCanvas(canvasState, setCanvas, setIsCanvasSet, 'speakerCanvas');
   useAddVideo(videoRef.current, canvas, duration / 10, setVideo);
-  useCropVideo(
+  useCropSpeakers(
     canvas,
-    isCanvasSet,
     video,
     boxArr,
     setBoxArr,

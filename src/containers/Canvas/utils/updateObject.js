@@ -18,6 +18,48 @@ const roundedCorners = (img, radius) => {
   return rect;
 };
 
+const roundedCornersVideo = (video, radius) => {
+  let currentRadiusX = (video.width * video.scaleX * radius) / 200;
+  let currentRadiusY = (video.height * video.scaleY * radius) / 200;
+  let rect = new fabric.Rect({
+    width: video.width,
+    height: video.height,
+    scaleX: video.scaleX,
+    scaleY: video.scaleY,
+    rx: currentRadiusX / video.scaleX,
+    ry: currentRadiusY / video.scaleY,
+    left: video.left,
+    top: video.top,
+    noScaleCache: false,
+    fill: 'rgba(70, 70, 70, 0.0)',
+  });
+  return rect;
+};
+
+export const updateVideoStyle = (state, canvas, dispatch) => {
+  let video = canvas.getActiveObject();
+  if (video && video.type === 'video') {
+    console.log('updating');
+    let radius = state.videoState.cornerRadius;
+    video.cornerRadius = radius;
+    let rect = roundedCornersVideo(video, radius);
+    // var group = new fabric.Group([video, rect], {
+    //   left: video.left,
+    //   top: video.top,
+    //   width: video.width,
+    //   height: video.height,
+    //   scaleX: video.scaleX,
+    //   scaleY: video.scaleY,
+    //   originX: 'center',
+    //   originY: 'center',
+    // });
+    // canvas.add(group);
+    canvas.requestRenderAll();
+  }
+  dispatch({ type: 'setShouldUpdateVideo', data: false });
+  dispatch({ type: 'setShouldTriggerCanvasUpdate', data: true });
+};
+
 export const updateImageStyle = (state, canvas, dispatch) => {
   let image = canvas.getActiveObject();
   if (image && image.type === 'customImage') {
@@ -27,7 +69,7 @@ export const updateImageStyle = (state, canvas, dispatch) => {
     canvas.requestRenderAll();
   }
   dispatch({ type: 'setShouldUpdateImage', data: false });
-  dispatch({ type: 'setShouldTriggerUpdate', data: true });
+  dispatch({ type: 'setShouldTriggerCanvasUpdate', data: true });
 };
 
 export const loadAndUse = (canvas, text, font, dispatch) => {
@@ -39,7 +81,8 @@ export const loadAndUse = (canvas, text, font, dispatch) => {
     fontactive: (familyName, fvd) => {
       text.set({ fontFamily: familyName });
       canvas.requestRenderAll();
-      if (dispatch) dispatch({ type: 'setShouldTriggerUpdate', data: true });
+      if (dispatch)
+        dispatch({ type: 'setShouldTriggerCanvasUpdate', data: true });
     },
   });
 };
@@ -62,7 +105,7 @@ export const updateTextStyle = (state, canvas, dispatch) => {
         fontFamily: textState.fontFamily,
       });
       canvas.requestRenderAll();
-      dispatch({ type: 'setShouldTriggerUpdate', data: true });
+      dispatch({ type: 'setShouldTriggerCanvasUpdate', data: true });
     }
 
     if (!state.showToolbar) dispatch({ type: 'setShowToolbar', data: true });
@@ -106,5 +149,5 @@ export const updateShapeStyle = (state, canvas, dispatch) => {
     canvas.requestRenderAll();
   }
   dispatch({ type: 'setShouldUpdateShape', data: false });
-  dispatch({ type: 'setShouldTriggerUpdate', data: true });
+  dispatch({ type: 'setShouldTriggerCanvasUpdate', data: true });
 };

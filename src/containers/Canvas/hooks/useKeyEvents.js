@@ -113,14 +113,14 @@ const useKeyEvents = (
       if (active && active.id !== 'subtitle') {
         canvas.bringToFront(active);
         if (fabricSub) canvas.bringToFront(fabricSub);
-        dispatch({ type: 'setShouldTriggerUpdate', data: true });
+        dispatch({ type: 'setShouldTriggerCanvasUpdate', data: true });
       }
     } else if (shouldRun && isSendToBack) {
       setShouldRun(false);
       let active = canvas.getActiveObject();
       if (active && active.id !== 'subtitle'){
         canvas.sendToBack(active);
-        dispatch({ type: 'setShouldTriggerUpdate', data: true });
+        dispatch({ type: 'setShouldTriggerCanvasUpdate', data: true });
       } 
     }
   }, [

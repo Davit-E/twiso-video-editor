@@ -13,6 +13,11 @@ const Editor = () => {
   const [speakers, setSpeakers] = useState([]);
   const match = useRouteMatch();
   const words = useRef(null);
+  // const [transcriptonStatus, setTranscriptionStatus] = useState({
+  //   timeLeft: 0,
+  //   startDate: '1299671538',
+  //   isFinished: true,
+  // });
 
   const clearState = useCallback(() => {
     setVideoForUpload(null);
@@ -54,15 +59,18 @@ const Editor = () => {
           allowed={true}
           component={VideoEditor}
           speakers={speakers}
+          setVideoData={setVideoData}
         />
         {/* <CustomRoute
           path={`${match.path}/video-editor`}
           redirect={`${match.path}/new`}
           where='in the Editor video-editor route'
-          allowed={isUploaded}
+          allowed={true}
           component={VideoEditor}
           words={words.current}
           info={videoData}
+          transcriptonStatus={transcriptonStatus}
+          setVideoData={setVideoData}
           speakers={speakers}
         /> */}
         <Redirect to={`${match.path}/new`} />

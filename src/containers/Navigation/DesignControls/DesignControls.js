@@ -12,7 +12,7 @@ import addShape from '../../../assets/editor/addShape.svg';
 import subtitles from '../../../assets/editor/subtitles.svg';
 import useGetAssets from '../../../hooks/useGetAssets';
 
-const DesignControls = ({ canvas }) => {
+const DesignControls = ({ canvas, words }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const { getAssets, assets, setAssets } = useGetAssets();
   const [shouldFetchAssets, setShouldFetchAssets] = useState(false);
@@ -120,7 +120,7 @@ const DesignControls = ({ canvas }) => {
         <>
           <Backdrop />
           <div className={styles.SubtitlesDropdown}>
-            <SubtitlesDropdown />
+            <SubtitlesDropdown words={words} />
           </div>
         </>
       ) : null}

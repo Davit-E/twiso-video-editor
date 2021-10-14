@@ -4,6 +4,7 @@ fabric.Video = fabric.util.createClass(fabric.Image, {
   type: 'video',
   cropRect: null,
   id: null,
+  cornerRadius: 0,
   
   initialize: function (video, options) {
     const defaultOpts = {
@@ -25,6 +26,7 @@ fabric.Video = fabric.util.createClass(fabric.Image, {
       type: this.get('type'),
       cropRect: this.get('cropRect'),
       id: this.get('id'),
+      cornerRadius: this.get('cornerRadius'),
     });
   },
 

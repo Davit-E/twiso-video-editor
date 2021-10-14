@@ -83,7 +83,7 @@ const PlayerCanvas = ({
     currentTime,
     speakers,
     objectIdCount,
-    updatetObjectId,
+    setObjectIdCount,
     isCanvasData
   );
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styles from './VideoEditor.module.css';
 import Transcription from '../Transcription/Transcription';
 import Player from '../Player/Player';
@@ -12,9 +12,10 @@ import Spinner from '../../components/Spinner2/Spinner';
 import useUpdateProject from '../../hooks/useUpdateProject';
 import useDownloadVideo from '../../hooks/useDownloadVideo';
 import useCanvasUpdate from './hooks/useCanvasUpdate';
+import useWordsUpdate from './hooks/useWordsUpdate';
 import useCheckTranscription from './hooks/useCheckTranscription';
 
-const VideoEditor = ({ speakers }) => {
+const VideoEditor = ({ speakers, setVideoData }) => {
   const [editorState, editorDispatch] = useEditorState();
   const {
     isGettingVideo,
@@ -41,17 +42,34 @@ const VideoEditor = ({ speakers }) => {
   const history = useHistory();
   const params = useParams();
   const videoRef = useRef(null);
-  const wordsUpdateTimerRef = useRef(null);
-  const isFirstLoad = useRef(true);
   const isMounted = useRef(false);
+
+  // useEffect(() => {
+  //   let obj = editorState.currentObject.object;
+  //   if (obj) {
+  //     console.log(obj);
+  //     console.log(obj.type);
+  //   }
+  // }, [editorState]);
+
   useCanvasUpdate(
     isMounted,
     updateProject,
     canvas,
     info,
-    editorState.shouldTriggerUpdate,
+    editorState.shouldTriggerCanvasUpdate,
     editorDispatch,
     isDownloading
+  );
+  useWordsUpdate(
+    isMounted,
+    updateProject,
+    info,
+    words,
+    editorDispatch,
+    isDownloading,
+    editorState.shouldTriggerWordsUpdate,
+    videoCuts
   );
   useCheckTranscription(
     isGettingVideo,
@@ -60,9 +78,6 @@ const VideoEditor = ({ speakers }) => {
     isMounted,
     params
   );
-  // useEffect(() => {
-  //   console.log(editorState.canvasState);
-  // }, [editorState]);
 
   useEffect(() => {
     if (params && params.id) getVideo(params.id);
@@ -71,26 +86,6 @@ const VideoEditor = ({ speakers }) => {
   useEffect(() => {
     if (getVideoError) history.push('/home');
   }, [getVideoError, history]);
-
-  const triggerWordsUpdate = useCallback(() => {
-    if (wordsUpdateTimerRef.current) clearTimeout(wordsUpdateTimerRef.current);
-    let timeout = setTimeout(() => {
-      if (isMounted.current) {
-        wordsUpdateTimerRef.current = null;
-        updateProject({
-          id: info.id,
-          transcription: [...words],
-        });
-      }
-    }, 1000);
-    wordsUpdateTimerRef.current = timeout;
-  }, [updateProject, info, words]);
-
-  useEffect(() => {
-    if (isFirstLoad.current) {
-      isFirstLoad.current = false;
-    } else if (!isDownloading && words) triggerWordsUpdate();
-  }, [videoCuts, triggerWordsUpdate, isDownloading, words]);
 
   useEffect(() => {
     isMounted.current = true;
@@ -135,7 +130,6 @@ const VideoEditor = ({ speakers }) => {
                 setCurrentTime={setCurrentTime}
                 setNextCutIndex={setNextCutIndex}
                 videoCuts={videoCuts}
-                triggerWordsUpdate={triggerWordsUpdate}
                 status={transcriptonStatus}
               />
               <Player
@@ -160,6 +154,8 @@ const VideoEditor = ({ speakers }) => {
                 setShouldRerenderSub={setShouldRerenderSub}
                 speakers={speakers}
                 info={info}
+                setVideoData={setVideoData}
+                transcriptonStatus={transcriptonStatus}
               />
               <Video
                 videoRef={videoRef}

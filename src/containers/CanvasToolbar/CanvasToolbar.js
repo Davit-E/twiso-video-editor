@@ -7,8 +7,9 @@ import { ReactComponent as Templates } from '../../assets/editor/templates.svg';
 import { ReactComponent as Resize } from '../../assets/editor/resize.svg';
 import { ReactComponent as Crop } from '../../assets/editor/cropImage.svg';
 import { SketchPicker } from 'react-color';
+import { useHistory } from 'react-router-dom';
 
-const CanvasToolbar = () => {
+const CanvasToolbar = ({ setVideoData, info }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const [bgColor, setBgColor] = useState(
     editorState.canvasState.backgroundColor
@@ -16,6 +17,8 @@ const CanvasToolbar = () => {
   const backgroundColorRef = useRef(null);
   const bgDropdownRef = useRef(null);
   const resizeDropdownRef = useRef(null);
+  const history = useHistory();
+
   const clickHandler = (e) => {
     if (!editorState.shouldCropImage) {
       if (editorState.isCropMode) {
@@ -26,6 +29,9 @@ const CanvasToolbar = () => {
         editorDispatch({ type: 'setIsResizeDropdown', data: true });
       } else if (id === 'bgColor') {
         editorDispatch({ type: 'setIsCanvasBgColorDropdown', data: true });
+      } else if(id === 'crop') {
+        setVideoData({...info})
+        history.push(`/editor/speakers`);
       }
     }
   };

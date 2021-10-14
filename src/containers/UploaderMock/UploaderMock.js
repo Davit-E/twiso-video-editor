@@ -1,14 +1,12 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import styles from './UploaderMock.module.css';
 import Navbar from '../../components/Navbar/Navbar';
 import * as data from './test-data/test-short.json';
 
 const UploaderMock = ({
-  setIsFinished,
   wordsRef,
   setVideoForUpload,
-  clearState,
-  setVideoData
+  setVideoData,
 }) => {
   const uploadRef = useRef(null);
   const uploadHandler = () => {
@@ -17,15 +15,10 @@ const UploaderMock = ({
       id: data._id,
       duration: data.duration,
       url: URL.createObjectURL(uploadRef.current.files[0]),
-      title: data.title
-    })
-    wordsRef.current = [...data.subtitles.captions];
-    setIsFinished(true);
+      title: data.title,
+    });
+    wordsRef.current = [...data.transcription];
   };
-
-  useEffect(() => {
-    clearState();
-  }, [clearState]);
 
   return (
     <>

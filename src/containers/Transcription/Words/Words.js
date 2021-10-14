@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import styles from './Words.module.css';
 import restoreText from '../../../assets/editor/restoreText.svg';
+import EditorContext from '../../../contexts/EditorContext';
 
 const Words = ({
   wordsArr,
@@ -13,15 +14,13 @@ const Words = ({
   fabricSub,
   currentSub,
   setShouldRerenderSub,
-  triggerWordsUpdate,
 }) => {
+  const { editorDispatch } = useContext(EditorContext);
   const [input, setInput] = useState('');
   const inputRef = useRef(null);
 
   const handleNotSilenceAndText = (id, text) => {
     let words = currentSub.val.words;
-    // console.log(currentSub.val);
-    // console.log(words);
     for (let i = 0; i < words.length; i++) {
       let word = words[i];
       if (word._id === id) {
@@ -35,7 +34,6 @@ const Words = ({
 
   const handleSilenceAndText = (id, text) => {
     let words = currentSub.val.words;
-    // console.log(words);
     if (words) {
       for (let i = 0; i < words.length; i++) {
         let word = words[i];
@@ -56,7 +54,6 @@ const Words = ({
 
   const handleNoText = (id) => {
     let words = currentSub.val.words;
-    // console.log(words);
     let silenceCount = 0;
     for (let i = 0; i < words.length; i++) {
       let word = words[i];
@@ -102,7 +99,7 @@ const Words = ({
     }
     setInput('');
     setInputIndex(null);
-    triggerWordsUpdate();
+    editorDispatch({ type: 'setShouldTriggerWordsUpdate', data: true });
   };
 
   let isLastDeleted = false;

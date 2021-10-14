@@ -6,14 +6,13 @@ const useAddVideo = (
   canvas,
   currentTime,
   speakers,
-  idCount,
-  updateId,
+  objectIdCount,
+  setObjectIdCount,
   isCanvasData
 ) => {
   const [isFirtLoad, setIsFirtLoad] = useState(true);
   const isMounted = useRef(true);
   const frameRef = useRef(null);
-  useEffect(() => () => (isMounted.current = false), []);
 
   const animate = useCallback(() => {
     const render = () => {
@@ -32,16 +31,9 @@ const useAddVideo = (
       top: speaker.y,
       width: speaker.w,
       height: speaker.h,
+      cornerRadius: 0,
       cropRect: { ...speaker },
     });
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (!isMounted.current && frameRef.current) {
-        fabric.util.cancelAnimFrame(frameRef.current);
-      }
-    };
   }, []);
 
   useEffect(() => {
@@ -50,29 +42,32 @@ const useAddVideo = (
       if (!isCanvasData) {
         // console.log(speakers);
         video.currentTime = currentTime > 0 ? currentTime : 0.001;
+        let lastId = objectIdCount;
         if (speakers.length > 0) {
           for (let i = 0; i < speakers.length; i++) {
             const speaker = speakers[i];
-            let speakerVideo = newVideo(video, speaker, i + 1);
+            let speakerVideo = newVideo(video, speaker, lastId);
             canvas.add(speakerVideo);
-            updateId();
+            lastId++;
           }
         } else {
           let speakerVideo = newVideo(
             video,
             { w: video.videoWidth, h: video.videoHeight, x: 0, y: 0 },
-            1
+            lastId
           );
           // console.log(speakerVideo);
           canvas.add(speakerVideo);
-          updateId();
+          lastId++;
         }
+        setObjectIdCount(lastId)
       }
       animate();
     }
   }, [
     isCanvasData,
-    updateId,
+    objectIdCount,
+    setObjectIdCount,
     video,
     canvas,
     isFirtLoad,
@@ -81,6 +76,16 @@ const useAddVideo = (
     newVideo,
     speakers,
   ]);
+
+  useEffect(() => () => (isMounted.current = false), []);
+
+  useEffect(() => {
+    return () => {
+      if (!isMounted.current && frameRef.current) {
+        fabric.util.cancelAnimFrame(frameRef.current);
+      }
+    };
+  }, []);
 };
 
 export default useAddVideo;

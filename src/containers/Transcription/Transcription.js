@@ -27,7 +27,6 @@ const Transcription = ({
   setCurrentTime,
   setNextCutIndex,
   videoCuts,
-  triggerWordsUpdate,
   status,
 }) => {
   const [searchInput, setSearchInput] = useState('');
@@ -230,7 +229,6 @@ const Transcription = ({
             fabricSub={fabricSub}
             currentSub={currentSub}
             setShouldRerenderSub={setShouldRerenderSub}
-            triggerWordsUpdate={triggerWordsUpdate}
           />
         ) : (
           <TranscriptionProgress

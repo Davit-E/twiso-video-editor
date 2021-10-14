@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from 'react';
+import React, { useRef, useContext, useEffect } from 'react';
 import styles from './Player.module.css';
 import PlayerCanvas from '../Canvas/PlayerCanvas/PlayerCanvas';
 import EventContext from '../../contexts/EventContext';
@@ -33,6 +33,8 @@ const Player = ({
   setShouldRerenderSub,
   speakers,
   info,
+  setVideoData,
+  transcriptonStatus
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const [eventState, eventDispatch] = useEventState();
@@ -41,6 +43,12 @@ const Player = ({
     if (isPlaying) videoRef.current.pause();
     else videoRef.current.play();
   };
+  useEffect(() => {
+    if(transcriptonStatus && transcriptonStatus.isFinished ){
+      videoRef.current.pause();
+    }
+  }, [transcriptonStatus, videoRef])
+
   useContainerSize(editorState.canvasState, editorDispatch, containerRef);
 
   usePlayerTime(
@@ -100,7 +108,7 @@ const Player = ({
                   )}
                 </div>
               </div>
-              <CanvasToolbar />
+              <CanvasToolbar setVideoData={setVideoData} info={info} />
             </>
           ) : null}
         </div>

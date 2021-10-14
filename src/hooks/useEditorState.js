@@ -1,7 +1,8 @@
 import { useReducer } from 'react';
 
 const initialState = {
-  shouldTriggerUpdate: false,
+  shouldTriggerCanvasUpdate: false,
+  shouldTriggerWordsUpdate: false,
   canvasState: {
     initialWidth: 0,
     initialHeight: 0,
@@ -32,9 +33,13 @@ const initialState = {
     cornerRadius: 0,
     isSvg: false,
   },
+  videoState: {
+    cornerRadius: 0,
+  },
   isSubtitles: false,
   isCropMode: false,
   shouldCropImage: false,
+  shouldCropVideo: false,
   isImageDropdown: false,
   isSubtitlesDropdown: false,
   isShapeDropdown: false,
@@ -46,6 +51,7 @@ const initialState = {
   shouldUpdateSubtitles: false,
   shouldUpdateShape: false,
   shouldUpdateImage: false,
+  shouldUpdateVideo: false,
   shouldReplaceImage: false,
   currentObject: {
     type: '',
@@ -72,8 +78,10 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'setShouldTriggerUpdate':
-      return { ...state, shouldTriggerUpdate: action.data };
+    case 'setShouldTriggerCanvasUpdate':
+      return { ...state, shouldTriggerCanvasUpdate: action.data };
+    case 'setShouldTriggerWordsUpdate':
+      return { ...state, shouldTriggerWordsUpdate: action.data };
     case 'setCanvasState':
       return { ...state, canvasState: action.data };
     case 'setIsDownloadDropdown':
@@ -84,6 +92,8 @@ const reducer = (state, action) => {
       return { ...state, isCropMode: action.data };
     case 'setShouldCropImage':
       return { ...state, shouldCropImage: action.data };
+    case 'setShouldCropVideo':
+      return { ...state, shouldCropVideo: action.data };
     case 'setIsImageDropdown':
       return { ...state, isImageDropdown: action.data };
     case 'setIsSubtitlesDropdown':
@@ -110,6 +120,8 @@ const reducer = (state, action) => {
       return { ...state, shouldUpdateShape: action.data };
     case 'setShouldUpdateImage':
       return { ...state, shouldUpdateImage: action.data };
+    case 'setShouldUpdateVideo':
+      return { ...state, shouldUpdateVideo: action.data };
     case 'setCurrentObject':
       return { ...state, currentObject: action.data };
     case 'setShapeToAdd':
@@ -120,6 +132,8 @@ const reducer = (state, action) => {
       return { ...state, shapeState: { ...action.data } };
     case 'setImageState':
       return { ...state, imageState: { ...action.data } };
+    case 'setVideoState':
+      return { ...state, videoState: { ...action.data } };
     case 'setTextState':
       return { ...state, textState: { ...action.data } };
     case 'setSubtitlesState':
@@ -205,6 +219,15 @@ const reducer = (state, action) => {
         shouldUpdateImage: true,
         imageState: {
           ...state.imageState,
+          cornerRadius: action.data,
+        },
+      };
+    case 'setVideoCornerRadius':
+      return {
+        ...state,
+        shouldUpdateVideo: true,
+        videoState: {
+          ...state.videoState,
           cornerRadius: action.data,
         },
       };

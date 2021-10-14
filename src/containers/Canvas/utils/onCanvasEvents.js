@@ -7,46 +7,35 @@ const textPropertyArr = [
   'opacity',
   'textAlign',
 ];
-
 const shapePropertyArr = ['fill', 'stroke', 'strokeWidth', 'rx', 'ry'];
 const imagePropertyArr = ['cornerRadius', 'isSvg'];
+const videoPropertyArr = ['cornerRadius', 'stroke', 'strokeWidth'];
 
-const handleText = (e, dispatch) => {
-  let newTextState = {};
-  textPropertyArr.forEach((property) => {
-    newTextState[property] = e.target[property];
+const handleObject = (e, dispatch, type, propertyArr) => {
+  let newState = {};
+  propertyArr.forEach((property) => {
+    newState[property] = e.target[property];
   });
-  dispatch({ type: 'setTextState', data: newTextState });
-  return 'text';
-};
-
-const handleShape = (e, dispatch) => {
-  let newShapeState = {};
-  shapePropertyArr.forEach((property) => {
-    newShapeState[property] = e.target[property];
-  });
-  dispatch({ type: 'setShapeState', data: newShapeState });
-  return e.target.type;
-};
-
-const handleImage = (e, dispatch) => {
-  let newImageState = {};
-  imagePropertyArr.forEach((property) => {
-    newImageState[property] = e.target[property];
-  });
-  dispatch({ type: 'setImageState', data: newImageState });
-  return 'customImage';
+  dispatch({ type, data: newState });
 };
 
 const handleSelected = (e, dispatch) => {
   let obj = { type: '', object: null };
   dispatch({ type: 'setCurrentCoords', data: e.target.lineCoords });
-  if (e.target.type === 'textbox') obj.type = handleText(e, dispatch);
-  else if (e.target.type === 'customImage' && e.target.type !== 'video')
-    obj.type = handleImage(e, dispatch);
-  else if (e.target.id === 'subtitle') obj.type = 'subtitle';
-  else if (e.target.type !== 'video') obj.type = handleShape(e, dispatch);
-  else obj.type = 'video';
+  if (e.target.type === 'textbox') {
+    obj.type = 'text';
+    handleObject(e, dispatch, 'setTextState', textPropertyArr);
+  } else if (e.target.type === 'customImage') {
+    obj.type = 'customImage';
+    handleObject(e, dispatch, 'setImageState', imagePropertyArr);
+  } else if (e.target.type === 'subtitle') obj.type = 'subtitle';
+  else if (e.target.type === 'video'){
+    obj.type = 'video';
+    handleObject(e, dispatch, 'setVideoState', videoPropertyArr);
+  } else {
+    obj.type = e.target.type
+    handleObject(e, dispatch, 'setShapeState', shapePropertyArr);
+  }
   obj.object = e.target;
   dispatch({ type: 'setCurrentObject', data: obj });
 };
@@ -77,16 +66,16 @@ export const onCleared = (e, dispatch, currentId) => {
 export const onModified = (e, dispatch) => {
   handleSelected(e, dispatch);
   if (e.target.id !== 'subtitle') {
-    dispatch({ type: 'setShouldTriggerUpdate', data: true });
+    dispatch({ type: 'setShouldTriggerCanvasUpdate', data: true });
   }
 };
 
 export const onAdded = (e, dispatch) => {
-  dispatch({ type: 'setShouldTriggerUpdate', data: true });
+  dispatch({ type: 'setShouldTriggerCanvasUpdate', data: true });
 };
 
 export const onRemoved = (e, dispatch) => {
-  dispatch({ type: 'setShouldTriggerUpdate', data: true });
+  dispatch({ type: 'setShouldTriggerCanvasUpdate', data: true });
 };
 
 export const onUpdated = (e, dispatch) => {

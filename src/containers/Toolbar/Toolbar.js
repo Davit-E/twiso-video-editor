@@ -11,6 +11,7 @@ import { calcPosition } from './utils/toolbarPosition';
 import TextToolbar from './TextToolbar/TextToolbar';
 import ShapeToolbar from './ShapeToolbar/ShapeToolbar';
 import ImageToolbar from './ImageToolbar/ImageToolbar';
+import VideoToolbar from './VideoToolbar/VideoToolbar';
 
 const Toolbar = ({ canvas }) => {
   const [coords, setCoords] = useState(null);
@@ -56,7 +57,10 @@ const Toolbar = ({ canvas }) => {
       {shapeArr.includes(editorState.currentObject.type) ? (
         <ShapeToolbar coords={coords} />
       ) : null}
-      {editorState.currentObject.type === 'customImage' ? <ImageToolbar /> : null}
+      {editorState.currentObject.type === 'customImage' ? (
+        <ImageToolbar />
+      ) : null}
+      {/* {editorState.currentObject.type === 'video' ? <VideoToolbar /> : null} */}
     </div>
   );
 };

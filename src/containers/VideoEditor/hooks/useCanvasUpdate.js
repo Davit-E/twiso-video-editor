@@ -23,7 +23,7 @@ const useCanvasUpdate = (
   updateProject,
   canvas,
   info,
-  shouldTriggerUpdate,
+  shouldUpdate,
   dispatch,
   isDownloading
 ) => {
@@ -47,11 +47,11 @@ const useCanvasUpdate = (
   }, [updateProject, info, canvas, isMounted]);
 
   useEffect(() => {
-    if (shouldTriggerUpdate && !isDownloading) {
-      dispatch({ type: 'setShouldTriggerUpdate', data: false });
-      triggerCanvasUpdate();
+    if (shouldUpdate) {
+      dispatch({ type: 'setShouldTriggerCanvasUpdate', data: false });
+      if (!isDownloading) triggerCanvasUpdate();
     }
-  }, [triggerCanvasUpdate, shouldTriggerUpdate, dispatch, isDownloading]);
+  }, [triggerCanvasUpdate, shouldUpdate, dispatch, isDownloading]);
 };
 
 export default useCanvasUpdate;

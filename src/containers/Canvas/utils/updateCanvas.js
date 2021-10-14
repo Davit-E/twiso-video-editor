@@ -2,7 +2,7 @@ export const updateCanvasStyle = (state, canvas, dispatch) => {
   canvas.backgroundColor = state.backgroundColor;
   canvas.requestRenderAll();
   dispatch({ type: 'setShouldUpdateCanvas', data: false });
-  dispatch({ type: 'setShouldTriggerUpdate', data: true });
+  dispatch({ type: 'setShouldTriggerCanvasUpdate', data: true });
 };
 
 export const setSize = (state, canvas) => {
@@ -80,7 +80,7 @@ export const updateCanvasSize = (state, canvas, dispatch) => {
         let object = objects[i];
         checkOffScreen(object, canvas, state.resize, dispatch);
       }
-      dispatch({ type: 'setShouldTriggerUpdate', data: true });
+      dispatch({ type: 'setShouldTriggerCanvasUpdate', data: true });
     }
     canvas.renderAll();
   }

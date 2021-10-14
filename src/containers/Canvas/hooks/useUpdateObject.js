@@ -4,6 +4,7 @@ import {
   updateTextStyle,
   updateShapeStyle,
   updateSubtitlesStyle,
+  updateVideoStyle
 } from '../utils/updateObject';
 
 const shapeArr = ['rect', 'circle', 'triangle', 'line'];
@@ -24,6 +25,9 @@ const useUpdateObject = (state, dispatch, canvas) => {
     }
     if (state.shouldUpdateImage && state.currentObject.type === 'customImage') {
       updateImageStyle(state, canvas, dispatch);
+    }
+    if (state.shouldUpdateVideo) {
+      updateVideoStyle(state, canvas, dispatch);
     }
   }, [state, dispatch, canvas]);
 };

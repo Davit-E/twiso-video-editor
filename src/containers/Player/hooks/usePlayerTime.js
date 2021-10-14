@@ -66,7 +66,7 @@ const usePlayerTime = (
       //   console.log('comparing: ', time, '>', +word.end, time >= +word.end);
       // }
       if (sub && nextSub && time > +sub.val.end) {
-        if (nextSub.val.active) setCurrentSub(prevState => prevState.next);
+        if (nextSub.val.active) setCurrentSub((prevState) => prevState.next);
         else setCurrentSub(nextSub.nextSub);
       }
     },
@@ -74,18 +74,19 @@ const usePlayerTime = (
   );
 
   useEffect(() => {
-    if (isPlaying && fabricSub && currentSub && currentTime !== null) {
+    if (words && isPlaying && fabricSub && currentSub && currentTime !== null) {
       handleCurrentSub(currentTime, currentSub);
     }
-  }, [isPlaying, fabricSub, currentTime, handleCurrentSub, currentSub]);
+  }, [words, isPlaying, fabricSub, currentTime, handleCurrentSub, currentSub]);
 
   useEffect(() => {
-    if (currentTime !== null) handleCurrentWord(currentTime, currentWordIndex);
-  }, [currentTime, handleCurrentWord, currentWordIndex]);
+    if (words && currentTime !== null)
+      handleCurrentWord(currentTime, currentWordIndex);
+  }, [words, currentTime, handleCurrentWord, currentWordIndex]);
 
   useEffect(() => {
-    if (currentTime !== null) handleVideoCuts(currentTime);
-  }, [currentTime, handleVideoCuts]);
+    if (words && currentTime !== null) handleVideoCuts(currentTime);
+  }, [words, currentTime, handleVideoCuts]);
 };
 
 export default usePlayerTime;

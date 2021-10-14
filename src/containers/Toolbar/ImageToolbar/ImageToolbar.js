@@ -68,7 +68,7 @@ const ImageToolbar = () => {
             id='crop'
             onClick={clickHandler}
           >
-            <img src={cropImage} alt='replace' />
+            <img src={cropImage} alt='crop' />
             <p>Crop</p>
           </div>
         </>

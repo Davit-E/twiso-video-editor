@@ -2,9 +2,8 @@ import { useEffect, useContext } from 'react';
 import { addSpeaker } from '../utils/crop';
 import SpeakersContext from '../../../contexts/SpeakersContext';
 
-const useCropVideo = (
+const useCropSpeakers = (
   canvas,
-  isCanvasSet,
   video,
   boxArr,
   setBoxArr,
@@ -46,4 +45,4 @@ const useCropVideo = (
   }, [speakersState, speakersDispatch, canvas, video, setBoxArr]);
 };
 
-export default useCropVideo;
+export default useCropSpeakers;

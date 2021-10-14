@@ -67,11 +67,11 @@ const ContextMenu = ({
     } else if (id === 'bringToFront') {
       canvas.bringToFront(activeObj);
       if (fabricSub) canvas.bringToFront(fabricSub);
-      dispatch({ type: 'setShouldTriggerUpdate', data: true });
+      dispatch({ type: 'setShouldTriggerCanvasUpdate', data: true });
       eventDispatch({ type: 'setRightClickEvent', data: null });
     } else if (id === 'sendToBack') {
       canvas.sendToBack(activeObj);
-      dispatch({ type: 'setShouldTriggerUpdate', data: true });
+      dispatch({ type: 'setShouldTriggerCanvasUpdate', data: true });
       eventDispatch({ type: 'setRightClickEvent', data: null });
     } else if (id === 'copy') {
       setClipboard({

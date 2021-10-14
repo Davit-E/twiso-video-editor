@@ -2,7 +2,7 @@ export const updateCanvasStyle = (state, canvas, dispatch) => {
   canvas.backgroundColor = state.backgroundColor;
   canvas.requestRenderAll();
   dispatch({ type: 'setShouldUpdateCanvas', data: false });
-  dispatch({ type: 'setShouldTriggerUpdate', data: true });
+  dispatch({ type: 'setShouldTriggerCanvasUpdate', data: true });
 };
 
 export const updateCanvasSize = (state, canvas, dispatch) => {
@@ -18,5 +18,5 @@ export const updateCanvasSize = (state, canvas, dispatch) => {
   });
   canvas.requestRenderAll();
   dispatch({ type: 'setShouldUpdateCanvasSize', data: false });
-  dispatch({ type: 'setShouldTriggerUpdate', data: true });
+  dispatch({ type: 'setShouldTriggerCanvasUpdate', data: true });
 };
