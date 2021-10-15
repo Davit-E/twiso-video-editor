@@ -1,7 +1,6 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { addSpeaker, handleFirstLoadSpeakers } from '../utils/crop';
 import SpeakersContext from '../../../contexts/SpeakersContext';
-import { useState } from 'react/cjs/react.development';
 
 const useCropSpeakers = (
   canvas,
