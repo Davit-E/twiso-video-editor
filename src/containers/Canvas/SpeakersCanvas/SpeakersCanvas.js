@@ -15,6 +15,7 @@ const SpeakersCanvas = ({
   setBoxArr,
   duration,
   boxArr,
+  speakers
 }) => {
   const [isCanvasSet, setIsCanvasSet] = useState(null);
   const [video, setVideo] = useState(null);
@@ -31,7 +32,9 @@ const SpeakersCanvas = ({
     boxArr,
     setBoxArr,
     boxId,
-    updateBoxId
+    updateBoxId,
+    speakers,
+    isCanvasSet
   );
 
   return (

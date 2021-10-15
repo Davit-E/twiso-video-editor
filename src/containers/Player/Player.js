@@ -34,7 +34,8 @@ const Player = ({
   speakers,
   info,
   setVideoData,
-  transcriptonStatus
+  transcriptonStatus,
+  setSpeakers
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const [eventState, eventDispatch] = useEventState();
@@ -44,10 +45,10 @@ const Player = ({
     else videoRef.current.play();
   };
   useEffect(() => {
-    if(transcriptonStatus && transcriptonStatus.isFinished ){
+    if (transcriptonStatus && transcriptonStatus.isFinished) {
       videoRef.current.pause();
     }
-  }, [transcriptonStatus, videoRef])
+  }, [transcriptonStatus, videoRef]);
 
   useContainerSize(editorState.canvasState, editorDispatch, containerRef);
 
@@ -108,7 +109,12 @@ const Player = ({
                   )}
                 </div>
               </div>
-              <CanvasToolbar setVideoData={setVideoData} info={info} />
+              <CanvasToolbar
+                setVideoData={setVideoData}
+                info={info}
+                setSpeakers={setSpeakers}
+                canvas={canvas}
+              />
             </>
           ) : null}
         </div>

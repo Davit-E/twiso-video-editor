@@ -1,6 +1,7 @@
 import { useEffect, useContext } from 'react';
-import { addSpeaker } from '../utils/crop';
+import { addSpeaker, handleFirstLoadSpeakers } from '../utils/crop';
 import SpeakersContext from '../../../contexts/SpeakersContext';
+import { useState } from 'react/cjs/react.development';
 
 const useCropSpeakers = (
   canvas,
@@ -8,9 +9,37 @@ const useCropSpeakers = (
   boxArr,
   setBoxArr,
   boxId,
-  updateBoxId
+  updateBoxId,
+  speakers,
+  isCanvasSet
 ) => {
   const { speakersState, speakersDispatch } = useContext(SpeakersContext);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
+
+  // Handle Speaker Adding On First Load
+  useEffect(() => {
+    if (video && isCanvasSet && isFirstLoad) {
+      setIsFirstLoad(false);
+      if (speakers.length > 0) {
+        handleFirstLoadSpeakers(
+          canvas,
+          setBoxArr,
+          updateBoxId,
+          video,
+          speakers
+        );
+      } else speakersDispatch({ type: 'setShouldAddSpeaker', data: true });
+    }
+  }, [
+    canvas,
+    setBoxArr,
+    updateBoxId,
+    isFirstLoad,
+    video,
+    speakers,
+    isCanvasSet,
+    speakersDispatch,
+  ]);
 
   // Handle Speaker Adding
   useEffect(() => {

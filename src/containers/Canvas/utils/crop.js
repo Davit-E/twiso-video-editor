@@ -50,8 +50,8 @@ export const restrictBox = (active, box) => {
   });
 };
 
-export const getSpeakerBox = (boxSize, boxId, updateBoxId) => {
-  let box = new fabric.CropBox({
+export const getSpeakerBox = (boxSize, boxId) => {
+  return new fabric.CropBox({
     ...boxSize,
     fill: 'rgba(111, 122, 208, 0.4)',
     top: 0,
@@ -60,8 +60,34 @@ export const getSpeakerBox = (boxSize, boxId, updateBoxId) => {
     lockScalingFlip: true,
     id: boxId,
   });
-  updateBoxId();
-  return box;
+};
+
+export const handleFirstLoadSpeakers = (
+  canvas,
+  setBoxArr,
+  updateBoxId,
+  video,
+  speakers
+) => {
+  let boxes = [];
+  for (let i = 0; i < speakers.length; i++) {
+    const speaker = speakers[i];
+    let size = {
+      width:  video.width,
+      height: video.height,
+      scaleX: speaker.w / video.width,
+      scaleY: speaker.h / video.height,
+    };
+    let box = getSpeakerBox(size, i + 1);
+    box.top = speaker.y;
+    box.left = speaker.x;
+    updateBoxId();
+    canvas.add(box);
+    canvas.requestRenderAll();
+    boxes.push(box);
+    restrictBox(video, box);
+  }
+  setBoxArr(boxes);
 };
 
 export const addSpeaker = (
@@ -89,7 +115,8 @@ export const addSpeaker = (
       scaleY: last.scaleY,
     };
   }
-  let box = getSpeakerBox(size, boxId, updateBoxId);
+  let box = getSpeakerBox(size, boxId);
+  updateBoxId();
   canvas.add(box).setActiveObject(box);
   canvas.requestRenderAll();
   setBoxArr((prevState) => [...prevState, box]);

@@ -18,7 +18,7 @@ export const setSize = (state, canvas) => {
   canvas.renderAll();
 };
 
-const checkOffScreen = (object, canvas, resize, dispatch) => {
+export const checkOffScreen = (object, canvas, resize, dispatch) => {
   let zoom = canvas.getZoom();
   let canvasWidth = canvas.getWidth() / zoom;
   let canvasHeight = canvas.getHeight() / zoom;
@@ -35,8 +35,7 @@ const checkOffScreen = (object, canvas, resize, dispatch) => {
     object.width = canvasWidth / 2;
     objWidth = canvasWidth / 2;
   } else if (shouldResize) {
-    let desiredSize =
-      objWidth / 2 > canvasWidth ? (canvasWidth * 2) / 3 : objWidth / 2;
+    let desiredSize = (canvasWidth * 2) / 3;
     let scale = desiredSize / object.width;
     object.scaleX = scale;
     object.scaleY = scale;
@@ -44,7 +43,7 @@ const checkOffScreen = (object, canvas, resize, dispatch) => {
     objHeight = object.height * object.scaleY;
   }
 
-  if (isTextObject && isVertical && +object.fontSize > 30) {
+  if (isTextObject && isVertical && +object.fontSize > 30 && dispatch) {
     object.fontSize = 30;
     dispatch({
       type: isSub ? 'setSubtitlesFontSize' : 'setFontSize',

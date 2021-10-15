@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { fabric } from 'fabric';
+import { checkOffScreen } from '../utils/updateCanvas';
 
 const useAddVideo = (
   video,
@@ -49,6 +50,7 @@ const useAddVideo = (
             let speakerVideo = newVideo(video, speaker, lastId);
             canvas.add(speakerVideo);
             lastId++;
+            checkOffScreen(speakerVideo, canvas, canvas.resize, null);
           }
         } else {
           let speakerVideo = newVideo(
@@ -59,8 +61,9 @@ const useAddVideo = (
           // console.log(speakerVideo);
           canvas.add(speakerVideo);
           lastId++;
+          checkOffScreen(speakerVideo, canvas, canvas.resize, null);
         }
-        setObjectIdCount(lastId)
+        setObjectIdCount(lastId);
       }
       animate();
     }

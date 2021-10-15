@@ -7,7 +7,7 @@ const initialState = {
   height: 0,
   shouldUpdateCanvas: false,
   shouldUpdateCanvasSize: false,
-  shouldAddSpeaker: true,
+  shouldAddSpeaker: false,
   shouldRemoveSpeaker: false,
 };
 

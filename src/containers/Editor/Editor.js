@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import styles from './Editor.module.css';
 import Uploader from '../Uploader/Uploader';
 import VideoEditor from '../VideoEditor/VideoEditor';
@@ -19,12 +19,6 @@ const Editor = () => {
   //   isFinished: true,
   // });
 
-  const clearState = useCallback(() => {
-    setVideoForUpload(null);
-    setSpeakers([]);
-    setVideoData(null);
-  }, []);
-
   return (
     <div className={styles.Editor}>
       <Switch>
@@ -40,7 +34,6 @@ const Editor = () => {
           viedoForUpload={viedoForUpload}
           setVideoForUpload={setVideoForUpload}
           setVideoData={setVideoData}
-          clearState={clearState}
           wordsRef={words}
         />
         <CustomRoute
@@ -51,6 +44,7 @@ const Editor = () => {
           component={SelectSpeakers}
           videoData={videoData}
           setSpeakers={setSpeakers}
+          speakers={speakers}
         />
         <CustomRoute
           path={`${match.path}/:id`}
@@ -59,6 +53,7 @@ const Editor = () => {
           allowed={true}
           component={VideoEditor}
           speakers={speakers}
+          setSpeakers={setSpeakers}
           setVideoData={setVideoData}
         />
         {/* <CustomRoute

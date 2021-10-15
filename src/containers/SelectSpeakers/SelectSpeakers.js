@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import styles from './SelectSpeakers.module.css';
 import Navbar from '../../components/Navbar/Navbar';
 import { useHistory } from 'react-router-dom';
@@ -10,7 +10,7 @@ import SpeakersContext from '../../contexts/SpeakersContext';
 import useSpeakersState from '../../hooks/useSpeakersState';
 import useContainerSize from './hooks/useContainerSize';
 
-const SelectSpeakers = ({ videoData, setSpeakers }) => {
+const SelectSpeakers = ({ videoData, setSpeakers, speakers }) => {
   const [speakersState, speakersDispatch] = useSpeakersState();
   const history = useHistory();
   const [canvas, setCanvas] = useState(null);
@@ -19,15 +19,7 @@ const SelectSpeakers = ({ videoData, setSpeakers }) => {
   const [videoSize, setVideoSize] = useState(null);
   const [boxArr, setBoxArr] = useState([]);
 
-  useEffect(() => {
-    setSpeakers([]);
-  }, [setSpeakers]);
-
-  useContainerSize(
-    videoSize,
-    speakersDispatch,
-    containerRef,
-  );
+  useContainerSize(videoSize, speakersDispatch, containerRef);
 
   const addSpeakerHandler = () => {
     speakersDispatch({ type: 'setShouldAddSpeaker', data: true });
@@ -38,16 +30,20 @@ const SelectSpeakers = ({ videoData, setSpeakers }) => {
   };
 
   const confirmHandler = () => {
-    let arr = [];
-    for (let i = 0; i < boxArr.length; i++) {
-      const box = boxArr[i];
-      let w = box.width * box.scaleX;
-      let h = box.height * box.scaleY;
-      let x = box.lineCoords.tl.x / canvas.getZoom();
-      let y = box.lineCoords.tr.y / canvas.getZoom();
-      arr.push({ x, y, w, h });
+    if (boxArr.length > 0) {
+      let arr = [];
+      for (let i = 0; i < boxArr.length; i++) {
+        const box = boxArr[i];
+        let w = box.width * box.scaleX;
+        let h = box.height * box.scaleY;
+        let x = box.lineCoords.tl.x / canvas.getZoom();
+        let y = box.lineCoords.tr.y / canvas.getZoom();
+        arr.push({ x, y, w, h });
+      }
+      setSpeakers(arr);
+    } else {
+      setSpeakers([{ x: 0, y: 0, w: videoSize.width, h: videoSize.height }]);
     }
-    setSpeakers(arr);
     history.replace(`/editor/${videoData.id}`);
     // history.push('/editor/video-editor');
   };
@@ -73,6 +69,7 @@ const SelectSpeakers = ({ videoData, setSpeakers }) => {
             boxArr={boxArr}
             setBoxArr={setBoxArr}
             duration={videoData ? videoData.duration : null}
+            speakers={speakers}
           />
           <video
             src={videoData ? videoData.url : null}

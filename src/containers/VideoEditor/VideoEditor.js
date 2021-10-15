@@ -15,7 +15,7 @@ import useCanvasUpdate from './hooks/useCanvasUpdate';
 import useWordsUpdate from './hooks/useWordsUpdate';
 import useCheckTranscription from './hooks/useCheckTranscription';
 
-const VideoEditor = ({ speakers, setVideoData }) => {
+const VideoEditor = ({ speakers, setSpeakers, setVideoData }) => {
   const [editorState, editorDispatch] = useEditorState();
   const {
     isGettingVideo,
@@ -153,6 +153,7 @@ const VideoEditor = ({ speakers, setVideoData }) => {
                 shouldRerenderSub={shouldRerenderSub}
                 setShouldRerenderSub={setShouldRerenderSub}
                 speakers={speakers}
+                setSpeakers={setSpeakers}
                 info={info}
                 setVideoData={setVideoData}
                 transcriptonStatus={transcriptonStatus}
