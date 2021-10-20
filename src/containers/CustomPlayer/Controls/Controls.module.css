@@ -56,3 +56,7 @@
 .PlayPause {
   padding-left: 2px;
 }
+
+.FullScreenSize {
+  max-height: 100vh;
+}

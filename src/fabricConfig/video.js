@@ -5,11 +5,13 @@ fabric.Video = fabric.util.createClass(fabric.Image, {
   cropRect: null,
   id: null,
   cornerRadius: 0,
-  
+
   initialize: function (video, options) {
     const defaultOpts = {
       lockRotation: true,
       objectCaching: true,
+      lockScalingFlip: true,
+      strokeUniform: true,
       cacheProperties: ['time'],
     };
     options = options || {};
@@ -47,15 +49,17 @@ fabric.Video = fabric.util.createClass(fabric.Image, {
 
   _render: function (ctx) {
     this._draw(this.getElement(), ctx);
+    this._stroke(ctx);
+    this._renderPaintInOrder(ctx);
   },
 });
 
 fabric.Video.prototype.setControlsVisibility({
   tl: true,
-  tr: true, 
-  bl: true, 
-  br: true, 
-  mtr: false
+  tr: true,
+  bl: true,
+  br: true,
+  mtr: false,
 });
 
 fabric.Video.fromObject = function (object, callback) {

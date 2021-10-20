@@ -21,8 +21,8 @@ const Controls = ({ video, container, duration, time, setTime, isPlaying }) => {
   }, [isPlaying, video]);
 
   const fullScreen = useCallback(() => {
-    fullScreenHanlder(container);
-  }, [container]);
+    fullScreenHanlder(container, video, styles.FullScreenSize);
+  }, [container, video]);
 
   useKeyEvents(video, playPause, setVolume, setShouldShowPanel);
   useSingleAndDoubleClick(playPause, fullScreen, controlsRef);
@@ -56,7 +56,7 @@ const Controls = ({ video, container, duration, time, setTime, isPlaying }) => {
         <Volume video={video} volume={volume} setVolume={setVolume} />
         <button
           className={styles.FullScreen}
-          onClick={() => fullScreenHanlder(container)}
+          onClick={fullScreen}
         >
           <img src={fullScreenSvg} alt='full screen' />
         </button>

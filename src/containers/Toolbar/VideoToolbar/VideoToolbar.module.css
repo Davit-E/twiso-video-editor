@@ -13,7 +13,9 @@
   background: #ececec;
 }
 
-.ReaplaceContainer,
+.StrokeContainer,
+.StrokeWidthContainer,
+.CircleCropContainer,
 .RadiusContainer,
 .CropContainer,
 .DoneContainer {
@@ -24,18 +26,27 @@
   cursor: pointer;
   height: 100%;
 }
+.StrokeContainer:hover,
 .DoneContainer:hover,
-.ReaplaceContainer:hover,
-.CropContainer:hover {
+.CircleCropContainer:hover,
+.CropContainer:hover,
+.StrokeWidthInput:hover,
+.RadiusInput:hover,
+.StrokeWidthArrowContainer:hover {
   background: rgba(88, 110, 224, 0.06);
 }
+.StrokeContainer:active,
 .DoneContainer:active,
-.ReaplaceContainer:active,
-.CropContainer:active {
+.CircleCropContainer:active,
+.CropContainer:active,
+.StrokeWidthInput:active,
+.RadiusInput:active,
+.StrokeWidthArrowContainer:active {
   background: rgba(88, 110, 224, 0.12);
 }
 
-.ReaplaceContainer p,
+.StrokeContainer p,
+.CircleCropContainer p,
 .CropContainer p {
   margin: 0;
   font-weight: 300;
@@ -54,6 +65,20 @@
   padding-right: 1rem;
   padding-left: 1rem;
   border-radius: 15px;
+}
+
+.CircleCropContainer,
+.StrokeContainer {
+  padding: 0 0.75rem;
+  line-height: normal;
+}
+
+.CircleCropCircle {
+  border-radius: 100%;
+  border: 0.1px solid #000000;
+  width: 0.875rem;
+  height: 0.875rem;
+  margin-top: 1px;
 }
 
 .RadiusContainer {
@@ -79,15 +104,71 @@
   outline: none;
 }
 
-.RadiusInput:hover,
-.StrokeWidthArrowContainer:hover {
-  background: rgba(88, 110, 224, 0.06);
-}
-
 .RadiusInput::selection {
   background: #abb6ef;
 }
 
 .BorderStyle {
   border-radius: 15px;
+}
+
+.DownArrow {
+  width: 0.5rem;
+  height: auto;
+  user-select: none;
+}
+
+.ColorPickerBorder {
+  border: 0.1px solid #c4c4c4;
+  height: 1rem;
+  width: 1rem;
+  border-radius: 30px;
+  margin-right: 0.3125rem;
+  margin-top: 1px;
+}
+
+.ColorPicker {
+  background: black;
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+}
+
+.StrokeWidthContainer {
+  width: 4.25rem;
+  overflow: hidden;
+}
+
+.StrokeWidthInputContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.StrokeWidthInput {
+  width: 100%;
+  padding-left: 0;
+  text-align: right;
+  height: 100%;
+  border: none;
+  font: inherit;
+  font-weight: 300;
+}
+
+.StrokeWidthInput:focus {
+  outline: none;
+}
+
+.StrokeWidthInput::selection {
+  background: #abb6ef;
+}
+
+.StrokeWidthArrowContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

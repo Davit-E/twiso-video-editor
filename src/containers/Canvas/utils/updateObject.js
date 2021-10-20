@@ -3,57 +3,40 @@ import { fabric } from 'fabric';
 
 const loaded = ['Inter'];
 
-const roundedCorners = (img, radius) => {
-  let currentRadiusX = (img.width * img.scaleX * radius) / 200;
-  let currentRadiusY = (img.height * img.scaleY * radius) / 200;
-  let rect = new fabric.Rect({
-    width: img.width,
-    height: img.height,
-    rx: currentRadiusX / img.scaleX,
-    ry: currentRadiusY / img.scaleY,
-    left: -img.width / 2,
-    top: -img.height / 2,
-    noScaleCache: false,
-  });
-  return rect;
-};
+const roundedCorners = (media, radius) => {
+  let finalRad = 0;
+  let width = media.width;
+  let height = media.height;
+  if (media.cropRect) {
+    width = media.cropRect.w;
+    height = media.cropRect.h;
+  }
+  width += media.strokeWidth;
+  height += media.strokeWidth;
+  if (width < height) finalRad = (width * radius) / 200;
+  else finalRad = (height * radius) / 200;
 
-const roundedCornersVideo = (video, radius) => {
-  let currentRadiusX = (video.width * video.scaleX * radius) / 200;
-  let currentRadiusY = (video.height * video.scaleY * radius) / 200;
-  let rect = new fabric.Rect({
-    width: video.width,
-    height: video.height,
-    scaleX: video.scaleX,
-    scaleY: video.scaleY,
-    rx: currentRadiusX / video.scaleX,
-    ry: currentRadiusY / video.scaleY,
-    left: video.left,
-    top: video.top,
+  return new fabric.Rect({
+    width: media.width + media.strokeWidth,
+    height: media.height + media.strokeWidth,
+    rx: finalRad,
+    ry: finalRad,
+    left: (-media.width - media.strokeWidth) / 2,
+    top: (-media.height - media.strokeWidth) / 2,
     noScaleCache: false,
-    fill: 'rgba(70, 70, 70, 0.0)',
   });
-  return rect;
 };
 
 export const updateVideoStyle = (state, canvas, dispatch) => {
-  let video = canvas.getActiveObject();
+  let video = state.currentObject.object;
   if (video && video.type === 'video') {
-    console.log('updating');
     let radius = state.videoState.cornerRadius;
-    video.cornerRadius = radius;
-    let rect = roundedCornersVideo(video, radius);
-    // var group = new fabric.Group([video, rect], {
-    //   left: video.left,
-    //   top: video.top,
-    //   width: video.width,
-    //   height: video.height,
-    //   scaleX: video.scaleX,
-    //   scaleY: video.scaleY,
-    //   originX: 'center',
-    //   originY: 'center',
-    // });
-    // canvas.add(group);
+    if (radius === 0) video.clipPath = null;
+    else video.set('clipPath', roundedCorners(video, radius));
+    for (const [key, value] of Object.entries(state.videoState)) {
+      video.set(key, value);
+    }
+    if (!state.showToolbar) dispatch({ type: 'setShowToolbar', data: true });
     canvas.requestRenderAll();
   }
   dispatch({ type: 'setShouldUpdateVideo', data: false });
@@ -61,7 +44,7 @@ export const updateVideoStyle = (state, canvas, dispatch) => {
 };
 
 export const updateImageStyle = (state, canvas, dispatch) => {
-  let image = canvas.getActiveObject();
+  let image = state.currentObject.object;
   if (image && image.type === 'customImage') {
     let radius = state.imageState.cornerRadius;
     image.set('clipPath', roundedCorners(image, radius));

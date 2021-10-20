@@ -20,7 +20,7 @@ const CanvasToolbar = ({ setVideoData, info, setSpeakers, canvas }) => {
   const history = useHistory();
 
   const clickHandler = (e) => {
-    if (!editorState.shouldCropImage) {
+    if (!editorState.shouldCropMedia) {
       if (editorState.isCropMode) {
         editorDispatch({ type: 'setIsCropMode', data: false });
       }
@@ -34,7 +34,7 @@ const CanvasToolbar = ({ setVideoData, info, setSpeakers, canvas }) => {
         let objects = canvas.getObjects();
         let speakerVideos = [];
         for (let i = 0; i < objects.length; i++) {
-          const obj = objects[i];
+          let obj = objects[i];
           if (obj.type === 'video') speakerVideos.push({ ...obj.cropRect });
         }
         setSpeakers(speakerVideos);

@@ -48,7 +48,6 @@ const VideoEditor = ({ speakers, setSpeakers, setVideoData }) => {
   //   let obj = editorState.currentObject.object;
   //   if (obj) {
   //     console.log(obj);
-  //     console.log(obj.type);
   //   }
   // }, [editorState]);
 

@@ -6,14 +6,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background: rgba(51, 51, 51, 255);
 }
 
 .Video {
   width: 100%;
   height: auto;
+  max-height: 600px;
 }
 
 /* .Video::-webkit-media-controls {
   display:none !important;
 } */
-

@@ -43,7 +43,7 @@ const useAddVideo = (video, canvas, currentTime, setVideo) => {
 
   useEffect(() => {
     return () => {
-      if (!isMounted.current && frameRef.current) {
+      if (frameRef.current) {
         fabric.util.cancelAnimFrame(frameRef.current);
       }
     };

@@ -60,7 +60,9 @@ const Toolbar = ({ canvas }) => {
       {editorState.currentObject.type === 'customImage' ? (
         <ImageToolbar />
       ) : null}
-      {/* {editorState.currentObject.type === 'video' ? <VideoToolbar /> : null} */}
+      {editorState.currentObject.type === 'video' ? (
+        <VideoToolbar coords={coords} />
+      ) : null}
     </div>
   );
 };

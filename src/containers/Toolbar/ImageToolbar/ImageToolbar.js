@@ -15,7 +15,7 @@ const ImageToolbar = () => {
     if (e.currentTarget.id === 'replace') {
       editorDispatch({ type: 'setShouldReplaceImage', data: true });
     } else if (e.currentTarget.id === 'crop') {
-      editorDispatch({ type: 'setIsCropMode', data: true });
+      editorDispatch({ type: 'setCropType', data: 'rect' });
     }
   };
 
@@ -28,7 +28,7 @@ const ImageToolbar = () => {
   };
 
   const cropDoneHandler = () => {
-    editorDispatch({ type: 'setShouldCropImage', data: true });
+    editorDispatch({ type: 'setShouldCropMedia', data: true });
     editorDispatch({ type: 'setShowToolbar', data: false });
   };
 

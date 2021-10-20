@@ -35,11 +35,13 @@ const initialState = {
   },
   videoState: {
     cornerRadius: 0,
+    stroke: 'rgba(255,255,255,1)',
+    strokeWidth: 0,
   },
   isSubtitles: false,
   isCropMode: false,
-  shouldCropImage: false,
-  shouldCropVideo: false,
+  cropType: 'rect',
+  shouldCropMedia: false,
   isImageDropdown: false,
   isSubtitlesDropdown: false,
   isShapeDropdown: false,
@@ -90,10 +92,10 @@ const reducer = (state, action) => {
       return { ...state, isSubtitles: action.data, isSubtitlesDropdown: false };
     case 'setIsCropMode':
       return { ...state, isCropMode: action.data };
-    case 'setShouldCropImage':
-      return { ...state, shouldCropImage: action.data };
-    case 'setShouldCropVideo':
-      return { ...state, shouldCropVideo: action.data };
+    case 'setCropType':
+      return { ...state, isCropMode: true, cropType: action.data };
+    case 'setShouldCropMedia':
+      return { ...state, shouldCropMedia: action.data };
     case 'setIsImageDropdown':
       return { ...state, isImageDropdown: action.data };
     case 'setIsSubtitlesDropdown':
@@ -228,7 +230,27 @@ const reducer = (state, action) => {
         shouldUpdateVideo: true,
         videoState: {
           ...state.videoState,
+          strokeWidth: 0,
           cornerRadius: action.data,
+        },
+      };
+    case 'setVideoStroke':
+      return {
+        ...state,
+        shouldUpdateVideo: true,
+        videoState: {
+          ...state.videoState,
+          stroke: action.data,
+        },
+      };
+    case 'setVideoStrokeWidth':
+      return {
+        ...state,
+        shouldUpdateVideo: true,
+        videoState: {
+          ...state.videoState,
+          strokeWidth: action.data,
+          cornerRadius: 0,
         },
       };
     case 'setShapeRadius':

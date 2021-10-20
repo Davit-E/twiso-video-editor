@@ -1,32 +1,22 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { SketchPicker } from 'react-color';
-import styles from './ShapeDropdowns.module.css';
-import StrokeWidthDropdown from '../StrokeWidthDropdown/StrokeWidthDropdown';
+import styles from './VideoDropdowns.module.css';
+import StrokeWidthDropdown from '../../StrokeWidthDropdown/StrokeWidthDropdown';
 
-const ShapeDropdowns = ({
+const VideoDropdowns = ({
   state,
   dispatch,
   coords,
-  shapeToolbar,
+  videoToolbar,
   isStrokeWidthDropdown,
-  isFillDropdown,
+  setIsStrokeWidthDropdown,
   isStrokeDropdown,
-  fill,
-  setFill,
-  fillChangeCompleteHandler,
-  fillRef,
   stroke,
   setStroke,
   strokeChangeCompleteHandler,
   strokeRef,
-  setIsStrokeWidthDropdown,
-  isLine,
-  isRect,
 }) => {
   const [dropDownStyle, setDropdownStyle] = useState({ top: 41 });
-  const [strokeWidthDropDownStyle, setStrokeWidthDropDownStyle] = useState({
-    top: 41,
-  });
   const maxDropdownHeight = 301;
   const maxDropdownWidth = 220;
   const DropdownOffset = 41;
@@ -41,7 +31,6 @@ const ShapeDropdowns = ({
         canvasHeight
       ) {
         style.bottom = 41;
-        setStrokeWidthDropDownStyle({ bottom: 41, right: !isRect ? 0 : 66 });
       }
 
       if (coords.coordX + toolbarWidth - maxDropdownWidth < 0) {
@@ -50,29 +39,17 @@ const ShapeDropdowns = ({
       }
       if (Object.keys(style).length !== 0) setDropdownStyle(style);
     },
-    [isRect]
+    []
   );
 
   useEffect(() => {
-    if (coords && shapeToolbar) {
-      handleDropdownPosition(coords, shapeToolbar, state.canvasState.height);
+    if (coords && videoToolbar) {
+      handleDropdownPosition(coords, videoToolbar, state.canvasState.height);
     }
-  }, [handleDropdownPosition, shapeToolbar, state.canvasState, coords]);
+  }, [handleDropdownPosition, videoToolbar, state.canvasState, coords]);
 
   return (
     <>
-      {isFillDropdown ? (
-        <div className={styles.FillDropdownContainer} style={dropDownStyle}>
-          <SketchPicker
-            color={fill}
-            onChange={(c) => setFill(c.rgb)}
-            onChangeComplete={(c) =>
-              fillChangeCompleteHandler(c, dispatch, fillRef)
-            }
-          />
-        </div>
-      ) : null}
-
       {isStrokeDropdown ? (
         <div className={styles.StrokeDropdownContainer} style={dropDownStyle}>
           <SketchPicker
@@ -88,14 +65,14 @@ const ShapeDropdowns = ({
       {isStrokeWidthDropdown ? (
         <div
           className={styles.StrokeWidthDropdownContainer}
-          style={strokeWidthDropDownStyle}
+          style={dropDownStyle}
         >
           <StrokeWidthDropdown
+            type={'setVideoStrokeWidth'}
             setIsDropDown={setIsStrokeWidthDropdown}
-            isSmallRange={isLine}
-            includesZero={false}
+            isSmallRange={true}
+            includesZero={true}
             dispatch={dispatch}
-            type={'setShapeStrokeWidth'}
           />
         </div>
       ) : null}
@@ -103,4 +80,4 @@ const ShapeDropdowns = ({
   );
 };
 
-export default ShapeDropdowns;
+export default VideoDropdowns;

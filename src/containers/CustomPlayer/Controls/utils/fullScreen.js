@@ -20,8 +20,12 @@ const closeFullscreen = () => {
   }
 };
 
-export const fullScreenHanlder = (container) => {
+export const fullScreenHanlder = (container, video, className) => {
   if (!document.fullscreenElement) {
     openFullScreen(container);
-  } else closeFullscreen();
+    if (video) video.classList.add(className);
+  } else {
+    closeFullscreen();
+    if (video) video.classList.remove(className);
+  }
 };

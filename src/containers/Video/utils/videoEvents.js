@@ -10,16 +10,15 @@ export const handlePlay = (
   words
 ) => {
   setIsPlaying(true);
-  if (words) {
-    let selection = document.getSelection();
-    selection.removeAllRanges();
-    if (currentSelection) setCurrentSelection(null);
-    let interval = setInterval(() => {
-      // console.log('interval: ', videoRef.current.currentTime);
-      if (videoRef.current) setCurrentTime(videoRef.current.currentTime);
-    }, 10);
-    setIntervalId(interval);
-  }
+  let selection = document.getSelection();
+  selection.removeAllRanges();
+  if (currentSelection) setCurrentSelection(null);
+  let interval = setInterval(() => {
+    // console.log('interval: ', videoRef.current.currentTime);
+    // console.log('playing');
+    if (words && videoRef.current) setCurrentTime(videoRef.current.currentTime);
+  }, 10);
+  setIntervalId(interval);
 };
 
 export const handlePause = (setIsPlaying, intervalId, words) => {

@@ -19,7 +19,7 @@ const DesignControls = ({ canvas, words }) => {
   const isFirstMount = useRef(true);
 
   const clickHandler = (e) => {
-    if (canvas && !editorState.shouldCropImage) {
+    if (canvas && !editorState.shouldCropMedia) {
       let type = '';
       let id = e.currentTarget.id;
       if (id === 'addText') type = 'setShouldAddText';

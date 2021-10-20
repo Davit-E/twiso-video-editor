@@ -10,7 +10,8 @@ const addCanvas = (
   shouldLoad,
   setObjectIdCount,
   setCanvas,
-  setIsCanvasSet
+  setIsCanvasSet,
+  setSpeakerVideos
 ) => {
   let canvas = new fabric.Canvas(id, {
     width: state.videoWidth,
@@ -25,13 +26,15 @@ const addCanvas = (
 
   if (info.canvas) {
     canvas.clear();
+    let videos = []
     let lastId = 1;
     canvas.loadFromJSON(info.canvas, () => {
       let objects = canvas.getObjects();
       let textArr = [];
       for (let i = 0; i < objects.length; i++) {
-        const obj = objects[i];
+        let obj = objects[i];
         if (!shouldLoad && obj.type === 'video') canvas.remove(obj);
+        else if (obj.type === 'video') videos.push(obj)
         else {
           obj.id = lastId;
           lastId++;
@@ -46,6 +49,7 @@ const addCanvas = (
       setObjectIdCount(lastId);
       setCanvas(canvas)
       setIsCanvasSet(true)
+      if (shouldLoad) setSpeakerVideos(videos)
     });
   } else {
     setSize(state, canvas);
@@ -63,7 +67,8 @@ const useAddCanvas = (
   info,
   setIsCanvasData,
   speakers,
-  setObjectIdCount
+  setObjectIdCount,
+  setSpeakerVideos
 ) => {
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
@@ -79,7 +84,8 @@ const useAddCanvas = (
         shouldLoad,
         setObjectIdCount,
         setCanvas,
-        setIsCanvasSet
+        setIsCanvasSet,
+        setSpeakerVideos
       );
       setIsFirstLoad(false);
     }
@@ -93,6 +99,7 @@ const useAddCanvas = (
     info,
     setIsCanvasData,
     setObjectIdCount,
+    setSpeakerVideos
   ]);
 };
 

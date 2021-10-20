@@ -33,7 +33,7 @@ const SelectSpeakers = ({ videoData, setSpeakers, speakers }) => {
     if (boxArr.length > 0) {
       let arr = [];
       for (let i = 0; i < boxArr.length; i++) {
-        const box = boxArr[i];
+        let box = boxArr[i];
         let w = box.width * box.scaleX;
         let h = box.height * box.scaleY;
         let x = box.lineCoords.tl.x / canvas.getZoom();

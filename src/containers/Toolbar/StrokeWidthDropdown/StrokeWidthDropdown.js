@@ -1,19 +1,29 @@
 import React from 'react';
 import styles from './StrokeWidthDropdown.module.css';
 
-const StrokeWidthDropdown = ({ setIsDropDown, dispatch, isLine }) => {
+const StrokeWidthDropdown = ({
+  setIsDropDown,
+  dispatch,
+  type,
+  isSmallRange,
+  includesZero,
+}) => {
   const optionsClickHandler = (e) => {
     if (e.target.tagName === 'LI') {
-      dispatch({ type: 'setShapeStrokeWidth', data: +e.target.textContent });
+      dispatch({ type, data: +e.target.textContent });
       dispatch({ type: 'setShowToolbar', data: false });
       setIsDropDown(false);
     }
   };
   let list = null;
-  if (isLine) {
+  if (isSmallRange) {
     list = (
       <ul className={styles.LineDropdown} onClick={optionsClickHandler}>
-        <li className={styles.StrokeOption}>1</li>
+        {includesZero ? (
+          <li className={styles.StrokeOption}>0</li>
+        ) : (
+          <li className={styles.StrokeOption}>1</li>
+        )}
         <li className={styles.StrokeOption}>5</li>
         <li className={styles.StrokeOption}>10</li>
         <li className={styles.StrokeOption}>15</li>

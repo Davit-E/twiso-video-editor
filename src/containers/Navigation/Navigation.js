@@ -36,6 +36,7 @@ const Navigation = ({
   const [videoInfo, setVideoInfo] = useState(null);
   const [breaks, setBreaks] = useState(null);
   const [subs, setSubs] = useState(null);
+  const [resizeInfo, setResizeInfo] = useState(null);
   const downloadRef = useRef(null);
   const history = useHistory();
   // const uploadRef = useRef(null);
@@ -79,6 +80,11 @@ const Navigation = ({
         prepareSubs(subList, fabricSub, editorState.subtitlesState, setSubs);
       } else setSubs({ captions: [], config: {} });
       prepareCanvas(canvas, setElements, setVideoInfo);
+      setResizeInfo({
+        type: editorState.canvasState.resize,
+        w: editorState.canvasState.videoWidth,
+        h: editorState.canvasState.videoHeight,
+      })
     }
   };
 
@@ -87,10 +93,11 @@ const Navigation = ({
   // };
 
   const prepareData = useCallback(
-    (elementsArr, videoData, breaksData, subsData, id) => {
+    (elementsArr, videoData, breaksData, subsData, resize, id) => {
       let elements = [...elementsArr];
       let data = {
         id,
+        resize: {...resize},
         video: { ...videoData },
         elements,
         breaks: [...breaksData],
@@ -100,6 +107,7 @@ const Navigation = ({
       let jsonData = JSON.stringify(data);
       setDownloadData(jsonData);
       setElements(null);
+      setResizeInfo(null);
       setBreaks(null);
       setVideoInfo(null);
       setSubs(null);
@@ -108,10 +116,10 @@ const Navigation = ({
   );
 
   useEffect(() => {
-    if (elements && videoInfo && breaks && subs) {
-      prepareData(elements, videoInfo, breaks, subs, videoData.id);
+    if (elements && videoInfo && breaks && subs && resizeInfo) {
+      prepareData(elements, videoInfo, breaks, subs, resizeInfo, videoData.id);
     }
-  }, [elements, videoInfo, prepareData, breaks, subs, videoData]);
+  }, [elements, videoInfo, prepareData, breaks, subs, videoData, resizeInfo]);
 
   return (
     <Navbar videoData={videoData}>

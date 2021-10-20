@@ -113,8 +113,7 @@ const useSelectionObserver = (isCanvasSet, canvas, state, dispatch) => {
         isSkewing ||
         eventState.isMoving ||
         isEditingText ||
-        !state.currentCoords ||
-        state.currentObject.type === 'video'
+        !state.currentCoords
       )
         data = false;
       dispatch({ type: 'setShowToolbar', data });
@@ -137,8 +136,7 @@ const useSelectionObserver = (isCanvasSet, canvas, state, dispatch) => {
         dispatch({ type: 'setShowToolbar', data: false });
       } else if (
         state.currentObject.object &&
-        state.currentObject.object.id !== currentId.current &&
-        state.currentObject.type !== 'video'
+        state.currentObject.object.id !== currentId.current
       ) {
         currentId.current = state.currentObject.object.id;
         dispatch({ type: 'setShowToolbar', data: true });

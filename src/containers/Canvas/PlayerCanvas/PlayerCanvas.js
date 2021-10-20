@@ -6,14 +6,15 @@ import useSelectionObserver from '../hooks/useSelectionObserver';
 import useGuideLines from '../hooks/useGuideLines';
 import useUpdateObject from '../hooks/useUpdateObject';
 import useUpdateCanvas from '../hooks/useUpdateCanvas';
-import useCropImage from '../hooks/useCropImage';
+import useCropMedia from '../hooks/useCropMedia';
 import useAddCanvas from '../hooks/useAddCanvas';
-import useAddVideo from '../hooks/useAddVideo';
+import useAddSpeakers from '../hooks/useAddSpeakers';
 import useKeyEvents from '../hooks/useKeyEvents';
 import useClickListener from '../hooks/useClickListener';
 import Toolbar from '../../Toolbar/Toolbar';
 import ContextMenu from '../ContextMenu/ContextMenu';
 import EventContext from '../../../contexts/EventContext';
+import useAnimate from '../hooks/useAnimate';
 
 const PlayerCanvas = ({
   canvas,
@@ -23,15 +24,19 @@ const PlayerCanvas = ({
   currentTime,
   speakers,
   info,
+  isPlaying,
+  isCanvasSet,
+  setIsCanvasSet,
 }) => {
   const { editorState, editorDispatch } = useContext(EditorContext);
   const { eventState, eventDispatch } = useContext(EventContext);
   const [objectIdCount, setObjectIdCount] = useState(1);
-  const [isCanvasSet, setIsCanvasSet] = useState(false);
   const [clipboard, setClipboard] = useState(null);
   const [isCanvasData, setIsCanvasData] = useState(false);
   const updatetObjectId = useCallback(() => setObjectIdCount((i) => i + 1), []);
+  const [speakerVideos, setSpeakerVideos] = useState([]);
 
+  useAnimate(isCanvasSet, canvas, speakerVideos, isPlaying, video, currentTime);
   useGuideLines(
     editorState.canvasState,
     isCanvasSet,
@@ -50,7 +55,7 @@ const PlayerCanvas = ({
   useSelectionObserver(isCanvasSet, canvas, editorState, editorDispatch);
   useUpdateObject(editorState, editorDispatch, canvas);
   useUpdateCanvas(editorState.canvasState, editorDispatch, canvas);
-  useCropImage(
+  useCropMedia(
     editorState,
     editorDispatch,
     canvas,
@@ -65,7 +70,8 @@ const PlayerCanvas = ({
     info,
     setIsCanvasData,
     speakers,
-    setObjectIdCount
+    setObjectIdCount,
+    setSpeakerVideos
   );
   useKeyEvents(
     canvas,
@@ -77,14 +83,15 @@ const PlayerCanvas = ({
     editorDispatch
   );
   useClickListener(canvas, editorState);
-  useAddVideo(
+  useAddSpeakers(
     video,
     canvas,
     currentTime,
     speakers,
     objectIdCount,
     setObjectIdCount,
-    isCanvasData
+    isCanvasData,
+    setSpeakerVideos
   );
 
   return (

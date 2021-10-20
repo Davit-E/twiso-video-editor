@@ -31,8 +31,8 @@ const useContainerSize = (state, dispatch, containerRef) => {
   const containerPadding = 88;
   const getSizeInfo = useCallback(() => {
     let { width, height } = getCanvasSize(state);
-    if (width > height) containerRef.current.style.marginTop = '5rem';
-    else containerRef.current.style.marginTop = '1rem';
+    if (width > height) containerRef.current.style.paddingTop = '5rem';
+    else containerRef.current.style.paddingTop = '1rem';
     let isInRange = width > 100;
     return isInRange ? { width, height } : {};
   }, [containerRef, state]);

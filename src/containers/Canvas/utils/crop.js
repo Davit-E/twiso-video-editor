@@ -51,7 +51,7 @@ export const restrictBox = (active, box) => {
 };
 
 export const getSpeakerBox = (boxSize, boxId) => {
-  return new fabric.CropBox({
+  return new fabric.RectCropBox({
     ...boxSize,
     fill: 'rgba(111, 122, 208, 0.4)',
     top: 0,
@@ -71,9 +71,9 @@ export const handleFirstLoadSpeakers = (
 ) => {
   let boxes = [];
   for (let i = 0; i < speakers.length; i++) {
-    const speaker = speakers[i];
+    let speaker = speakers[i];
     let size = {
-      width:  video.width,
+      width: video.width,
       height: video.height,
       scaleX: speaker.w / video.width,
       scaleY: speaker.h / video.height,
@@ -123,8 +123,8 @@ export const addSpeaker = (
   restrictBox(video, box);
 };
 
-const getImageCropBox = (topBound, leftBound, activeEl) => {
-  let box = new fabric.CropBox({
+const getMediaCropBox = (topBound, leftBound, activeEl) => {
+  return new fabric.RectCropBox({
     fill: 'rgba(0,0,0,0)',
     originX: 'left',
     originY: 'top',
@@ -141,15 +141,40 @@ const getImageCropBox = (topBound, leftBound, activeEl) => {
     type: 'cropbox',
     excludeFromExport: true,
   });
-  return box;
 };
 
-export const prepareForImageCrop = (
+const getMediaCircleCropBox = (topBound, leftBound, activeEl) => {
+  let min = Math.min(activeEl.height, activeEl.width);
+  let radius = min / 2 - 2;
+
+  return new fabric.CircleCropBox({
+    fill: 'rgba(0, 0, 0, 0)',
+    originX: 'left',
+    originY: 'top',
+    left: leftBound,
+    top: topBound,
+    borderDashArray: [2, 2],
+    strokeDashArray: [2, 2],
+    borderColor: 'rgba(111, 122, 208, 1)',
+    strokeWidth: 2,
+    stroke: '#dbff17',
+    radius: radius,
+    scaleX: activeEl.scaleX,
+    scaleY: activeEl.scaleY,
+    selectable: true,
+    lockScalingFlip: true,
+    type: 'cropbox',
+    excludeFromExport: true,
+  });
+};
+
+export const prepareMediaForCrop = (
   active,
   dispatch,
   canvas,
   setAcitveEl,
-  setCropbox
+  setCropbox,
+  cropType
 ) => {
   canvas.getObjects().forEach((el) => (el.selectable = false));
   let transformMatrix = active.calcTransformMatrix();
@@ -169,9 +194,13 @@ export const prepareForImageCrop = (
     );
 
   active.angle = 0;
+  active.clipPath = null;
+  active.strokeWidth = 0;
   active.top = topBound;
   active.left = leftBound;
-  let box = getImageCropBox(topBound, leftBound, active);
+  let box = null;
+  if (cropType === 'rect') box = getMediaCropBox(topBound, leftBound, active);
+  else box = getMediaCircleCropBox(topBound, leftBound, active);
   canvas.add(box);
   canvas.setActiveObject(box);
   dispatch({ type: 'setCurrentCoords', data: box.lineCoords });
@@ -179,7 +208,7 @@ export const prepareForImageCrop = (
   setCropbox(box);
 };
 
-export const cropImage = (active, box, setCropped) => {
+export const cropMedia = (active, box, setCropped) => {
   let prevCrop = active.cropRect;
   let ratioX = box.scaleX / active.scaleX;
   let ratioY = box.scaleY / active.scaleY;

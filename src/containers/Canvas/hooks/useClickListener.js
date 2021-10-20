@@ -6,7 +6,7 @@ const useClickListener = (canvas, state) => {
       if (
         canvas &&
         !state.isCropMode &&
-        !state.shouldCropImage &&
+        !state.shouldCropMedia &&
         !state.shouldReplaceImage
       ) {
         for (let i = 0; i < e.path.length; i++) {
@@ -15,7 +15,7 @@ const useClickListener = (canvas, state) => {
         canvas.discardActiveObject().requestRenderAll();
       }
     },
-    [canvas, state.isCropMode, state.shouldCropImage, state.shouldReplaceImage]
+    [canvas, state.isCropMode, state.shouldCropMedia, state.shouldReplaceImage]
   );
 
   useEffect(() => {
