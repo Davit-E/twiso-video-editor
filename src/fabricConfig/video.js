@@ -47,6 +47,21 @@ fabric.Video = fabric.util.createClass(fabric.Image, {
     }
   },
 
+  // _stroke: function (ctx) {
+  //   if (!this.stroke || this.strokeWidth === 0) {
+  //     return;
+  //   }
+  //   var w = this.width / 2,
+  //     h = this.height / 2;
+  //   ctx.beginPath();
+  //   ctx.moveTo(-w, -h);
+  //   ctx.lineTo(w, -h);
+  //   ctx.lineTo(w, h);
+  //   ctx.lineTo(-w, h);
+  //   ctx.lineTo(-w, -h);
+  //   ctx.closePath();
+  // },
+
   _render: function (ctx) {
     this._draw(this.getElement(), ctx);
     this._stroke(ctx);
