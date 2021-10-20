@@ -1,5 +1,5 @@
 export const initialLoadHandler = (videoState, setStroke, strokeRef) => {
-  if (strokeRef.current) {
+  if (strokeRef.current && videoState.stroke !== null) {
     let [r, g, b, a] = videoState.stroke.split('(')[1].split(')')[0].split(',');
     setStroke({ r, g, b, a });
     strokeRef.current.style.background = videoState.stroke;

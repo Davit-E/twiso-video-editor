@@ -13,6 +13,9 @@ const videoPropertyArr = ['cornerRadius', 'stroke', 'strokeWidth'];
 
 const handleObject = (e, dispatch, type, propertyArr) => {
   let newState = {};
+  if (e.target.type === 'video' && e.target.stroke === null) {
+    e.target.stroke = 'rgba(255,255,255,1)';
+  }
   propertyArr.forEach((property) => {
     newState[property] = e.target[property];
   });
