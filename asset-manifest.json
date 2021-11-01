@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/twiso-video-editor/static/css/main.f1641efa.chunk.css",
-    "main.js": "/twiso-video-editor/static/js/main.89413d4a.chunk.js",
-    "main.js.map": "/twiso-video-editor/static/js/main.89413d4a.chunk.js.map",
+    "main.js": "/twiso-video-editor/static/js/main.e1fac1e0.chunk.js",
+    "main.js.map": "/twiso-video-editor/static/js/main.e1fac1e0.chunk.js.map",
     "runtime-main.js": "/twiso-video-editor/static/js/runtime-main.313535b7.js",
     "runtime-main.js.map": "/twiso-video-editor/static/js/runtime-main.313535b7.js.map",
     "static/js/2.90054f13.chunk.js": "/twiso-video-editor/static/js/2.90054f13.chunk.js",
@@ -76,6 +76,6 @@
     "static/js/runtime-main.313535b7.js",
     "static/js/2.90054f13.chunk.js",
     "static/css/main.f1641efa.chunk.css",
-    "static/js/main.89413d4a.chunk.js"
+    "static/js/main.e1fac1e0.chunk.js"
   ]
 }
