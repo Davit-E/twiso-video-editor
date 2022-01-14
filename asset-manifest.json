@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/twiso-video-editor/static/css/main.9f697aca.chunk.css",
-    "main.js": "/twiso-video-editor/static/js/main.51202d75.chunk.js",
-    "main.js.map": "/twiso-video-editor/static/js/main.51202d75.chunk.js.map",
+    "main.js": "/twiso-video-editor/static/js/main.61a4c791.chunk.js",
+    "main.js.map": "/twiso-video-editor/static/js/main.61a4c791.chunk.js.map",
     "runtime-main.js": "/twiso-video-editor/static/js/runtime-main.103e176a.js",
     "runtime-main.js.map": "/twiso-video-editor/static/js/runtime-main.103e176a.js.map",
-    "static/js/2.38501938.chunk.js": "/twiso-video-editor/static/js/2.38501938.chunk.js",
-    "static/js/2.38501938.chunk.js.map": "/twiso-video-editor/static/js/2.38501938.chunk.js.map",
+    "static/js/2.1bfd8129.chunk.js": "/twiso-video-editor/static/js/2.1bfd8129.chunk.js",
+    "static/js/2.1bfd8129.chunk.js.map": "/twiso-video-editor/static/js/2.1bfd8129.chunk.js.map",
     "static/js/3.e9d58e69.chunk.js": "/twiso-video-editor/static/js/3.e9d58e69.chunk.js",
     "static/js/3.e9d58e69.chunk.js.map": "/twiso-video-editor/static/js/3.e9d58e69.chunk.js.map",
     "index.html": "/twiso-video-editor/index.html",
     "static/css/main.9f697aca.chunk.css.map": "/twiso-video-editor/static/css/main.9f697aca.chunk.css.map",
-    "static/js/2.38501938.chunk.js.LICENSE.txt": "/twiso-video-editor/static/js/2.38501938.chunk.js.LICENSE.txt",
+    "static/js/2.1bfd8129.chunk.js.LICENSE.txt": "/twiso-video-editor/static/js/2.1bfd8129.chunk.js.LICENSE.txt",
     "static/media/addImage.decc1d7e.svg": "/twiso-video-editor/static/media/addImage.decc1d7e.svg",
     "static/media/addShape.ad7a674c.svg": "/twiso-video-editor/static/media/addShape.ad7a674c.svg",
     "static/media/addSpeaker.45816d68.svg": "/twiso-video-editor/static/media/addSpeaker.45816d68.svg",
@@ -65,8 +65,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.103e176a.js",
-    "static/js/2.38501938.chunk.js",
+    "static/js/2.1bfd8129.chunk.js",
     "static/css/main.9f697aca.chunk.css",
-    "static/js/main.51202d75.chunk.js"
+    "static/js/main.61a4c791.chunk.js"
   ]
 }
